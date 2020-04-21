@@ -1,4 +1,7 @@
 # 2PG
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/12f11e4dc0654c5b8790aca3cb7f1343)](https://app.codacy.com/manual/ADAMJR/2PG?utm_source=github.com&utm_medium=referral&utm_content=theADAMJR/2PG&utm_campaign=Badge_Grade_Dashboard)
+
 Simple multi-purpose Discord bot made with TypeScript
 
 ## Installation
