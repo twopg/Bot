@@ -21,10 +21,8 @@ mongoose.connect(config.mongoURL, {
 });
 
 // GLITCH.COM -> uncomment for glitch auto ping
-/* const mins = 5;
-
 let count = 0;
 setInterval(() =>
     require('node-fetch')(config.dashboard.url)
-    .then(() => console.log(`[${++count}] Kept ${config.dashboard.url} alive.`)
-, mins * 60 * 1000)); */
+    .then(() => console.log(`[${++count}] Kept ${config.dashboard.url} alive.`))
+, 5 * 60 * 1000);
