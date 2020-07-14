@@ -6,7 +6,9 @@ import Deps from './utils/deps';
 import EventsService from './services/events.service';
 import API from './api/server';
 
-export const bot = new Client();
+export const bot = new Client({
+    partials: ['GUILD_MEMBER']
+});
 
 bot.login(config.bot.token);
 
@@ -17,3 +19,12 @@ mongoose.connect(config.mongoURL, {
     useNewUrlParser: true, 
     useFindAndModify: false 
 });
+
+// GLITCH.COM -> uncomment for glitch auto ping
+/* const mins = 5;
+
+let count = 0;
+setInterval(() =>
+    require('node-fetch')(config.dashboard.url)
+    .then(() => console.log(`[${++count}] Kept ${config.dashboard.url} alive.`)
+, mins * 60 * 1000)); */

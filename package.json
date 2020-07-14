@@ -14,7 +14,8 @@
     "start:music": "cd dist/lavalink && java -jar Lavalink.jar"
   },
   "engines": {
-    "node": "12.x"
+    "node": "12.x",
+    "npm": "6.x"
   },
   "keywords": [],
   "author": "ADAMJR#0001",
@@ -29,9 +30,10 @@
     "erela.js": "^1.1.7",
     "express": "^4.17.1",
     "mongoose": "^5.9.3",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.3",
     "stripe": "^8.39.1",
     "ts-node": "^8.10.1",
-    "nodemon": "^2.0.3",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
