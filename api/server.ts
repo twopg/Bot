@@ -18,10 +18,12 @@ export default class API {
         AuthClient.setRedirect(`${config.dashboard.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
 
-        stripe.webhookEndpoints.create({
-            url: config.api.url + '/stripe-webhook',
-            enabled_events: ['*']
-        });
+        const isLiveKey = config.api.stripe.apiKey.includes('live');
+        if (isLiveKey)
+            stripe.webhookEndpoints.create({
+                url: config.api.url + '/stripe-webhook',
+                enabled_events: ['*']
+            });
 
         app.use(cors());
         app.use(bodyParser.json());

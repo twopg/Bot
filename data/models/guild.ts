@@ -10,7 +10,16 @@ export class AnnounceModule extends Module {
     events: AnnounceEvent[] = [];
 }
 
-export enum EventType { MemberJoin, MemberLeave, MessageDeleted }
+export enum EventType {
+    Ban = 'BAN', 
+    ConfigUpdate = 'CONFIG_UPDATE',
+    LevelUp = 'LEVEL_UP',
+    MessageDeleted = 'MESSAGE_DELETED',
+    MemberJoin = 'MEMBER_JOIN',
+    MemberLeave = 'MEMBER_LEAVE',
+    Unban = 'UNBAN',
+    Warn ='WARN',
+}
 
 export interface AnnounceEvent {
     event: EventType;
@@ -49,7 +58,7 @@ export class LevelingModule extends Module {
     levelRoles: LevelRole[] = [];
     ignoredRoles: string[] = [];
     xpPerMessage = 50;
-    xpCooldown = 5;
+    maxMessagesPerMinute = 3;
 }
 
 export interface LevelRole {

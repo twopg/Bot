@@ -2,6 +2,7 @@ import { Client } from 'discord.js';
 import config from './config.json';
 import mongoose from 'mongoose';
 import Deps from './utils/deps';
+import { EventEmitter } from 'events';
 
 import EventsService from './services/events.service';
 import API from './api/server';
@@ -9,10 +10,12 @@ import API from './api/server';
 export const bot = new Client({
     partials: ['GUILD_MEMBER']
 });
+export const emitter = new EventEmitter();
 
 bot.login(config.bot.token);
 
-Deps.build(EventsService, API);
+Deps.get<EventsService>(EventsService).init();
+Deps.build(API);
 
 mongoose.connect(config.mongoURL, { 
     useUnifiedTopology: true, 

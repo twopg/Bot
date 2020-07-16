@@ -22,11 +22,10 @@ export default class CommandService {
         private savedCommands = Deps.get<Commands>(Commands)) {}
 
     async init() {
-        const directory = './commands';
-        const files = await readdir(directory);
+        const files = await readdir('./commands');
         
-        for (const file of files) {            
-            const Command = require(`../commands/${file}`).default;
+        for (const file of files) {
+            const Command = await require(`../commands/${file}`).default;
             if (!Command) continue;
             
             const command = new Command();

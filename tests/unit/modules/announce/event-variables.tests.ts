@@ -1,25 +1,7 @@
-import EventVariables from "../../../../modules/announce/event-variables";
-import { expect } from "chai";
+import EventVariables from '../../../../modules/announce/event-variables';
+import { expect } from 'chai';
 
 describe('modules/announce/event-variables', () => {
-    it('USER', () => {
-        const variables = new EventVariables('[USER] = trash');
-
-        const user = { id: '123' } as any;
-        const result = variables.user(user).toString();
-
-        expect(result).to.equal('<@!123> = trash');
-    });
-
-    it('REASON', () => {
-        const variables = new EventVariables('User was banned for `[REASON]`');
-
-        const reason = { user: null, reason: 'hacking' } as any;
-        const result = variables.reason(reason).toString();
-
-        expect(result).to.equal('User was banned for `hacking`');
-    });
-
     it('GUILD', () => {
         const variables = new EventVariables('[GUILD] is good server');
 
@@ -27,6 +9,15 @@ describe('modules/announce/event-variables', () => {
         const result = variables.guild(user).toString();
 
         expect(result).to.equal('test is good server');
+    });
+
+    it('INSTIGATOR', () => {
+        const variables = new EventVariables('[INSTIGATOR] banned User');
+
+        const user = { id: '123' } as any;
+        const result = variables.instigator(user).toString();
+
+        expect(result).to.equal('<@!123> banned User');
     });
 
     it('MEMBER_COUNT', () => {
@@ -47,15 +38,6 @@ describe('modules/announce/event-variables', () => {
         expect(result).to.equal('Message: `hi`');
     });
 
-    it('OLD_LEVEL', () => {
-        const variables = new EventVariables('Old: `[OLD_LEVEL]`');
-
-        const level = 1;
-        const result = variables.oldLevel(level).toString();
-
-        expect(result).to.equal('Old: `1`');
-    });
-
     it('NEW_LEVEL', () => {
         const variables = new EventVariables('New: `[NEW_LEVEL]`');
 
@@ -63,5 +45,59 @@ describe('modules/announce/event-variables', () => {
         const result = variables.newLevel(level).toString();
 
         expect(result).to.equal('New: `2`');
+    });
+
+    it('NEW_value', () => {
+        const variables = new EventVariables('New: [NEW_VALUE]');
+
+        const change = { a: 'b' };
+        const result = variables.newValue(change).toString();
+
+        expect(result).to.equal(`New: ${JSON.stringify(change, null, 2)}`);
+    });
+    
+    it('OLD_LEVEL', () => {
+        const variables = new EventVariables('Old: `[OLD_LEVEL]`');
+        
+        const level = 1;
+        const result = variables.oldLevel(level).toString();
+        
+        expect(result).to.equal('Old: `1`');
+    });
+
+    it('OLD_VALUE', () => {
+        const variables = new EventVariables('Old: [OLD_VALUE]');
+
+        const change = { a: 'a' };
+        const result = variables.oldValue(change).toString();
+
+        expect(result).to.equal(`Old: ${JSON.stringify(change, null, 2)}`);
+    });
+    
+    it('REASON', () => {
+        const variables = new EventVariables('User was banned for `[REASON]`');
+
+        const reason = 'hacking';
+        const result = variables.reason(reason).toString();
+
+        expect(result).to.equal('User was banned for `hacking`');
+    });
+    
+    it('USER', () => {
+        const variables = new EventVariables('[USER] = trash');
+
+        const user = { id: '123' } as any;
+        const result = variables.user(user).toString();
+
+        expect(result).to.equal('<@!123> = trash');
+    });
+    
+    it('WARNINGS', () => {
+        const variables = new EventVariables('User has [WARNINGS] warnings');
+
+        const warnings = 4;
+        const result = variables.warnings(warnings).toString();
+
+        expect(result).to.equal('User has 4 warnings');
     });
 });

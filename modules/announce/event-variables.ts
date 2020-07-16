@@ -1,46 +1,64 @@
-import { User, Guild, Message } from "discord.js";
+import { User, Guild, Message } from 'discord.js';
 
 export default class EventVariables {
     constructor(private content: string) {}
 
-    guild(guild: Guild) {
-        this.content = this.content.replace(/\[GUILD\]/g, guild.name);
+    toString() { return this.content; }
+    
+    private replace(regex: RegExp, replacement: string) {
+        this.content = this.content.replace(regex, replacement);
         return this;
+    }
+
+    guild(guild: Guild) {
+        return this.replace(/\[GUILD\]/g, guild.name);
+    }
+
+    instigator(user: User) {
+        return this.replace(/\[INSTIGATOR\]/g, `<@!${user.id}>`);
+    }
+
+    module(name: string) {
+        return this.replace(/\[MODULE\]/g, name);
     }
 
     memberCount(guild: Guild) {
-        this.content = this.content.replace(/\[MEMBER_COUNT\]/g, guild.memberCount.toString());
-        return this;
+        return this.replace(/\[MEMBER_COUNT\]/g, guild.memberCount.toString());
     }
 
     message(msg: Message) {
-        this.content = this.content.replace(/\[MESSAGE\]/g, msg.content);
-        return this;
+        return this.replace(/\[MESSAGE\]/g, msg.content);
+    }
+
+    oldValue(value: any) {
+        return this.replace(/\[OLD_VALUE\]/g, JSON.stringify(value, null, 2));
     }
 
     oldLevel(level: number) {
-        this.content = this.content.replace(/\[OLD_LEVEL\]/g, level.toString());
-        return this;
-    }
-    newLevel(level: number) {
-        this.content = this.content.replace(/\[NEW_LEVEL\]/g, level.toString());
-        return this;
+        return this.replace(/\[OLD_LEVEL\]/g, level.toString());
     }
 
-    reason(punishment: { user: User, reason: string }) {
-        this.content = this.content.replace(/\[REASON\]/g, punishment.reason);
-        return this;
+    newValue(value: any) {        
+        return this.replace(/\[NEW_VALUE\]/g, JSON.stringify(value, null, 2));
+    }
+
+    newLevel(level: number) {
+        return this.replace(/\[NEW_LEVEL\]/g, level.toString());
+    }
+
+    reason(reason: string) {
+        return this.replace(/\[REASON\]/g, reason);
     }
 
     user(user: User) {
-        this.content = this.content.replace(/\[USER\]/g, `<@!${user.id}>`);
-        return this;
+        return this.replace(/\[USER\]/g, `<@!${user.id}>`);
     }
 
+    warnings(warnings: number) {
+        return this.replace(/\[WARNINGS\]/g, warnings.toString());
+    }
+    
     xp(xp: number) {
-        this.content = this.content.replace(/\[XP\]/g, xp.toString());
-        return this;
+        return this.replace(/\[XP\]/g, xp.toString());
     }
-
-    toString() { return this.content; }
 }

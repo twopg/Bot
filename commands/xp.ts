@@ -1,6 +1,6 @@
 import { Command, CommandContext, Permission } from './command';
-import CommandUtils from '../utils/command-utils';
 import config from '../config.json';
+import { getMemberFromMention } from '../utils/command-utils';
 
 export default class XPCommand implements Command {
     name = 'xp';
@@ -11,7 +11,7 @@ export default class XPCommand implements Command {
 
     execute = (ctx: CommandContext, userMention: string) =>  {
         const target = (userMention) ?
-            CommandUtils.getMemberFromMention(userMention, ctx.guild) : ctx.member;
+            getMemberFromMention(userMention, ctx.guild) : ctx.member;
         
         if (target.user.bot)
             throw new Error(`Bot users cannot earn XP`);

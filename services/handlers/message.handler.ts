@@ -25,7 +25,7 @@ export default class MessageHandler implements EventHandler {
 
         
         if (savedGuild.autoMod.enabled)
-            await this.autoMod.validateMsg(msg, savedGuild);
+            await this.autoMod.validate(msg, savedGuild);
         if (savedGuild.leveling.enabled)
             await this.leveling.validateXPMsg(msg, savedGuild);
     }

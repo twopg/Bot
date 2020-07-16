@@ -2,7 +2,7 @@
   "name": "2pg",
   "version": "1.0.0",
   "description": "Good bot",
-  "main": "bot.js",
+  "main": "bot.ts",
   "scripts": {
     "test": "ts-mocha tests/**/*.tests.ts",
     "test:u": "ts-mocha tests/unit/**/*.tests.ts",
@@ -21,6 +21,7 @@
   "author": "ADAMJR#0001",
   "license": "ISC",
   "dependencies": {
+    "@lykmapipo/rate-limit-mongoose": "^0.1.32",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "canvas": "^2.6.1",
@@ -29,6 +30,7 @@
     "discord.js": "^12.0.2",
     "erela.js": "^1.1.7",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.1.3",
     "mongoose": "^5.9.3",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.3",

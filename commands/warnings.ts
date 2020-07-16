@@ -3,12 +3,13 @@ import Members from '../data/members';
 import { TextChannel } from 'discord.js';
 import { MemberDocument } from '../data/models/member';
 import Deps from '../utils/deps';
-import CommandUtils from '../utils/command-utils';
+import { getMemberFromMention } from '../utils/command-utils';
 
 export default class WarningsCommand implements Command {
-    name = 'warnings';
-    summary = 'Display the warnings of a member.';
     precondition: Permission = 'VIEW_AUDIT_LOG';
+    name = 'warnings';
+    usage = 'warnings [user]'
+    summary = 'Display your warnings, or the warnings of a member.';
     cooldown = 3;
     module = 'Auto-mod';
 
@@ -17,7 +18,7 @@ export default class WarningsCommand implements Command {
     
     execute = async(ctx: CommandContext, userMention?: string, position?: string) => {
         const target = (userMention) ?
-            CommandUtils.getMemberFromMention(userMention, ctx.guild) : ctx.member;
+            getMemberFromMention(userMention, ctx.guild) : ctx.member;
 
         const savedMember = await this.members.get(target);
         

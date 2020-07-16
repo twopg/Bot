@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import config from '../../config.json';
-import { SavedMember, MemberDocument } from '../../data/models/member';
+import { SavedMember } from '../../data/models/member';
 import { AuthClient } from '../server';
 import { XPCardGenerator } from '../modules/image/xp-card-generator';
 import { bot } from '../../bot';
@@ -13,13 +13,14 @@ import Logs from '../../data/logs';
 import AuditLogger from '../modules/audit-logger';
 import { User } from 'discord.js';
 import Leveling from '../../modules/xp/leveling';
-import Log from '../../utils/log';
 import { getUser } from './user-routes';
 import { sendError } from './api-routes';
+import Emit from '../../services/emit';
 
 export const router = Router();
 
-const logs = Deps.get<Logs>(Logs),
+const emit = Deps.get<Emit>(Emit),
+      logs = Deps.get<Logs>(Logs),
       members = Deps.get<Members>(Members),
       users = Deps.get<Users>(Users),
       guilds = Deps.get<Guilds>(Guilds);
@@ -57,6 +58,8 @@ router.put('/:id/:module', async (req, res) => {
         
         log.changes.push(change);
         await log.save();
+        
+        emit.configSaved(guild, user, change);
             
         res.json(savedGuild);
     } catch (error) { sendError(res, 400, error); }
@@ -80,8 +83,7 @@ router.get('/:id/channels', async (req, res) => {
 router.get('/:id/log', async(req, res) => {
     try {
         const id = req.params.id;
-        // TODO: add auth protection
-        // await validateGuildManager(req.query.key, id);
+        await validateGuildManager(req.query.key, id);
 
         const guild = bot.guilds.cache.get(req.params.id);
         const log = await logs.get(guild);
@@ -128,21 +130,6 @@ function leaderboardMember(user: User, xpInfo: any) {
     };
 }
 
-async function getManagableGuilds(key: string) {
-    const manageableGuilds = [];
-    let userGuilds = await AuthClient.getGuilds(key);    
-    for (const id of userGuilds.keys()) {        
-        const authGuild = userGuilds.get(id);        
-        const hasManager = authGuild._permissions
-            .some(p => p === 'MANAGE_GUILD');
-
-        if (hasManager)
-            manageableGuilds.push(id);
-    }    
-    return bot.guilds.cache
-        .filter(g => manageableGuilds.some(id => id === g.id));
-}
-
 router.get('/:guildId/members/:memberId/xp-card', async (req, res) => {
     try {
         const { guildId, memberId } = req.params;
@@ -178,11 +165,26 @@ router.get('/:id/bot-status', async (req, res) => {
     } catch (error) { sendError(res, 400, error); }
 });
 
-export async function validateGuildManager(key: string, id: string) {
+export async function validateGuildManager(key: string, guildId: string) {
     if (!key)
-        throw new TypeError();
-    const guilds = await getManagableGuilds(key);        
+        throw new TypeError('No key provided.');
+    const guilds = await getManagableGuilds(key);
         
-    if (!guilds.has(id))
-        throw TypeError();
+    if (!guilds.has(guildId))
+        throw TypeError('Guild not manageable.');
+}
+
+async function getManagableGuilds(key: string) {
+    const manageableGuilds = [];
+    let userGuilds = await AuthClient.getGuilds(key);    
+    for (const id of userGuilds.keys()) {        
+        const authGuild = userGuilds.get(id);        
+        const hasManager = authGuild._permissions
+            .some(p => p === 'MANAGE_GUILD');
+
+        if (hasManager)
+            manageableGuilds.push(id);
+    }    
+    return bot.guilds.cache
+        .filter(g => manageableGuilds.some(id => id === g.id));
 }
