@@ -1,7 +1,5 @@
 import { Router } from 'express';
-import config from '../../config.json';
 import { SavedMember } from '../../data/models/member';
-import { AuthClient } from '../server';
 import { XPCardGenerator } from '../modules/image/xp-card-generator';
 import { bot } from '../../bot';
 import Deps from '../../utils/deps';
@@ -13,9 +11,9 @@ import Logs from '../../data/logs';
 import AuditLogger from '../modules/audit-logger';
 import { User } from 'discord.js';
 import Leveling from '../../modules/xp/leveling';
-import { getUser } from './user-routes';
 import { sendError } from './api-routes';
 import Emit from '../../services/emit';
+import { getManagableGuilds, validateGuildManager, getUser } from '../modules/api-utils';
 
 export const router = Router();
 
@@ -26,7 +24,7 @@ const emit = Deps.get<Emit>(Emit),
       guilds = Deps.get<Guilds>(Guilds);
 
 router.get('/', async (req, res) => {
-    try {        
+    try {
         const guilds = await getManagableGuilds(req.query.key);
         res.json(guilds);
     } catch (error) { sendError(res, 400, error); }
@@ -165,27 +163,3 @@ router.get('/:id/bot-status', async (req, res) => {
         res.json({ hasAdmin: botMember.hasPermission(requiredPermission) });
     } catch (error) { sendError(res, 400, error); }
 });
-
-export async function validateGuildManager(key: string, guildId: string) {
-    if (!key)
-        throw new TypeError('No key provided.');
-    const guilds = await getManagableGuilds(key);
-        
-    if (!guilds.has(guildId))
-        throw TypeError('Guild not manageable.');
-}
-
-async function getManagableGuilds(key: string) {
-    const manageableGuilds = [];
-    let userGuilds = await AuthClient.getGuilds(key);    
-    for (const id of userGuilds.keys()) {        
-        const authGuild = userGuilds.get(id);        
-        const hasManager = authGuild._permissions
-            .some(p => p === 'MANAGE_GUILD');
-
-        if (hasManager)
-            manageableGuilds.push(id);
-    }    
-    return bot.guilds.cache
-        .filter(g => manageableGuilds.some(id => id === g.id));
-}

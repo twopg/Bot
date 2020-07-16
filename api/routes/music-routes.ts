@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import Music from '../../modules/music/music';
 import Deps from '../../utils/deps';
-import { validateGuildManager } from './guilds-routes';
 import { bot } from '../../bot';
 import { AuthClient } from '../server';
 import Users from '../../data/users';
+import { validateGuildManager } from '../modules/api-utils';
 
 export const router = Router({ mergeParams: true });
 
@@ -57,7 +57,7 @@ router.get('/seek/:position', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        player.seek(req.params.position * 1000);
+        player.seek(+req.params.position * 1000);
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }
@@ -78,7 +78,7 @@ router.get('/play', async (req, res) => {
     try {
         const { player, requestor, hasPremium } = await getMusic(req.params.id, req.query.key);
         const track = await music.findTrack(
-            req.query.query, requestor, req.query.maxTrackLength ?? 2);
+            req.query.query?.toString(), requestor, +req.query.maxTrackLength ?? 2);
         
         const maxSize = (hasPremium) ? 10 : 5;
         if (player.queue.size >= maxSize)
@@ -122,7 +122,7 @@ router.get('/stop', async (req, res) => {
     } catch (error) { res.status(400).send(error?.message); }
 });
 
-async function getMusic(guildId: string, key: string) {
+async function getMusic(guildId: string, key: any) {
     const { id } = await AuthClient.getUser(key);
 
     const user = bot.users.cache.get(id);

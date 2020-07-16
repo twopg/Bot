@@ -1,16 +1,19 @@
-import { Router } from 'express';
-import { SavedCommand, CommandDocument } from '../../data/models/command';
-import { AuthClient, stripe } from '../server';
-import * as config from '../../config.json';
-import { SavedUser } from '../../data/models/user';
-import { bot } from '../../bot';
 import { MessageEmbed } from 'discord.js';
+import { Router } from 'express';
+import { bot } from '../../bot';
+import * as config from '../../config.json';
+import { CommandDocument, SavedCommand } from '../../data/models/command';
+import Users from '../../data/users';
+import Deps from '../../utils/deps';
+import { AuthClient } from '../server';
 
 import { router as guildsRoutes } from './guilds-routes';
 import { router as musicRoutes } from './music-routes';
 import { router as userRoutes } from './user-routes';
 
 export const router = Router();
+
+const users = Deps.get<Users>(Users);
 
 let commands: CommandDocument[] = [];
 SavedCommand.find().then(cmds => commands = cmds);
@@ -51,7 +54,7 @@ router.post('/error', async(req, res) => {
     
     await bot.users.cache
       .get(config.bot.ownerId)
-      .send(new MessageEmbed({
+      ?.send(new MessageEmbed({
         title: 'Dashboard Error',
         description: `**Message**: ${message}`,
         footer: { text: `User ID: ${user.id}` }
@@ -60,7 +63,7 @@ router.post('/error', async(req, res) => {
 });
 
 async function giveUserPlus(id: string) {   
-  const savedUser = await SavedUser.findById(id);
+  const savedUser = await users.get({ id });
   savedUser.premium = true;
   savedUser.save();
 }

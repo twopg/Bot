@@ -5,6 +5,8 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false
   }
 }

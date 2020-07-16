@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { XPCardGenerator } from '../modules/image/xp-card-generator';
 import { SavedMember } from '../../data/models/member';
-import { AuthClient, stripe } from '../server';
-import { bot } from '../../bot';
 import Deps from '../../utils/deps';
 import Users from '../../data/users';
 import config from '../../config.json';
 import { sendError } from './api-routes';
+import { getUser } from '../modules/api-utils';
+import { stripe } from '../server';
 
 export const router = Router();
 
@@ -26,6 +26,7 @@ const items = [
         quantity: 1,
     }
 ];
+
 router.get('/pay', async(req, res) => {
     try {
         const user = await getUser(req.query.key);
@@ -82,8 +83,3 @@ router.put('/xp-card', async (req, res) => {
         res.send(savedUser);
     } catch (error) { sendError(res, 400, error); }
 });
-
-export async function getUser(key: string) {    
-    const { id } = await AuthClient.getUser(key);
-    return bot.users.cache.get(id);
-}
