@@ -9,6 +9,7 @@ export default class PlayCommand implements Command {
     precondition: Permission = 'SPEAK';
     cooldown = 2;
     module = 'Music';
+    aliases: ['p']
 
     constructor(private music = Deps.get<Music>(Music)) {}
     

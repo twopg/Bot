@@ -36,7 +36,7 @@ export default class AutoMod {
         for (const filter of activeFilters)
             try {                
                 const validator = this.validators.find(v => v.filter === filter);
-                await validator?.validate(msg.content, guild);
+                validator?.validate(msg.content, guild);
             } catch (validation) {
                 if (guild.autoMod.autoDeleteMessages)
                     await msg.delete({ reason: validation.message });

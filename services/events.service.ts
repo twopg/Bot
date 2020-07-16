@@ -33,7 +33,7 @@ export default class EventsService {
 
     private hookEvents() {
         for (const handler of this.handlers)
-            bot.on(handler.on, handler.invoke.bind(handler));
+            bot.on(handler.on as any, handler.invoke.bind(handler));
 
         for (const handler of this.customHandlers)
             emitter.on(handler.on, handler.invoke.bind(handler));

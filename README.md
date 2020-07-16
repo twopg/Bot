@@ -36,11 +36,7 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
         "url": "https://2pg.xyz",
         "distPath": "/dist/dashboard"
     },
-    "lavalink": {
-        "password": "youshallnotpass"
-    },
-    "mongoURL": "mongodb://localhost/2PG",
-    "modules": ["announce", "autoMod", "commands", "general", "music", "xp", "settings"]
+    "mongoURL": "mongodb://localhost/2PG"
 }
 ```
 

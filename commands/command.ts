@@ -8,6 +8,7 @@ export interface Command {
     name: string;
     precondition?: Permission;
     summary: string;
+    aliases?: string[];
     usage?: string;
     
     execute: (ctx: CommandContext, ...args: any) => Promise<any> | void;
