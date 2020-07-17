@@ -4,12 +4,13 @@ import { GuildMember } from 'discord.js';
 import Music from '../modules/music/music';
 
 export default class PlayCommand implements Command {
-    name = 'play';
-    summary = 'Join and play a youtube result.';
-    precondition: Permission = 'SPEAK';
+    aliases = ['p'];
     cooldown = 2;
     module = 'Music';
-    aliases: ['p']
+    name = 'play';
+    precondition: Permission = 'SPEAK';
+    summary = 'Join and play a youtube result.';
+    usage = 'play query'
 
     constructor(private music = Deps.get<Music>(Music)) {}
     

@@ -72,12 +72,14 @@ export default class CommandService {
 
     private findCommand(prefix: string, content: string) {        
         const name = content
+            .toLowerCase()
             .split(' ')[0]
             .substring(prefix.length, content.length);
 
         return this.commands.get(name) ?? this.findByAlias(name);
     }
     private findByAlias(name: string) {
+        console.log(Array.from(this.commands.values()));        
         return Array.from(this.commands.values())
             .find(c => c.aliases?.some(a => a === name));
     }

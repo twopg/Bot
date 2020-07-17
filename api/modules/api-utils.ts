@@ -1,5 +1,6 @@
 import { bot } from '../../bot';
 import { AuthClient } from '../server';
+import { User } from 'discord.js';
 
 export async function getUser(key: any) {    
   const { id } = await AuthClient.getUser(key);
@@ -28,4 +29,14 @@ export async function getManagableGuilds(key: any) {
   }    
   return bot.guilds.cache
     .filter(g => manageableGuilds.some(id => id === g.id));
+}
+
+export function leaderboardMember(user: User, xpInfo: any) {
+    return {
+        id: user.id,
+        username: user.username,
+        tag: '#' + user.discriminator,
+        displayAvatarURL: user.displayAvatarURL({ dynamic: true }),
+        ...xpInfo
+    };
 }
