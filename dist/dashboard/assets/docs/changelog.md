@@ -5,6 +5,12 @@
 ## Beta
 
 ---
+<!-- ![v0.2.1b Dashboard](assets/docs/img/dashboard-v0.2.1.png) -->
+
+### v0.2.1b
+`Upcoming`
+
+---
 
 ![v0.2.0b Dashboard](assets/docs/img/dashboard-v0.2.0.png)
 

@@ -11,14 +11,14 @@ import Log from '../utils/log';
 
 export const app = express(),
              AuthClient = new OAuthClient(config.bot.id, config.bot.secret),
-             stripe = new Stripe(config.api.stripe.apiKey, { apiVersion: '2020-03-02' });
+             stripe = new Stripe(config.api.stripe.secretKey, { apiVersion: '2020-03-02' });
 
 export default class API {
     constructor() {
-        AuthClient.setRedirect(`${config.dashboard.url}/auth`);
+        AuthClient.setRedirect(`${config.api.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
 
-        const isLiveKey = config.api.stripe.apiKey.includes('live');
+        const isLiveKey = config.api.stripe.secretKey.includes('live');
         if (isLiveKey)
             stripe.webhookEndpoints.create({
                 url: config.api.url + '/stripe-webhook',
@@ -28,11 +28,11 @@ export default class API {
         app.use(cors());
         app.use(bodyParser.json());
         app.use('/api', apiRoutes);
+                
+        const distPath = join(__dirname, '../dist/dashboard');
+        app.use(express.static(distPath));
         
-        app.use(express.static(join(__dirname, '..', config.dashboard.distPath)));
-        
-        app.all('*', (req, res) => res.status(200).sendFile(
-            join(__dirname, '..', config.dashboard.distPath, '/index.html')));
+        app.all('*', (req, res) => res.status(200).sendFile(`${distPath}/index.html`));
     }
 }
 

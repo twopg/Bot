@@ -1,13 +1,11 @@
 import { model, Schema, Document } from 'mongoose';
 
-export type ModuleString = 'Auto-mod' | 'Announce' | 'General' | 'Music' | 'XP';
-
 export class Module {
     enabled = true;
 }
 
-export class AnnounceModule extends Module {
-    events: AnnounceEvent[] = [];
+export class LogsModule extends Module {
+    events: LogEvent[] = [];
 }
 
 export enum EventType {
@@ -21,7 +19,7 @@ export enum EventType {
     Warn ='WARN',
 }
 
-export interface AnnounceEvent {
+export interface LogEvent {
     event: EventType;
     channel: string;
     message: string;
@@ -81,22 +79,22 @@ export class DashboardSettings {
 
 const guildSchema = new Schema({
     _id: String,
-    announce: { type: Object, default: new AnnounceModule() }, 
     autoMod: { type: Object, default: new AutoModModule() }, 
     commands: { type: Object, default: new CommandsModule() },
     general: { type: Object, default: new GeneralModule() },
     leveling: { type: Object, default: new LevelingModule() },
+    logs: { type: Object, default: new LogsModule() }, 
     music: { type: Object, default: new MusicModule },
     settings: { type: Object, default: new DashboardSettings() }
 });
 
 export interface GuildDocument extends Document {
     _id: string;
-    announce: AnnounceModule;
     autoMod: AutoModModule;
     general: GeneralModule;
     music: MusicModule;
     leveling: LevelingModule;
+    logs: LogsModule;
     commands: CommandsModule;
     settings: DashboardSettings;
 }

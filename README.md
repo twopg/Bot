@@ -28,13 +28,11 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
         "port": "3000",
         "url": "https://2pg.xyz/api",
         "stripe": {
-            "apiKey": "stripeAPIKey",
-            "endpointSecret": "webhookEndpointSecret"
+            "secretKey": "stripeAPIKey"
         }
     },
     "dashboard": {
-        "url": "https://2pg.xyz",
-        "distPath": "/dist/dashboard"
+        "url": "https://2pg.xyz"
     },
     "mongoURL": "mongodb://localhost/2PG"
 }

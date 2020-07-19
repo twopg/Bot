@@ -1,4 +1,4 @@
-import { EventType, AnnounceEvent } from '../../data/models/guild';
+import { EventType, LogEvent } from '../../data/models/guild';
 import Guilds from '../../data/guilds';
 import { Guild, TextChannel } from 'discord.js';
 import Deps from '../../utils/deps';
@@ -13,11 +13,11 @@ export default abstract class AnnounceHandler implements EventHandler {
     protected async getEvent(guild: Guild) {
         const savedGuild = await this.guilds.get(guild);
         
-        const activeEvent = savedGuild.announce.events.find(e => e.event === this.event);
-        return (savedGuild.announce.enabled && activeEvent) ? activeEvent : null;
+        const activeEvent = savedGuild.logs.events.find(e => e.event === this.event);
+        return (savedGuild.logs.enabled && activeEvent) ? activeEvent : null;
     }
 
-    protected getChannel(config: AnnounceEvent, guild: Guild) {
+    protected getChannel(config: LogEvent, guild: Guild) {
         return guild.channels.cache.get(config?.channel) as TextChannel;
     }
 

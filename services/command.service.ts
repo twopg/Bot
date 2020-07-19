@@ -74,18 +74,18 @@ export default class CommandService {
         const name = content
             .toLowerCase()
             .split(' ')[0]
-            .substring(prefix.length, content.length);
+            .slice(prefix.length);
 
         return this.commands.get(name) ?? this.findByAlias(name);
     }
-    private findByAlias(name: string) {
-        console.log(Array.from(this.commands.values()));        
+    private findByAlias(name: string) {   
         return Array.from(this.commands.values())
             .find(c => c.aliases?.some(a => a === name));
     }
 
     private getCommandArgs(prefix: string, content: string) {
-        let args = content.split(' ');
-        return args.splice(prefix.length, args.length);
+        return content
+            .split(' ')
+            .slice(prefix.length); // .ping arg1 arg2 -> ping arg1 arg2
     }
 }

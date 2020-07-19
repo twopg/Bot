@@ -36,7 +36,8 @@
     "nodemon": "^2.0.3",
     "stripe": "^8.39.1",
     "ts-node": "^8.10.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "uninstall": "0.0.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

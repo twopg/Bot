@@ -55,7 +55,7 @@ describe('modules/announce', () => {
         it('member join, channel not found, returns', () => {
             guilds.get = (): any => {
                 const guild = new SavedGuild();
-                guild.announce.events.push({
+                guild.logs.events.push({
                     event: EventType.MemberJoin,
                     message: 'test',
                     channel: '321'
@@ -70,7 +70,7 @@ describe('modules/announce', () => {
         it('member join, event active, message is sent', () => {
             guilds.get = (): any => {
                 const guild = new SavedGuild();
-                guild.announce.events.push({
+                guild.logs.events.push({
                     event: EventType.MemberJoin,
                     message: 'test',
                     channel: '123'
@@ -85,7 +85,7 @@ describe('modules/announce', () => {
         it('member join, event active, message is sent with applied guild variables', () => {
             guilds.get = (): any => {
                 const guild = new SavedGuild();
-                guild.announce.events.push({
+                guild.logs.events.push({
                     event: EventType.MemberJoin,
                     message: '[USER] joined!',
                     channel: '123'
