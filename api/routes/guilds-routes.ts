@@ -9,7 +9,7 @@ import Users from '../../data/users';
 import Guilds from '../../data/guilds';
 import Logs from '../../data/logs';
 import AuditLogger from '../modules/audit-logger';
-import { User } from 'discord.js';
+import { User, TextChannel } from 'discord.js';
 import Leveling from '../../modules/xp/leveling';
 import { sendError } from './api-routes';
 import Emit from '../../services/emit';
@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
 router.put('/:id/:module', async (req, res) => {
     try {
         const { id, module } = req.params;
-        const enabledModules = ['autoMod', 'commands', 'general', 'leveling', 'logs', 'music', 'settings'];
+        const enabledModules = ['autoMod', 'commands', 'general', 'leveling', 'logs', 'music', 'reactionRoles', 'settings'];
         
         const isValidModule = enabledModules.some(m => m === module);        
         if (!isValidModule)
@@ -150,5 +150,21 @@ router.get('/:id/bot-status', async (req, res) => {
         
         const requiredPermission = 'ADMINISTRATOR';
         res.json({ hasAdmin: botMember.hasPermission(requiredPermission) });
+    } catch (error) { sendError(res, 400, error); }
+});
+
+router.get('/:id/channels/:channelId/messages/:messageId', async(req, res) => {
+    try {
+        const guild = bot.guilds.cache.get(req.params.id);
+        const channel = guild?.channels.cache
+            .get(req.params.channelId) as TextChannel;   
+
+        const msg = await channel.messages.fetch(req.params.messageId);
+
+        res.json({
+            ...msg,
+            member: guild.members.cache.get(msg.author.id),
+            user: bot.users.cache.get(msg.author.id)
+        });
     } catch (error) { sendError(res, 400, error); }
 });

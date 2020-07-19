@@ -73,6 +73,16 @@ export interface CommandConfig {
     enabled: boolean;
 }
 
+export class ReactionRolesModule extends Module {
+    configs: ReactionRole[] = [];
+}
+export interface ReactionRole {
+    channel: string,
+    messageId: string,
+    emote: string,
+    role: string
+}
+
 export class DashboardSettings {
     privateLeaderboard = false;
 }
@@ -85,17 +95,19 @@ const guildSchema = new Schema({
     leveling: { type: Object, default: new LevelingModule() },
     logs: { type: Object, default: new LogsModule() }, 
     music: { type: Object, default: new MusicModule },
+    reactionRoles: { type: Object, default: new ReactionRolesModule() },
     settings: { type: Object, default: new DashboardSettings() }
 });
 
 export interface GuildDocument extends Document {
     _id: string;
     autoMod: AutoModModule;
+    commands: CommandsModule;
     general: GeneralModule;
     music: MusicModule;
     leveling: LevelingModule;
     logs: LogsModule;
-    commands: CommandsModule;
+    reactionRoles: ReactionRolesModule;
     settings: DashboardSettings;
 }
 
