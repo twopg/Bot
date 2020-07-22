@@ -33,11 +33,6 @@ router.get('/', async (req, res) => {
 router.put('/:id/:module', async (req, res) => {
     try {
         const { id, module } = req.params;
-        const enabledModules = ['autoMod', 'commands', 'general', 'leveling', 'logs', 'music', 'reactionRoles', 'settings'];
-        
-        const isValidModule = enabledModules.some(m => m === module);        
-        if (!isValidModule)
-            throw new TypeError('Module not configured');
 
         await validateGuildManager(req.query.key, id);
 
