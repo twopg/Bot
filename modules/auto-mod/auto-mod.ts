@@ -66,11 +66,9 @@ export default class AutoMod {
         return this.members.save(savedMember);        
     }
 
-    private validateAction(target: GuildMember, instigator: User) {
+    validateAction(target: GuildMember, instigator: User) {
         if (target.id === instigator.id)
             throw new TypeError('You cannot punish yourself.');
-        if (target.user.bot)
-            throw new TypeError('Bots cannot be punished.');
 
         const instigatorMember = target.guild.members.cache
             .get(instigator.id);        

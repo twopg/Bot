@@ -1,13 +1,12 @@
 import { Command, CommandContext, Permission } from './command';
-import config from '../config.json';
 import Deps from '../utils/deps';
 import AutoMod from '../modules/auto-mod/auto-mod';
 import { getMemberFromMention } from '../utils/command-utils';
 
 export default class KickCommand implements Command {
-    name = 'kick';
-    summary = `Kick a member`;
-    precondition: Permission = 'KICK_MEMBERS';
+    name = 'ban';
+    summary = `Ban a member`;
+    precondition: Permission = 'BAN_MEMBERS';
     cooldown = 3;
     module = 'Auto-mod';
 
@@ -18,6 +17,6 @@ export default class KickCommand implements Command {
         this.autoMod.validateAction(target, ctx.user);
 
         const reason = reasonArgs.join(' ');
-        return target.kick(reason);
+        return target.ban({ reason });
     }
 }
