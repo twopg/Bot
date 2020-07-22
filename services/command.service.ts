@@ -67,7 +67,7 @@ export default class CommandService {
         const prefix = savedGuild.general.prefix;        
         const command = this.findCommand(prefix, msg.content);        
         await command.execute(new CommandContext(msg), 
-            ...this.getCommandArgs(prefix, msg.content));  
+            ...this.getCommandArgs(msg.content));  
     }
 
     private findCommand(prefix: string, content: string) {        
@@ -83,9 +83,9 @@ export default class CommandService {
             .find(c => c.aliases?.some(a => a === name));
     }
 
-    private getCommandArgs(prefix: string, content: string) {
+    private getCommandArgs(content: string) {
         return content
             .split(' ')
-            .slice(prefix.length); // .ping arg1 arg2 -> ping arg1 arg2
+            .slice(1);
     }
 }
