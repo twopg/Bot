@@ -1,5 +1,5 @@
 import { Command, CommandContext, Permission } from './command';
-import config from '../config.json';
+import config from '../../config.json';
 
 export default class HelpCommand implements Command {
     name = 'help';

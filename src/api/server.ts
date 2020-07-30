@@ -1,5 +1,5 @@
 import express from 'express';
-import config from '../config.json';
+import config from '../../config.json';
 import cors from 'cors';
 import OAuthClient from 'disco-oauth';
 import bodyParser from 'body-parser';

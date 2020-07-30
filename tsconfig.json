@@ -8,11 +8,10 @@
     "noImplicitAny": false,
     "outDir": "lib",
     "resolveJsonModule": true,
-    "rootDir": "src",
     "strict": true,
     "strictNullChecks": false,
     "target": "ES5",
     "watch": true
   },
-  "exclude": ["test"]
+  "include": ["src", "config.json"]
 }

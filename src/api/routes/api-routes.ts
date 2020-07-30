@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import { Router } from 'express';
 import { bot } from '../../bot';
-import * as config from '../../config.json';
+import * as config from '../../../config.json';
 import { CommandDocument, SavedCommand } from '../../data/models/command';
 import Users from '../../data/users';
 import Deps from '../../utils/deps';

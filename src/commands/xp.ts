@@ -1,5 +1,5 @@
 import { Command, CommandContext, Permission } from './command';
-import config from '../config.json';
+import config from '../../config.json';
 import { getMemberFromMention } from '../utils/command-utils';
 
 export default class XPCommand implements Command {

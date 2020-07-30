@@ -1,4 +1,4 @@
-import config from '../../config.json';
+import config from '../../../config.json';
 import EventHandler from './event-handler';
 import { Guild, TextChannel } from 'discord.js';
 import Deps from '../../utils/deps';

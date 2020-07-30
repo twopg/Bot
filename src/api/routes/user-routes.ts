@@ -3,7 +3,7 @@ import { XPCardGenerator } from '../modules/image/xp-card-generator';
 import { SavedMember } from '../../data/models/member';
 import Deps from '../../utils/deps';
 import Users from '../../data/users';
-import config from '../../config.json';
+import config from '../../../config.json';
 import { sendError } from './api-routes';
 import { getUser } from '../modules/api-utils';
 import { stripe } from '../server';

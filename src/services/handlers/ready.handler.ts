@@ -4,7 +4,7 @@ import Deps from '../../utils/deps';
 import Music from '../../modules/music/music';
 import { bot } from '../../bot';
 import CommandService from '../command.service';
-import config from '../../config.json';
+import config from '../../../config.json';
 import AutoMod from '../../modules/auto-mod/auto-mod';
 
 export default class ReadyHandler implements EventHandler {

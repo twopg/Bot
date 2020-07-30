@@ -1,5 +1,5 @@
 import { Client } from 'discord.js';
-import config from './config.json';
+import config from './../config.json';
 import mongoose from 'mongoose';
 import Deps from './utils/deps';
 import { EventEmitter } from 'events';
