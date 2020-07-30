@@ -38,11 +38,10 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 - You can also join the [2PG Discord](https://discord.gg/24tycau) if you need extra support.
 
 ## Debugging with VSCode (Windows)
-`F5` -> start
-`Shift + F5` -> stop
-`Ctrl + Shift + B` -> run build task
-
-`F9` -> toggle breakpoint
-`F10` -> step over
-`F11` -> step into
-`Shift + F11` -> step out
+* `F5` -> start
+* `Shift + F5` -> stop
+* `Ctrl + Shift + B` -> run build task
+* `F9` -> toggle breakpoint
+* `F10` -> step over
+* `F11` -> step into
+* `Shift + F11` -> step out

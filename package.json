@@ -4,14 +4,14 @@
   "description": "Good bot",
   "main": "bot.ts",
   "scripts": {
-    "test": "ts-mocha tests/**/*.tests.ts",
-    "test:u": "ts-mocha tests/unit/**/*.tests.ts",
-    "test:i": "ts-mocha tests/integration/**/*.tests.ts",
+    "test": "ts-mocha test/**/*.tests.ts",
+    "test:u": "ts-mocha test/unit/**/*.tests.ts",
+    "test:i": "ts-mocha test/integration/**/*.tests.ts",
     "start": "npm run start:bot",
-    "start:prod": "npm run start:music | ts-node bot.ts",
-    "start:dev": "npm run start:music | npm run start:bot",
-    "start:bot": "nodemon --exec ts-node bot.ts --watch * -e ts,json",
-    "start:music": "cd dist/lavalink && java -jar Lavalink.jar"
+    "start:bot": "ts-node src/bot.ts",
+    "start:dev": "npm run start:music | ts-node-dev bot.ts",
+    "start:music": "cd dist/lavalink && java -jar Lavalink.jar",
+    "start:prod": "npm run start:music | ts-node src/bot.ts"
   },
   "engines": {
     "node": "12.x",
@@ -51,6 +51,7 @@
     "mocha": "^7.1.2",
     "supertest": "^4.0.2",
     "ts-mocha": "^6.0.0",
-    "ts-mockito": "^2.5.0"
+    "ts-mockito": "^2.5.0",
+    "ts-node-dev": "^1.0.0-pre.56"
   }
 }
