@@ -4,7 +4,7 @@ import cors from 'cors';
 import OAuthClient from 'disco-oauth';
 import bodyParser from 'body-parser';
 import { Stripe } from 'stripe';
-import { join } from 'path';
+import { dirname, join } from 'path';
 
 import { router as apiRoutes } from './routes/api-routes';
 import Log from '../utils/log';
@@ -28,8 +28,8 @@ export default class API {
         app.use(cors());
         app.use(bodyParser.json());
         app.use('/api', apiRoutes);
-                
-        const distPath = join(__dirname, '../dist/dashboard');
+        
+        const distPath = join(process.cwd(), '/dist/dashboard');
         app.use(express.static(distPath));
         
         app.all('*', (req, res) => res.status(200).sendFile(`${distPath}/index.html`));
