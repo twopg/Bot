@@ -1,16 +1,17 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "ES5",
-    "module": "CommonJS",
-    "strict": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
     "downlevelIteration": true,
+    "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "module": "CommonJS",
     "noImplicitAny": false,
-    "strictNullChecks": false,
-    "rootDir": "src",
     "outDir": "lib",
+    "resolveJsonModule": true,
+    "rootDir": "src",
+    "strict": true,
+    "strictNullChecks": false,
+    "target": "ES5",
     "watch": true
   },
   "exclude": ["test"]

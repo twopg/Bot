@@ -7,9 +7,7 @@ import { EventEmitter } from 'events';
 import EventsService from './services/events.service';
 import API from './api/server';
 
-export const bot = new Client({
-    partials: ['GUILD_MEMBER']
-});
+export const bot = new Client({ partials: ['GUILD_MEMBER'] });
 export const emitter = new EventEmitter();
 
 bot.login(config.bot.token);

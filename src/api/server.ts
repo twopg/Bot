@@ -11,14 +11,14 @@ import Log from '../utils/log';
 
 export const app = express(),
              AuthClient = new OAuthClient(config.bot.id, config.bot.secret),
-             stripe = new Stripe(config.api.stripe.secretKey, { apiVersion: '2020-03-02' });
+             stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-03-02' });
 
 export default class API {
     constructor() {
         AuthClient.setRedirect(`${config.api.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
 
-        const isLiveKey = config.api.stripe.secretKey.includes('live');
+        const isLiveKey = config.api.stripeSecretKey.includes('live');
         if (isLiveKey)
             stripe.webhookEndpoints.create({
                 url: config.api.url + '/stripe-webhook',

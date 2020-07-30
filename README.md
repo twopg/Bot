@@ -3,15 +3,9 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 
 **Dashboard**: https://github.com/theADAMJR/2PG-Dashboard
 
-⭐ Please star this if you find it useful. This will support the project, and help improve 2PG.
-
 ![2PG Avatar](https://i.ibb.co/h2BjCJh/2pg-smol.png)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8d6c9610e0eb4ae5a4045ab3b92f80bc)](https://www.codacy.com/manual/ADAMJR/2PG?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=theADAMJR/2PG&amp;utm_campaign=Badge_Grade)
-
-## Installation
-1) Fork/download this respository
-2) `npm i` to install packages
 
 ### Config
 `config.json` example:
@@ -19,40 +13,36 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 {
     "bot": {
         "token": "yourBotToken",
-        "secret": "oauthSecret",
-        "ownerId": "botOwnerId",
+        "secret": "yourClientSecret",
+        "ownerId": "",
         "activity": "2PG.xyz",
         "id": "discordBotId"
     },
     "api": {
         "port": "3000",
         "url": "https://2pg.xyz/api",
-        "stripe": {
-            "secretKey": "stripeAPIKey"
-        }
+        "stripeSecretKey": ""
     },
-    "dashboard": {
-        "url": "https://2pg.xyz"
-    },
+    "dashboardURL": "https://2pg.xyz",
     "mongoURL": "mongodb://localhost/2PG"
 }
 ```
 
-## Hosting
-1) `npm start` to start the bot, and Lavalink
-
-### Database
+## Start the Bot
+- `npm start` to start the bot, and Lavalink
 - Remember to have a local MongoDB database running `mongod`
-
-### Music
-- Have Lavalink.jar running - `java -jar Lavalink.jar` (done with npm start)
-
-[Lavalink Setup](https://github.com/Frederikam/Lavalink#server-configuration)
+- Have Lavalink.jar running - `npm run start:music` or `java -jar Lavalink.jar`
 
 ## Troubleshooting
 - Open an issue, if you find any bugs or have any suggestions etc.
+- You can also join the [2PG Discord](https://discord.gg/24tycau) if you need extra support.
 
-### Common Errors
-`UnhandledPromiseRejectionWarning: MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017`
+## Debugging with VSCode (Windows)
+`F5` -> start
+`Shift + F5` -> stop
+`Ctrl + Shift + B` -> run build task
 
-**Possible Cause**: No MongoDB server instance running, start with `mongod`
+`F9` -> toggle breakpoint
+`F10` -> step over
+`F11` -> step into
+`Shift + F11` -> step out
