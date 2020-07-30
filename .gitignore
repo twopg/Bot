@@ -2,3 +2,4 @@ config.json
 
 dist/lavalink/logs/
 node_modules/
+lib/

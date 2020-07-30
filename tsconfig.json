@@ -1,4 +1,5 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "target": "ES5",
     "module": "CommonJS",
@@ -7,6 +8,10 @@
     "resolveJsonModule": true,
     "downlevelIteration": true,
     "noImplicitAny": false,
-    "strictNullChecks": false
-  }
+    "strictNullChecks": false,
+    "rootDir": "src",
+    "outDir": "lib",
+    "watch": true
+  },
+  "exclude": ["test"]
 }
