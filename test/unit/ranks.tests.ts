@@ -25,4 +25,16 @@ describe('api/ranks', () => {
 
         expect(result).to.equal(1);
     });
+
+    it('medium xp messages returns middle rank', () => {
+        const members = [
+            { xp: '100', userId: '1' },
+            { xp: '999', userId: '2' },
+            { xp: '300', userId: '3' }
+        ] as any;
+        
+        const result = Ranks.get({ id: '3' } as any, members);
+
+        expect(result).to.equal(2);
+    });
 });
