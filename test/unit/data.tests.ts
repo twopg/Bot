@@ -1,3 +1,6 @@
+import Commands from '../../src/data/commands';
+import { expect } from 'chai';
+
 describe('data/commands', () => {
   it('getCommandUsage returns valid command usage with no args', () => {
       const result = new Commands().getCommandUsage({

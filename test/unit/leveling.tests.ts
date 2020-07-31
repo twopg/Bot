@@ -34,26 +34,7 @@ describe('modules/leveling', () => {
             result().should.eventually.throw();
         });
     });
-
-    describe('getLevel', () => {
-        it('0 returns level 1', () => {
-            const result = new Leveling().getLevel(0);
     
-            expect(result).to.deep.equal(1);
-        });
-
-        it('floored level returned, min level messages', () => {
-            const result = new Leveling().getLevel(300);
-    
-            expect(result).to.equal(2);
-        });
-
-        it('floored level returned, greater than min level messages', () => {
-            const result = new Leveling().getLevel(400);
-    
-            expect(result).to.equal(2);
-        });
-    });
     describe('getLevel', () => {
         it('0 returns level 1', () => {
             const result = Leveling.xpInfo(0).level;

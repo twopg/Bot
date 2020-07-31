@@ -1,6 +1,5 @@
 {
-  "mochaExplorer.files": "test/unit/*.test.ts",
-  "mochaExplorer.require": [
-    "ts-node/register"
-  ],
+  "mochaExplorer.files": "test/unit/*.tests.ts",
+  "mochaExplorer.require": "ts-node/register",
+  "mochaExplorer.logpanel": true
 }
