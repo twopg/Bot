@@ -1,5 +1,5 @@
-import AuditLogger from "../../../../api/modules/audit-logger";
-import { expect } from "chai";
+import AuditLogger from '../../src/api/modules/audit-logger';
+import { expect } from 'chai';
 
 describe('api/modules/audit-logger', () => {
     it('no changes, empty array returned', () => {

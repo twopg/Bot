@@ -1,8 +1,8 @@
-import Cooldowns from "../../../services/cooldowns";
-import { User } from "discord.js";
-import { mock } from "ts-mockito";
-import { Command } from "../../../commands/Command";
-import { expect } from "chai";
+import Cooldowns from '../../src/services/cooldowns';
+import { User } from 'discord.js';
+import { mock } from 'ts-mockito';
+import { Command } from '../../src/commands/command';
+import { expect } from 'chai';
 
 describe('services/cooldowns', () => {
     let cooldowns: Cooldowns;

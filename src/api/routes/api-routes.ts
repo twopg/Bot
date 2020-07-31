@@ -24,6 +24,9 @@ router.get('/commands', async (req, res) => res.json(commands));
 
 router.get('/auth', async (req, res) => {
   try {
+    console.log(req.query.key);
+    console.log(req.query.code);
+    
     const key = await AuthClient.getAccess(req.query.code);
     res.redirect(`${config.dashboardURL}/auth?key=${key}`);
   } catch (error) { sendError(res, 400, error); }

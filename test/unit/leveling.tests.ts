@@ -1,7 +1,7 @@
 import { should, use, expect } from 'chai';
 import { mock } from 'ts-mockito';
-import Leveling from '../../../modules/xp/leveling';
-import { GuildDocument } from '../../../data/models/guild';
+import Leveling from '../../src/modules/xp/leveling';
+import { GuildDocument } from '../../src/data/models/guild';
 import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);

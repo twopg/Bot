@@ -4,9 +4,9 @@
   "description": "Good bot",
   "main": "bot.ts",
   "scripts": {
-    "test": "ts-mocha test/**/*.tests.ts",
-    "test:u": "ts-mocha test/unit/**/*.tests.ts",
-    "test:i": "ts-mocha test/integration/**/*.tests.ts",
+    "test": "npm run test:u && npm run test:i",
+    "test:i": "ts-mocha test/integration/*.tests.ts",
+    "test:u": "ts-mocha test/unit/*.tests.ts",
     "start": "npm run start:bot",
     "start:bot": "ts-node src/bot.ts",
     "start:dev": "npm run start:music | ts-node-dev bot.ts",

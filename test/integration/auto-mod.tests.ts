@@ -1,11 +1,12 @@
 import { use, should, expect } from 'chai';
-import { GuildDocument, MessageFilter } from '../../../data/models/guild';
+import { GuildDocument, MessageFilter } from '../../src/data/models/guild';
 import { mock } from 'ts-mockito';
-import AutoMod from '../../../modules/auto-mod/auto-mod';
+import AutoMod from '../../src/modules/auto-mod/auto-mod';
 import { Message } from 'discord.js';
 import chaiAsPromised from 'chai-as-promised';
-import {  SavedMember } from '../../../data/models/member';
-import Members from '../../../data/members';
+import {  SavedMember } from '../../src/data/models/member';
+import Members from '../../src/data/members';
+import Emit from '../../src/services/emit';
 
 describe('modules/auto-mod', () => {
     let autoMod: AutoMod;
@@ -14,11 +15,10 @@ describe('modules/auto-mod', () => {
         const members = mock<Members>();
         members.get = (): any => new SavedMember();
         
-        autoMod = new AutoMod(members);
+        autoMod = new AutoMod(mock<Emit>(), members);
     });
     
     describe('validateMsg', () => {
-
         it('contains ban word, has filter, error thrown', async() => {            
             const guild = mock<GuildDocument>();
             const msg = mock<Message>();
@@ -27,7 +27,7 @@ describe('modules/auto-mod', () => {
             guild.autoMod.banWords = ['a'];
             msg.content = 'a';
             
-            const result = () => autoMod.validateMsg(msg, guild);
+            const result = () => autoMod.validate(msg, guild);
 
             result().should.eventually.throw();
         });
@@ -41,7 +41,7 @@ describe('modules/auto-mod', () => {
             msg.content = 'a';
             msg.delete = () => { throw new TypeError('deleted'); }
 
-            const result = () => autoMod.validateMsg(msg, guild);
+            const result = () => autoMod.validate(msg, guild);
 
             result().should.eventually.throw('deleted');
         });
@@ -54,7 +54,7 @@ describe('modules/auto-mod', () => {
             guild.autoMod.banWords = [];
             msg.content = 'a';
 
-            const result = () => autoMod.validateMsg(msg, guild);
+            const result = () => autoMod.validate(msg, guild);
 
             result().should.not.eventually.throw();
         });
@@ -67,7 +67,7 @@ describe('modules/auto-mod', () => {
             guild.autoMod.banLinks = ['a'];
             msg.content = 'a';
 
-            const result = () => autoMod.validateMsg(msg, guild);
+            const result = () => autoMod.validate(msg, guild);
 
             result().should.eventually.throw();
         });
@@ -80,7 +80,7 @@ describe('modules/auto-mod', () => {
             guild.autoMod.banLinks = ['a'];
             msg.content = 'a';
 
-            const result = () => autoMod.validateMsg(msg, guild);
+            const result = () => autoMod.validate(msg, guild);
 
             result().should.not.eventually.throw();
         });

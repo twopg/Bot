@@ -40,7 +40,7 @@ export default class Leveling {
         const lastMessage = savedMember.recentMessages[savedMember.recentMessages.length - 1];
         if (lastMessage && lastMessage.getMinutes() !== new Date().getMinutes())
             savedMember.recentMessages = [];
-        
+
         savedMember.recentMessages.push(new Date());
     }
 
