@@ -39,6 +39,7 @@ export class AutoModModule extends Module {
 
 export class CommandsModule extends Module {
     configs: CommandConfig[] = [];
+    custom: CustomCommand[] = [];
 }
 
 export enum MessageFilter {
@@ -73,6 +74,10 @@ export class MusicModule extends Module {
 export interface CommandConfig {
     name: string;
     enabled: boolean;
+}
+export interface CustomCommand {
+    name: string;
+    alias: string;
 }
 
 export class ReactionRolesModule extends Module {

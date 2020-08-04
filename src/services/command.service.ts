@@ -5,7 +5,7 @@ import Log from '../utils/log';
 import Deps from '../utils/deps';
 import Commands from '../data/commands';
 import Logs from '../data/logs';
-import { GuildDocument } from '../data/models/guild';
+import { GuildDocument, SavedGuild } from '../data/models/guild';
 import Cooldowns from './cooldowns';
 import Validators from './validators';
 import { promisify } from 'util';
@@ -44,18 +44,21 @@ export default class CommandService {
         return this.handleCommand(msg, savedGuild);
     }
     private async handleCommand(msg: Message, savedGuild: GuildDocument) {
-        const content = msg.content.toLowerCase();
         try {
             this.validators.checkChannel(msg.channel as TextChannel, savedGuild);
 
-            const command = this.findCommand(savedGuild.general.prefix, content);
+            const prefix = savedGuild.general.prefix;
+            const slicedContent = msg.content.slice(prefix.length);
+
+            const command = this.findCommand(slicedContent, savedGuild);
             if (!command || this.cooldowns.active(msg.author, command)) return;
 
             this.validators.checkCommand(command, savedGuild, msg);
             this.validators.checkPreconditions(command, msg.member);
 
-            await this.findAndExecute(msg, savedGuild);
-
+            await command.execute(new CommandContext(msg), 
+            ...this.getCommandArgs(slicedContent));
+            
             this.cooldowns.add(msg.author, command);
 
             await this.logs.logCommand(msg, command);
@@ -65,28 +68,26 @@ export default class CommandService {
         }
     }
 
-    async findAndExecute(msg: Message, savedGuild: GuildDocument) {
-        const prefix = savedGuild.general.prefix;        
-        const command = this.findCommand(prefix, msg.content);        
-        await command.execute(new CommandContext(msg), 
-            ...this.getCommandArgs(msg.content));  
-    }
-
-    private findCommand(prefix: string, content: string) {        
-        const name = content
+    private findCommand(slicedContent: string, savedGuild: GuildDocument) {
+        const name = slicedContent
             .toLowerCase()
-            .split(' ')[0]
-            .slice(prefix.length);
+            .split(' ')[0];
 
-        return this.commands.get(name) ?? this.findByAlias(name);
+        return this.commands.get(name)
+            ?? this.findByAlias(name)
+            ?? this.findCustomCommand(name, savedGuild);
     }
     private findByAlias(name: string) {   
         return Array.from(this.commands.values())
             .find(c => c.aliases?.some(a => a === name));
     }
+    private findCustomCommand(name: string, { commands }: GuildDocument) {
+        const customCommand = commands.custom.find(c => c.alias = name);
+        return this.commands.get(customCommand?.name);
+    }
 
-    private getCommandArgs(content: string) {
-        return content
+    private getCommandArgs(slicedContent: string) {
+        return slicedContent
             .split(' ')
             .slice(1);
     }

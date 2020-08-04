@@ -19,11 +19,25 @@ router.get('/', async (req, res) => {
 
 const items = [
     {
-        name: '2PG+',
+        name: '2PG+ [1 Month]',
         description: 'Support 2PG, and unlock exclusive features!',
         amount: 500,
         currency: 'usd',
         quantity: 1,
+    },
+    {
+        name: '2PG+ [3 Months]',
+        description: 'Support 2PG, and unlock exclusive features!',
+        amount: 1000,
+        currency: 'usd',
+        quantity: 1,
+    },
+    {
+        name: '2PG+ [Forever]',
+        description: 'Support 2PG, and unlock exclusive features!',
+        amount: 2500,
+        currency: 'usd',
+        quantity: 1
     }
 ];
 
