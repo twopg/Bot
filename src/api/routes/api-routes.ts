@@ -11,6 +11,7 @@ import { router as guildsRoutes } from './guilds-routes';
 import { router as musicRoutes } from './music-routes';
 import { router as userRoutes } from './user-routes';
 import Stats from '../modules/stats';
+import { validateBotOwner } from '../modules/api-utils';
 
 export const router = Router();
 
@@ -66,15 +67,17 @@ router.post('/error', async(req, res) => {
   } catch (error) { sendError(res, 400, error); }
 });
 
-router.get('/stats', (req, res) => {
-  // TODO: validate bot owner
-  // FIXME: 1 hour update cooldown (reduce cpu usage)
-  res.json({
-    general: stats.general,
-    commands: stats.commands,
-    inputs: stats.inputs,
-    modules: stats.modules
-  });
+router.get('/stats', async (req, res) => {
+  try {
+    await validateBotOwner(req.query.key);
+  
+    res.json({
+      general: stats.general,
+      commands: stats.commands,
+      inputs: stats.inputs,
+      modules: stats.modules
+    });
+  } catch (error) { sendError(res, 400, error); }
 });
 
 router.get('/invite', (req, res) => 
