@@ -33,21 +33,28 @@ describe('api/modules/stats', () => {
         at: new Date(),
         by: '',
         changes: { old: { xpPerMessage: 50 }, new: { xpPerMessage: 100 } }
-      });
+      }
+    );
 
-      await stats.init();
+    savedLog.commands.push(
+      { name: 'ping', by: '', at: new Date() },
+      { name: 'ping', by: '', at: new Date() },
+      { name: 'dashboard', by: '', at: new Date() }
+    );
+
+    await stats.init();
   });
 
-  it('get modules, returns correct count', () => {
-    const result = stats.modules[0].count;
+  it('get commands, returns correct count', () => {
+    const result = stats.commands[0].count;
 
     expect(result).to.equal(2);
   });
 
-  it('get modules, returns correct sorted item', () => {
-    const result = stats.modules[0].name;
+  it('get commands, returns correct sorted item', () => {
+    const result = stats.commands[0].name;
 
-    expect(result).to.equal('general');
+    expect(result).to.equal('ping');
   });
 
   it('get inputs, returns correct count', () => {
@@ -60,5 +67,17 @@ describe('api/modules/stats', () => {
     const result = stats.inputs[0].path;
 
     expect(result).to.equal('general.prefix');
+  });
+
+  it('get modules, returns correct count', () => {
+    const result = stats.modules[0].count;
+
+    expect(result).to.equal(2);
+  });
+
+  it('get modules, returns correct sorted item', () => {
+    const result = stats.modules[0].name;
+
+    expect(result).to.equal('general');
   });
 });

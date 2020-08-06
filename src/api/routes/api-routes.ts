@@ -68,7 +68,10 @@ router.post('/error', async(req, res) => {
 
 router.get('/stats', (req, res) => {
   // TODO: validate bot owner
+  // FIXME: 1 hour update cooldown (reduce cpu usage)
   res.json({
+    general: stats.general,
+    commands: stats.commands,
     inputs: stats.inputs,
     modules: stats.modules
   });
