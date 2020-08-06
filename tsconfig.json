@@ -4,6 +4,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "inlineSourceMap": true,
+    "lib": ["es2020"],
     "module": "CommonJS",
     "noImplicitAny": false,
     "outDir": "lib",

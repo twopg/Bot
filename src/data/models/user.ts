@@ -10,6 +10,7 @@ export class XPCard {
 const userSchema = new Schema({
     _id: String,
     premium: Boolean,
+    premiumExpiration: { type: Date, default: new Date() },
     votes: Number,
     xpCard: { type: Object, default: new XPCard() }
 });
@@ -17,6 +18,7 @@ const userSchema = new Schema({
 export interface UserDocument extends Document {
     _id: string;
     premium: boolean;
+    premiumExpiration: Date;
     votes: number;
     xpCard: XPCard;
 }

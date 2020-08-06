@@ -4,17 +4,19 @@ import cors from 'cors';
 import OAuthClient from 'disco-oauth';
 import bodyParser from 'body-parser';
 import { Stripe } from 'stripe';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
 import { router as apiRoutes } from './routes/api-routes';
 import Log from '../utils/log';
+import Deps from '../utils/deps';
+import Stats from './modules/stats';
 
 export const app = express(),
              AuthClient = new OAuthClient(config.bot.id, config.bot.secret),
              stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-03-02' });
 
 export default class API {
-    constructor() {
+    constructor(private stats = Deps.get<Stats>(Stats)) {
         AuthClient.setRedirect(`${config.api.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
 
@@ -33,6 +35,8 @@ export default class API {
         app.use(express.static(distPath));
         
         app.all('*', (req, res) => res.status(200).sendFile(`${distPath}/index.html`));
+
+        this.stats.init();
     }
 }
 

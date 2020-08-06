@@ -10,10 +10,12 @@ import { AuthClient } from '../server';
 import { router as guildsRoutes } from './guilds-routes';
 import { router as musicRoutes } from './music-routes';
 import { router as userRoutes } from './user-routes';
+import Stats from '../modules/stats';
 
 export const router = Router();
 
-const users = Deps.get<Users>(Users);
+const stats = Deps.get<Stats>(Stats),
+      users = Deps.get<Users>(Users);
 
 let commands: CommandDocument[] = [];
 SavedCommand.find().then(cmds => commands = cmds);
@@ -33,10 +35,12 @@ router.post('/stripe-webhook', async(req, res) => {
   try {
     // TODO: add better validation
     if (!req.headers['stripe-signature']) return;
+
+    const payment = req.body.data.object;
     
-    const id = req.body.data.object.metadata.id;
+    const id = payment.metadata.id;
     if (req.body.type === 'checkout.session.completed') {
-      await giveUserPlus(id);
+      await users.givePlus(id, payment.id);
       return res.json({ success: true });
     }
     res.json({ received: true });
@@ -58,21 +62,23 @@ router.post('/error', async(req, res) => {
         title: 'Dashboard Error',
         description: `**Message**: ${message}`,
         footer: { text: `User ID: ${user.id}` }
-      }));
+    }));
   } catch (error) { sendError(res, 400, error); }
 });
 
-async function giveUserPlus(id: string) {   
-  const savedUser = await users.get({ id });
-  savedUser.premium = true;
-  savedUser.save();
-}
+router.get('/stats', (req, res) => {
+  // TODO: validate bot owner
+  res.json({
+    inputs: stats.inputs,
+    modules: stats.modules
+  });
+});
 
 router.get('/invite', (req, res) => 
-    res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.dashboardURL}/dashboard&permissions=8&scope=bot`));
+  res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.dashboardURL}/dashboard&permissions=8&scope=bot`));
 
 router.get('/login', (req, res) =>
-    res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.api.url}/auth&response_type=code&scope=identify guilds&prompt=none`));
+  res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.api.url}/auth&response_type=code&scope=identify guilds&prompt=none`));
 
 router.use('/guilds', guildsRoutes);
 router.use('/guilds/:id/music', musicRoutes);

@@ -6,6 +6,7 @@ import { EventEmitter } from 'events';
 
 import EventsService from './services/events.service';
 import API from './api/server';
+import Log from './utils/log';
 
 export const bot = new Client({ partials: ['GUILD_MEMBER'] });
 export const emitter = new EventEmitter();
@@ -19,7 +20,9 @@ mongoose.connect(config.mongoURL, {
     useUnifiedTopology: true, 
     useNewUrlParser: true, 
     useFindAndModify: false 
-});
+}, (error) => error
+    ? Log.error('Failed to connect to db', 'bot')
+    : Log.info('Connected to db', 'bot'));
 
 // GLITCH.COM -> uncomment for glitch auto ping
 /*let count = 0;

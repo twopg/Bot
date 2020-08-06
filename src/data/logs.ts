@@ -22,4 +22,8 @@ export default class Logs extends DBWrapper<Guild, LogDocument> {
         });
         await this.save(log);
     }
+
+    async getAll() {
+        return await SavedLog.find();
+    }
 }

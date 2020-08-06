@@ -7,6 +7,7 @@ import config from '../../../config.json';
 import { sendError } from './api-routes';
 import { getUser } from '../modules/api-utils';
 import { stripe } from '../server';
+import { Stripe } from 'stripe';
 
 export const router = Router();
 
@@ -17,20 +18,20 @@ router.get('/', async (req, res) => {
     } catch (error) { sendError(res, 400, error); }
 });
 
-const items = [
+const items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
     {
         name: '2PG+ [1 Month]',
         description: 'Support 2PG, and unlock exclusive features!',
         amount: 500,
         currency: 'usd',
-        quantity: 1,
+        quantity: 1
     },
-    {
+    {        
         name: '2PG+ [3 Months]',
         description: 'Support 2PG, and unlock exclusive features!',
         amount: 1000,
         currency: 'usd',
-        quantity: 1,
+        quantity: 1
     },
     {
         name: '2PG+ [Forever]',
@@ -49,7 +50,7 @@ router.get('/pay', async(req, res) => {
             success_url: `${config.dashboardURL}/payment-success`,
             cancel_url: `${config.dashboardURL}/plus`,
             payment_method_types: ['card'],
-            metadata: { 'id': user.id },
+            metadata: { id: user.id },
             line_items: items
         });
         res.send(session);

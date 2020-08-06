@@ -23,6 +23,10 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
         "url": "https://2pg.xyz/api",
         "stripeSecretKey": ""
     },
+    "guild": {
+        "id": "599596068145201152",
+        "premiumRoleId": "598565371162656788"
+    },
     "dashboardURL": "https://2pg.xyz",
     "mongoURL": "mongodb://localhost/2PG"
 }
