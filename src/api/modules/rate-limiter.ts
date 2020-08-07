@@ -1,7 +1,7 @@
 import rateLimit from 'express-rate-limit';
 import rateLimitStore from '@lykmapipo/rate-limit-mongoose';
 
-const whiteListedIPs = ["::1", ".", "::ffff:127.0.0.1"];
+const whiteListedIPs = ['::1', '.', '::ffff:127.0.0.1'];
 
 export default rateLimit({
     store: rateLimitStore({ windowMs: 1 * 60 * 1000 }),

@@ -3,6 +3,7 @@ import config from '../../config.json';
 import { getMemberFromMention } from '../utils/command-utils';
 
 export default class XPCommand implements Command {
+    aliases = ['level', 'profile'];
     name = 'xp';
     summary = 'Display the XP card of a user.';
     precondition: Permission = '';
