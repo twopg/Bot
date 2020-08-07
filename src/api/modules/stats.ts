@@ -77,7 +77,7 @@ export default class Stats {
   constructor(private logs = Deps.get<Logs>(Logs)) {}
 
   async init() {
-    this.updateValues();
+    await this.updateValues();
 
     const interval = 30 * 60 * 1000;
     setInterval(() => this.updateValues(), interval);
