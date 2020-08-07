@@ -85,7 +85,9 @@ export default class Stats {
     setInterval(() => this.updateValues(), interval);
   }
 
-  updateValues() {
+  async updateValues() {
+    this.savedLogs = await this.logs.getAll();
+
     this.initialized = false;
 
     this._commands = this.commands;
