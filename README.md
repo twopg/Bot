@@ -7,7 +7,7 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8d6c9610e0eb4ae5a4045ab3b92f80bc)](https://www.codacy.com/manual/ADAMJR/2PG?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=theADAMJR/2PG&amp;utm_campaign=Badge_Grade)
 
-### Config
+## Config
 `config.json` example:
 ```
 {
@@ -31,6 +31,9 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
     "mongoURL": "mongodb://localhost/2PG"
 }
 ```
+
+## Redirect URIs
+![Redirects](https://i.ibb.co/9pbfVwL/updated-redirects.png)
 
 ## Start the Bot
 - `npm start` to start the bot, and Lavalink
