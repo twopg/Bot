@@ -7,15 +7,19 @@
 ---
 
 ### v0.2.1b
+`Upcoming`
 
 ![v0.2.1b Dashboard](assets/docs/img/dashboard-v0.2.1.png)
 
 **Add**
 - debugging -> vscode testing support
 - plus -> icon
+- stats -> bot stats, updated every 30 minutes
 
 **Change/Fix**
 - home -> smooth home page image
+- dashboard -> commands -> commands are now sorted alphabetically
+- navbar -> added navigation tooltips
 
 **Remove**
 
