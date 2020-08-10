@@ -55,7 +55,6 @@ router.post('/stripe-webhook', bodyParser.raw({type: 'application/json'}), async
   try {
     let event = stripe.webhooks
       .constructEvent(req.body, req.headers['stripe-signature'], config.api.endpointSecret);
-    console.log(event);    
     
     if (event.type === 'checkout.session.completed') {
       const { id, plan } = (event.data.object as any).metadata;
