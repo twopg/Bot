@@ -1,4 +1,3 @@
-import { Guild } from 'discord.js';
 import { GuildDocument, SavedGuild } from './models/guild';
 import DBWrapper from './db-wrapper';
 import SnowflakeEntity from './snowflake-entity';

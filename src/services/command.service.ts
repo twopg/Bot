@@ -57,7 +57,7 @@ export default class CommandService {
             this.validators.checkPreconditions(command, msg.member);
 
             await command.execute(new CommandContext(msg), 
-            ...this.getCommandArgs(slicedContent));
+            ...this.getCommandArgs(slicedContent, savedGuild));
             
             this.cooldowns.add(msg.author, command);
 
@@ -69,10 +69,7 @@ export default class CommandService {
     }
 
     private findCommand(slicedContent: string, savedGuild: GuildDocument) {
-        const name = slicedContent
-            .toLowerCase()
-            .split(' ')[0];
-
+        const name = this.getCommandName(slicedContent);
         return this.commands.get(name)
             ?? this.findByAlias(name)
             ?? this.findCustomCommand(name, savedGuild);
@@ -81,14 +78,24 @@ export default class CommandService {
         return Array.from(this.commands.values())
             .find(c => c.aliases?.some(a => a === name));
     }
-    private findCustomCommand(name: string, { commands }: GuildDocument) {
-        const customCommand = commands.custom.find(c => c.alias = name);
-        return this.commands.get(customCommand?.name);
+    private findCustomCommand(customName: string, { commands }: GuildDocument) {
+        const ccName = this.getCommandName(commands.custom
+            .find(c => c.alias === customName)?.command);
+        return this.commands.get(ccName);
     }
 
-    private getCommandArgs(slicedContent: string) {
-        return slicedContent
+    private getCommandArgs(slicedContent: string, savedGuild: GuildDocument) {
+        const name = this.getCommandName(slicedContent);
+        const customCommand = savedGuild.commands.custom
+            .find(c => c.alias === name)?.command;
+        return (customCommand ?? slicedContent)
             .split(' ')
-            .slice(1);
+            .slice(1)
+    }
+
+    private getCommandName(slicedContent: string) {
+        return slicedContent
+            .toLowerCase()
+            .split(' ')[0];
     }
 }

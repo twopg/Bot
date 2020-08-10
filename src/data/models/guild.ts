@@ -76,8 +76,8 @@ export interface CommandConfig {
     enabled: boolean;
 }
 export interface CustomCommand {
-    name: string;
     alias: string;
+    command: string;
 }
 
 export class ReactionRolesModule extends Module {
