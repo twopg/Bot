@@ -88,6 +88,7 @@ export default class CommandService {
         const name = this.getCommandName(slicedContent);
         const customCommand = savedGuild.commands.custom
             .find(c => c.alias === name)?.command;
+
         return (customCommand ?? slicedContent)
             .split(' ')
             .slice(1)
