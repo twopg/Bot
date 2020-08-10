@@ -11,7 +11,7 @@ export default class Users extends DBWrapper<SnowflakeEntity, UserDocument> {
         
         const savedUser = await SavedUser.findById(user.id);
         if (savedUser
-            && !savedUser.premiumExpiration
+            && savedUser.premiumExpiration
             && savedUser.premiumExpiration <= new Date())
             await this.removePremium(savedUser);
 

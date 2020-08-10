@@ -9,9 +9,8 @@ export class XPCard {
 
 const userSchema = new Schema({
     _id: String,
-    premium: Boolean,
+    premium: { type: Boolean, default: false },
     premiumExpiration: { type: Date, default: new Date() },
-    votes: Number,
     xpCard: { type: Object, default: new XPCard() }
 });
 
@@ -19,7 +18,6 @@ export interface UserDocument extends Document {
     _id: string;
     premium: boolean;
     premiumExpiration: Date;
-    votes: number;
     xpCard: XPCard;
 }
 

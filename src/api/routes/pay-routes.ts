@@ -4,7 +4,8 @@ import config from '../../../config.json';
 import { Router } from 'express';
 import { getUser, sendError } from '../modules/api-utils';
 import Deps from '../../utils/deps';
-import Users, { Plan } from '../../data/users';
+import Users from '../../data/users';
+import bodyParser from 'body-parser';
 
 const items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
   {
@@ -50,14 +51,15 @@ router.get('/user/pay', async(req, res) => {
   } catch (error) { sendError(res, 400, error); }
 });
 
-router.post('/stripe-webhook', async(req, res) => {
+router.post('/stripe-webhook', bodyParser.raw({type: 'application/json'}), async(req, res) => {
   try {
-    // TODO: add better validation
-    if (!req.headers['stripe-signature']) return;
+    let event = stripe.webhooks
+      .constructEvent(req.body, req.headers['stripe-signature'], config.api.endpointSecret);
+    console.log(event);    
     
-    if (req.body.type === 'checkout.session.completed') {
-      const { id, plan } = req.body.data.payment.metadata;
-      await users.givePlus(id, plan as Plan);
+    if (event.type === 'checkout.session.completed') {
+      const { id, plan } = (event.data.object as any).metadata;
+      await users.givePlus(id, +plan);
 
       return res.json({ success: true });
     }

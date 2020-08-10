@@ -24,20 +24,24 @@ export default class API {
         AuthClient.setRedirect(`${config.api.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
 
-        const isLiveKey = config.api.stripeSecretKey.includes('live');
-        if (isLiveKey)
+        const isStripeKey = config.api.stripeSecretKey.includes('live');
+        if (isStripeKey)
             stripe.webhookEndpoints.create({
                 url: config.api.url + '/stripe-webhook',
                 enabled_events: ['*']
             });
 
+            
         app.use(cors());
+        
+        app.use('/api', payRoutes);
+
         app.use(bodyParser.json());
 
         app.use('/api/guilds/:id/music', musicRoutes);
         app.use('/api/guilds', guildsRoutes);
         app.use('/api/user', userRoutes);
-        app.use('/api', payRoutes, apiRoutes);
+        app.use('/api', apiRoutes);
 
         app.get('/api/*', (req, res) => res.status(404).json({ code: 404 }));
         
