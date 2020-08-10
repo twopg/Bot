@@ -80,14 +80,14 @@ export default class CommandService {
     }
     private findCustomCommand(customName: string, { commands }: GuildDocument) {
         const ccName = this.getCommandName(commands.custom
-            .find(c => c.alias === customName)?.command);
+            ?.find(c => c.alias === customName)?.command);
         return this.commands.get(ccName);
     }
 
     private getCommandArgs(slicedContent: string, savedGuild: GuildDocument) {
         const name = this.getCommandName(slicedContent);
         const customCommand = savedGuild.commands.custom
-            .find(c => c.alias === name)?.command;
+            ?.find(c => c.alias === name)?.command;
 
         return (customCommand ?? slicedContent)
             .split(' ')
