@@ -3,11 +3,7 @@ import { XPCardGenerator } from '../modules/image/xp-card-generator';
 import { SavedMember } from '../../data/models/member';
 import Deps from '../../utils/deps';
 import Users from '../../data/users';
-import config from '../../../config.json';
-import { sendError } from './api-routes';
-import { getUser } from '../modules/api-utils';
-import { stripe } from '../server';
-import { Stripe } from 'stripe';
+import { getUser, sendError } from '../modules/api-utils';
 
 export const router = Router();
 
@@ -15,45 +11,6 @@ router.get('/', async (req, res) => {
     try {
         const user = await getUser(req.query.key);
         res.json(user);
-    } catch (error) { sendError(res, 400, error); }
-});
-
-const items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
-    {
-        name: '2PG+ [1 Month]',
-        description: 'Support 2PG, and unlock exclusive features!',
-        amount: 500,
-        currency: 'usd',
-        quantity: 1
-    },
-    {        
-        name: '2PG+ [3 Months]',
-        description: 'Support 2PG, and unlock exclusive features!',
-        amount: 1000,
-        currency: 'usd',
-        quantity: 1
-    },
-    {
-        name: '2PG+ [Forever]',
-        description: 'Support 2PG, and unlock exclusive features!',
-        amount: 2500,
-        currency: 'usd',
-        quantity: 1
-    }
-];
-
-router.get('/pay', async(req, res) => {
-    try {
-        const user = await getUser(req.query.key);
-
-        const session = await stripe.checkout.sessions.create({
-            success_url: `${config.dashboardURL}/payment-success`,
-            cancel_url: `${config.dashboardURL}/plus`,
-            payment_method_types: ['card'],
-            metadata: { id: user.id },
-            line_items: items
-        });
-        res.send(session);
     } catch (error) { sendError(res, 400, error); }
 });
 

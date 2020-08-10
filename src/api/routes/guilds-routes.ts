@@ -11,9 +11,8 @@ import Logs from '../../data/logs';
 import AuditLogger from '../modules/audit-logger';
 import { TextChannel } from 'discord.js';
 import Leveling from '../../modules/xp/leveling';
-import { sendError } from './api-routes';
 import Emit from '../../services/emit';
-import { getManagableGuilds, validateGuildManager, getUser, leaderboardMember } from '../modules/api-utils';
+import { getManagableGuilds, validateGuildManager, getUser, leaderboardMember, sendError } from '../modules/api-utils';
 
 export const router = Router();
 

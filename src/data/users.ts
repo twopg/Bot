@@ -18,28 +18,27 @@ export default class Users extends DBWrapper<SnowflakeEntity, UserDocument> {
         return savedUser ?? this.create({ id });
     }
 
-    async givePlus(id: string, plan: string) {   
+    async givePlus(id: string, plan: Plan) {   
         const savedUser = await this.get({ id });
         savedUser.premium = true;
         savedUser.premiumExpiration = this.getExpiration(plan);
         return savedUser.save();
     }
-    private getExpiration(plan: string) {
+    private getExpiration(plan: Plan) {
         let date = new Date();
         switch (plan) {
-          case '2PG+ [1 Month]':
+          case Plan.One:
             date.setDate(date.getDate() + 30)
             break;
-          case '2PG+ [3 Months]':
+          case Plan.Three:
             date.setDate(date.getDate() + 90)
             break;
-          case '2PG+ [Forever]':
+          default:
             date = null;
             break;
         }
         return date;
     }
-
     private removePremium(savedUser: UserDocument) {
         savedUser.premium = false;
         return savedUser.save();
@@ -49,3 +48,5 @@ export default class Users extends DBWrapper<SnowflakeEntity, UserDocument> {
         return new SavedUser({ _id: id }).save();
     }
 }
+
+export enum Plan { One, Three, Forever }

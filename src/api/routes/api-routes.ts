@@ -1,22 +1,16 @@
 import { MessageEmbed } from 'discord.js';
 import { Router } from 'express';
+import config from '../../../config.json';
 import { bot } from '../../bot';
-import * as config from '../../../config.json';
 import { CommandDocument, SavedCommand } from '../../data/models/command';
-import Users from '../../data/users';
 import Deps from '../../utils/deps';
-import { AuthClient } from '../server';
-
-import { router as guildsRoutes } from './guilds-routes';
-import { router as musicRoutes } from './music-routes';
-import { router as userRoutes } from './user-routes';
+import { validateBotOwner, sendError } from '../modules/api-utils';
 import Stats from '../modules/stats';
-import { validateBotOwner } from '../modules/api-utils';
+import { AuthClient } from '../server';
 
 export const router = Router();
 
-const stats = Deps.get<Stats>(Stats),
-      users = Deps.get<Users>(Users);
+const stats = Deps.get<Stats>(Stats);
 
 let commands: CommandDocument[] = [];
 SavedCommand.find().then(cmds => commands = cmds);
@@ -32,37 +26,17 @@ router.get('/auth', async (req, res) => {
   } catch (error) { sendError(res, 400, error); }
 });
 
-router.post('/stripe-webhook', async(req, res) => {
-  try {
-    // TODO: add better validation
-    if (!req.headers['stripe-signature']) return;
-
-    const payment = req.body.data.object;
-    
-    const id = payment.metadata.id;
-    if (req.body.type === 'checkout.session.completed') {
-      await users.givePlus(id, payment.id);
-      return res.json({ success: true });
-    }
-    res.json({ received: true });
-  } catch (error) { sendError(res, 400, error); }
-});
-
 router.post('/error', async(req, res) => {
   try {
-    const { message } = req.body;
-
     const key = req.query.key;
-    let user = { id: 'N/A' };
-    if (key)
-      user = AuthClient.getUser(key);
+    let { id } = await AuthClient.getUser(key);
     
     await bot.users.cache
       .get(config.bot.ownerId)
       ?.send(new MessageEmbed({
         title: 'Dashboard Error',
-        description: `**Message**: ${message}`,
-        footer: { text: `User ID: ${user.id}` }
+        description: `**Message**: ${req.body.message}`,
+        footer: { text: `User ID: ${id ?? 'N/A'}` }
     }));
   } catch (error) { sendError(res, 400, error); }
 });
@@ -85,13 +59,3 @@ router.get('/invite', (req, res) =>
 
 router.get('/login', (req, res) =>
   res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.api.url}/auth&response_type=code&scope=identify guilds&prompt=none`));
-
-router.use('/guilds', guildsRoutes);
-router.use('/guilds/:id/music', musicRoutes);
-router.use('/user', userRoutes);
-
-router.get('*', (req, res) => res.status(404).json({ code: 404 }));
-
-export function sendError(res: any, code: number, error: Error) {
-  return res.status(code).json({ code, message: error?.message })
-}
