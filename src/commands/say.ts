@@ -1,10 +1,9 @@
 import { Command, CommandContext, Permission } from './command';
-import config from '../../config.json';
 
-export default class DashboardCommand implements Command {
+export default class SayCommand implements Command {
     name = 'say';
     summary = `Get the bot to say something`;
-    precondition: Permission = '';
+    precondition: Permission = 'MENTION_EVERYONE';
     cooldown = 3;
     module = 'General';
     
