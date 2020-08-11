@@ -20,6 +20,8 @@ export const app = express(),
              stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-03-02' });
 
 export default class API {
+    stripeEndpointSecret = '';
+
     constructor(private stats = Deps.get<Stats>(Stats)) {
         AuthClient.setRedirect(`${config.api.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
@@ -29,7 +31,7 @@ export default class API {
             stripe.webhookEndpoints.create({
                 url: config.api.url + '/stripe-webhook',
                 enabled_events: ['*']
-            });
+            }).then(({ secret }) => this.stripeEndpointSecret = secret);
 
             
         app.use(cors());

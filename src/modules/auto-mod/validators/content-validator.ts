@@ -1,4 +1,4 @@
-import { GuildDocument, EventType, MessageFilter } from '../../../data/models/guild';
+import { GuildDocument, MessageFilter } from '../../../data/models/guild';
 
 export interface ContentValidator {
     filter: MessageFilter;

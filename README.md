@@ -21,8 +21,7 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
     "api": {
         "port": "3000",
         "url": "https://2pg.xyz/api",
-        "stripeSecretKey": "sk_test_...",
-        "stripeEndpointSecret": "whsec_..."
+        "stripeSecretKey": "sk_test_..."
     },
     "guild": {
         "id": "599596068145201152",
