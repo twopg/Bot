@@ -31,7 +31,7 @@ export default class API {
             stripe.webhookEndpoints.create({
                 url: config.api.url + '/stripe-webhook',
                 enabled_events: ['*']
-            }).then(({ secret }) => this.stripeEndpointSecret = secret);
+            }).then(v => this.stripeEndpointSecret = v.secret);
 
             
         app.use(cors());

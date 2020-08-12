@@ -96,7 +96,7 @@ export default class CommandService {
 
     private getCommandName(slicedContent: string) {
         return slicedContent
-            .toLowerCase()
+            ?.toLowerCase()
             .split(' ')[0];
     }
 }
