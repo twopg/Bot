@@ -5,7 +5,7 @@ import Log from '../utils/log';
 import Deps from '../utils/deps';
 import Commands from '../data/commands';
 import Logs from '../data/logs';
-import { GuildDocument, SavedGuild } from '../data/models/guild';
+import { GuildDocument } from '../data/models/guild';
 import Cooldowns from './cooldowns';
 import Validators from './validators';
 import { promisify } from 'util';
@@ -45,12 +45,14 @@ export default class CommandService {
     }
     private async handleCommand(msg: Message, savedGuild: GuildDocument) {
         try {
-            this.validators.checkChannel(msg.channel as TextChannel, savedGuild);
-
             const prefix = savedGuild.general.prefix;
             const slicedContent = msg.content.slice(prefix.length);
 
             const command = this.findCommand(slicedContent, savedGuild);
+            
+            const customCommand = this.getCustomCommand(slicedContent, savedGuild);
+            this.validators.checkChannel(msg.channel as TextChannel, savedGuild, customCommand);                
+            
             if (!command || this.cooldowns.active(msg.author, command)) return;
 
             this.validators.checkCommand(command, savedGuild, msg);
@@ -85,13 +87,16 @@ export default class CommandService {
     }
 
     private getCommandArgs(slicedContent: string, savedGuild: GuildDocument) {
-        const name = this.getCommandName(slicedContent);
-        const customCommand = savedGuild.commands.custom
-            ?.find(c => c.alias === name)?.command;
-
+        const customCommand = this
+            .getCustomCommand(slicedContent, savedGuild)?.command;
         return (customCommand ?? slicedContent)
             .split(' ')
             .slice(1)
+    }
+    private getCustomCommand(slicedContent: string, savedGuild: GuildDocument) {
+        const name = this.getCommandName(slicedContent);
+        return savedGuild.commands.custom
+            ?.find(c => c.alias === name);        
     }
 
     private getCommandName(slicedContent: string) {

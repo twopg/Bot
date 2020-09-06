@@ -75,6 +75,7 @@ export interface CommandConfig {
 }
 export interface CustomCommand {
     alias: string;
+    anywhere: boolean;
     command: string;
 }
 

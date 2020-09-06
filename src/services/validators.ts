@@ -1,6 +1,6 @@
 import { Command } from "../commands/command";
 import { GuildMember, TextChannel, Message } from "discord.js";
-import { GuildDocument } from "../data/models/guild";
+import { GuildDocument, CustomCommand } from "../data/models/guild";
 
 export default class Validators {
     checkCommand(command: Command, guild: GuildDocument, msg: Message) {
@@ -16,10 +16,13 @@ export default class Validators {
             throw new TypeError(`**Required Permission**: \`${command.precondition}\``);
     }
 
-    checkChannel(channel: TextChannel, savedGuild: GuildDocument) {
+    checkChannel(channel: TextChannel, savedGuild: GuildDocument, customCommand?: CustomCommand) {
         const isIgnored = savedGuild.general.ignoredChannels
             .some(id => id === channel.id);
-        if (isIgnored)
+
+        if (isIgnored && !customCommand)
             throw new TypeError('Commands cannot be executed in this channel.');
+        else if (isIgnored && !customCommand.anywhere)
+            throw new TypeError('This custom command cannot be executed in this channel.');
     }
 }
