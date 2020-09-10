@@ -1,4 +1,4 @@
-import API, { stripe } from '../server';
+import { stripe } from '../server';
 import { Stripe } from 'stripe';
 import config from '../../../config.json';
 import { Router } from 'express';
@@ -33,8 +33,7 @@ const items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
 
 export const router = Router();
 
-const api = Deps.get<API>(API),
-      users = Deps.get<Users>(Users);
+const users = Deps.get<Users>(Users);
 
 router.get('/user/pay', async(req, res) => {
   try {
@@ -52,10 +51,10 @@ router.get('/user/pay', async(req, res) => {
   } catch (error) { sendError(res, 400, error); }
 });
 
-router.post('/stripe-webhook', bodyParser.raw({type: 'application/json'}), async(req, res) => {
+router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), async(req, res) => {
   try {
     let event = stripe.webhooks
-      .constructEvent(req.body, req.headers['stripe-signature'], api.stripeEndpointSecret);
+      .constructEvent(req.body, req.headers['stripe-signature'], config.api.stripeWebhookSecret);
     
     if (event.type === 'checkout.session.completed') {
       const { id, plan } = (event.data.object as any).metadata;

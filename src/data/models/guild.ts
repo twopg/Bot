@@ -93,12 +93,6 @@ export class DashboardSettings {
     privateLeaderboard = false;
 }
 
-export class TestModule extends Module {
-    test: string;
-    test2: string;
-    test3: number;
-}
-
 const guildSchema = new Schema({
     _id: String,
     autoMod: { type: Object, default: new AutoModModule() }, 
@@ -108,7 +102,6 @@ const guildSchema = new Schema({
     logs: { type: Object, default: new LogsModule() }, 
     music: { type: Object, default: new MusicModule },
     reactionRoles: { type: Object, default: new ReactionRolesModule() },
-    test: { type: Object, default: new TestModule() },
     settings: { type: Object, default: new DashboardSettings() }
 });
 
@@ -121,7 +114,6 @@ export interface GuildDocument extends Document {
     leveling: LevelingModule;
     logs: LogsModule;
     reactionRoles: ReactionRolesModule;
-    test: TestModule;
     settings: DashboardSettings;
 }
 

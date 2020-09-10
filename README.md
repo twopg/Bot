@@ -21,7 +21,8 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
     "api": {
         "port": "3000",
         "url": "https://2pg.xyz/api",
-        "stripeSecretKey": "sk_test_..."
+        "stripeSecretKey": "sk_test_...",        
+        "stripeWebhookSecret": ""
     },
     "guild": {
         "id": "599596068145201152",
@@ -44,7 +45,7 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 - Open an issue, if you find any bugs or have any suggestions etc.
 - You can also join the [2PG Discord](https://discord.gg/24tycau) if you need extra support.
 
-## Debugging with VSCode (Windows)
+## Debug with VSCode (Windows)
 * `F5` -> start
 * `Shift + F5` -> stop
 * `Ctrl + Shift + B` -> run build task
@@ -52,3 +53,9 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 * `F10` -> step over
 * `F11` -> step into
 * `Shift + F11` -> step out
+
+## Debug Locally with Stripe
+`stripe listen --forward-to localhost:3000/stripe-webhook`
+
+This will allow you to get the `config.api.stripeWebhookSecret`.
+Replace `localhost:3000` with whatever you are using for the bot server.
