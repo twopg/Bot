@@ -2,17 +2,14 @@ import { ErelaClient, Player, Track } from 'erela.js';
 import { bot } from '../../bot';
 import Log from '../../utils/log';
 import { GuildMember, TextChannel } from 'discord.js';
+import config from '../../../config.json';
 
 export default class Music {
     private _client = {} as ErelaClient;
     get client() { return this._client; }
 
     initialize() {
-        const nodes = [{
-            host: 'localhost',
-            port: 2333,
-            password: 'youshallnotpass',
-        }];
+        const nodes = config.lavalinkNodes;
         const music = new ErelaClient(bot, nodes);
 
         this.hookEvents(music);

@@ -12,22 +12,29 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 ```
 {
     "bot": {
-        "token": "yourBotToken",
-        "secret": "yourClientSecret",
-        "ownerId": "",
+        "token": "<your_bot_token>",
+        "secret": "<your_client_secret>",
+        "ownerId": "<discord_user_id>",
         "activity": "2PG.xyz",
-        "id": "discordBotId"
+        "id": "<discord_bot_id>"
     },
     "api": {
         "port": "3000",
         "url": "https://2pg.xyz/api",
-        "stripeSecretKey": "sk_test_...",        
-        "stripeWebhookSecret": ""
+        "stripeSecretKey": "<sk_test_...>",        
+        "stripeWebhookSecret": "<whsec_...>"
     },
     "guild": {
-        "id": "599596068145201152",
-        "premiumRoleId": "598565371162656788"
+        "id": "<support_guild_id>",
+        "premiumRoleId": "<premium_role_id>"
     },
+    "lavalinkNodes": [
+        {
+            "host": "localhost",
+            "port": 2333,
+            "password": "youshallnotpass",
+        }
+    ],
     "dashboardURL": "https://2pg.xyz",
     "mongoURL": "mongodb://localhost/2PG"
 }
