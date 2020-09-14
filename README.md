@@ -32,7 +32,7 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
         {
             "host": "localhost",
             "port": 2333,
-            "password": "youshallnotpass",
+            "password": "youshallnotpass"
         }
     ],
     "dashboardURL": "https://2pg.xyz",
