@@ -23,15 +23,7 @@ export default class API {
     constructor(private stats = Deps.get<Stats>(Stats)) {
         AuthClient.setRedirect(`${config.api.url}/auth`);
         AuthClient.setScopes('identify', 'guilds');
-
-        const isStripeKey = config.api.stripeSecretKey.includes('live');
-        if (isStripeKey)
-            stripe.webhookEndpoints.create({
-                url: config.api.url + '/stripe-webhook',
-                enabled_events: ['*']
-            });
-
-            
+             
         app.use(cors());
         
         app.use('/api', payRoutes);
