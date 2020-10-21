@@ -1,6 +1,9 @@
 # 2PG - Simple, powerful Discord bot
 Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 
+2PG Bot Series - https://www.youtube.com/watch?v=rYpR0CiEGgk&list=PLGfT2ttRbfixMStpAhPD4pKBQN9wjJmbP&index=1
+2PG Dashboard Series - https://www.youtube.com/watch?v=rYpR0CiEGgk&list=PLGfT2ttRbfizIr60zU_S_6_i8O3xmP9ia&index=1
+
 **Dashboard**: https://github.com/theADAMJR/2PG-Dashboard
 
 ![2PG Avatar](https://i.ibb.co/h2BjCJh/2pg-smol.png)
