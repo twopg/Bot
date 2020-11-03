@@ -14,7 +14,7 @@ const music = Deps.get<Music>(Music),
 router.get('/pause', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
-        player.pause(true);
+        player.pause();
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }
@@ -23,7 +23,7 @@ router.get('/pause', async (req, res) => {
 router.get('/resume', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
-        player.pause(false);
+        player.resume();
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }
@@ -33,13 +33,13 @@ router.get('/list', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        for (const track of player.queue) {
+        for (const track of player.q.items) {
             const durationInSeconds = track.duration / 1000;  
             track.durationString = `${Math.floor(durationInSeconds / 60)}:${Math.floor(durationInSeconds % 60)
                 .toString().padStart(2, '0')}`;
         }
 
-        res.status(200).json(player.queue);
+        res.status(200).json(player.q.items);
     } catch (error) { res.status(400).send(error?.message); }
 });
 
@@ -53,22 +53,22 @@ router.get('/skip', async (req, res) => {
     } catch (error) { res.status(400).send(error?.message); }
 });
 
-router.get('/seek/:position', async (req, res) => {
-    try {
-        const { player } = await getMusic(req.params.id, req.query.key);
+// FIXME: make work
+// router.get('/seek/:position', async (req, res) => {
+//     try {
+//         const { player } = await getMusic(req.params.id, req.query.key);
 
-        player.seek(+req.params.position * 1000);
+//         player.seek(+req.params.position * 1000);
 
-        res.status(200).send({ success: true });
-    } catch (error) { res.status(400).send(error?.message); }
-});
-
+//         res.status(200).send({ success: true });
+//     } catch (error) { res.status(400).send(error?.message); }
+// });
 
 router.get('/remove/:number', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
         
-        const track = player.queue.remove(Number(req.params.number));
+        const track = player.q.items.splice(+req.params.number - 1);
 
         res.status(200).json(track);
     } catch (error) { res.status(400).send(error?.message); }
@@ -76,17 +76,17 @@ router.get('/remove/:number', async (req, res) => {
 
 router.get('/play', async (req, res) => {
     try {
-        const { player, requestor, hasPremium } = await getMusic(req.params.id, req.query.key);
+        const { player, hasPremium } = await getMusic(req.params.id, req.query.key);
         const track = await music.findTrack(
-            req.query.query?.toString(), requestor, +req.query.maxTrackLength ?? 2);
+            req.query.query?.toString(), +req.query.maxTrackLength || 2);
         
         const maxSize = (hasPremium) ? 10 : 5;
-        if (player.queue.size >= maxSize)
+        if (player.q.length >= maxSize)
             throw new Error('Queue limit reached.');
 
-        player.queue.add(track);
-        if (!player.playing)
-            player.play();
+        player.q.enqueue(track);
+        if (!player.isPlaying)
+            player.play(track);
 
         res.status(200).json(track);
     } catch (error) { res.status(400).send(error?.message); }
@@ -106,7 +106,7 @@ router.get('/shuffle', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        player.queue.shuffle();
+        // player.q.shuffle(); // FIXME: make work
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }    
@@ -116,7 +116,7 @@ router.get('/stop', async (req, res) => {
     try {
         await validateGuildManager(req.query.key, req.params.id);
 
-        music.client.players.destroy(req.params.id);
+        music.client.players.delete(req.params.id);
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }
@@ -132,8 +132,7 @@ async function getMusic(guildId: string, key: any) {
     const savedUser = await users.get(user);
 
     return {
-        player: music.joinAndGetPlayer(member, null),
-        requestor: member,
+        player: music.joinAndGetPlayer(member.voice.channel),
         hasPremium: savedUser.premium
     };
 }

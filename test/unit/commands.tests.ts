@@ -1,11 +1,7 @@
 import { expect } from 'chai';
-import { Player } from 'erela.js';
 import { mock } from 'ts-mockito';
 import { CommandContext } from '../../src/commands/command';
-import PauseCommand from '../../src/commands/pause';
 import PlayCommand from '../../src/commands/play';
-import ResumeCommand from '../../src/commands/resume';
-import StopCommand from '../../src/commands/stop';
 import XPCommand from '../../src/commands/xp';
 import WarningsCommand from '../../src/commands/warnings';
 

@@ -12,11 +12,11 @@ export default class ListCommand implements Command {
     constructor(private music = Deps.get<Music>(Music)) {}
     
     execute = async(ctx: CommandContext) => {
-        const { queue } = this.music.joinAndGetPlayer(ctx.member, ctx.channel);
+        const { q } = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
 
         let details = '';
-        for (let i = 0; i < queue.length; i++) {            
-            const track = queue[i];
+        for (let i = 0; i < q.length; i++) {            
+            const track = q[i];
             const prefix = (i === 0) ? `**Now Playing**:` : `**[${i + 1}]**`;
             details += `${prefix} \`${track.title}\` from <@${track.requester.user.id}>\n`;
         }

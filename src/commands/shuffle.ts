@@ -12,8 +12,8 @@ export default class ShuffleCommand implements Command {
     constructor(private music = Deps.get<Music>(Music)) {}
     
     execute = async(ctx: CommandContext) => {
-        const player = this.music.joinAndGetPlayer(ctx.member, ctx.channel);
-        player.queue.shuffle();
+        const player = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
+        player.q.shuffle();
         
         return ctx.channel.send('List shuffled.');
     }

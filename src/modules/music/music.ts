@@ -1,58 +1,42 @@
-import { ErelaClient, Player, Track } from 'erela.js';
-import { bot } from '../../bot';
-import Log from '../../utils/log';
-import { GuildMember, TextChannel } from 'discord.js';
-import config from '../../../config.json';
+import { GuildMember, TextChannel, VoiceChannel } from 'discord.js';
+import { MusicClient, Player, Track } from '2pg-music';
 
 export default class Music {
-    private _client = {} as ErelaClient;
+    private _client = {} as MusicClient;
     get client() { return this._client; }
 
     initialize() {
-        const nodes = config.lavalinkNodes;
-        const music = new ErelaClient(bot, nodes);
-
-        this.hookEvents(music);
-
-        this._client = music;        
+        this._client = new MusicClient();     
+        
+        this.hookEvents();
     }
 
-    private hookEvents(music: ErelaClient) {
-        music.on('nodeConnect', () => Log.info('Connected to Lavalink node', 'music'));
-        music.on('nodeError', (node, error) => Log.error(error, 'music'));
-        music.on('trackStuck', (player) => player.textChannel.send('❗ Error loading track.'));
-        music.on('trackStart', (player, track) => player.textChannel?.send(`**Now Playing**: \`${track.title}\` 🎵`));
-        music.on('queueEnd', (player) => {
-            player.textChannel?.send('Queue has ended.');
-            music.players.destroy(player.guild.id);
-        });
+    private hookEvents() {
+        this.client.on('trackStart', (player, track) => player.textChannel?.send(`**Now Playing**: \`${track.title}\` 🎵`));
+        this.client.on('queueEnd', (player) => player.textChannel?.send(`**Queue has Ended** 🎵`));
     }
     
-    joinAndGetPlayer(member: GuildMember, textChannel?: TextChannel) {
-        const voiceChannel = member.voice.channel;
+    joinAndGetPlayer(voiceChannel?: VoiceChannel, textChannel?: TextChannel) {
         if (!voiceChannel)
             throw new TypeError('You must be in a voice channel to play music.');
             
-        return this.client.players?.spawn({
-            guild: member.guild,
-            textChannel,
-            voiceChannel: voiceChannel
-        });
+        return this.client.get(voiceChannel.guild.id)
+            ?? this.client.create(voiceChannel.guild.id, { textChannel, voiceChannel });
     }
 
     getDurationString(player: Player, track?: Track) {
-        if (!player.playing)
+        if (!player.isPlaying)
             throw new TypeError('No track is currently playing.');
 
         const positionInSeconds = player.position / 1000;
-        const durationInSeconds = (track ?? player.queue[0]).duration / 1000;        
+        const durationInSeconds = (track ?? player.q.peek()).duration / 1000;        
 
         return `${Math.floor(positionInSeconds / 60)}:${Math.floor(positionInSeconds % 60).toString().padStart(2, '0')} / ` +
             `${Math.floor(durationInSeconds / 60)}:${Math.floor(durationInSeconds % 60).toString().padStart(2, '0')}`;
     }
 
-    async findTrack(query: string, requestor: GuildMember, maxTrackLength: number) {
-        const track = await this.searchForTrack(query, requestor);
+    async findTrack(query: string, maxTrackLength: number) {
+        const track: Track = await this.searchForTrack(query);
 
         const maxHours = maxTrackLength * 60 * 60 * 1000;      
         if (track.duration > maxHours)
@@ -61,13 +45,13 @@ export default class Music {
     }
 
     skip(player: Player) {
-        if (player.queue.size <= 1)
+        if (player.q.length <= 1)
             throw new TypeError('No tracks to skip');
         player.stop();
     }
 
-    private async searchForTrack(query: string, requestor: GuildMember) {
-        const res = await this.client.search(query, requestor);    
-        return res.tracks[0];
+    private async searchForTrack(query: string) {
+        const videos = await this.client.search(query);  
+        return videos[0];
     }
 }

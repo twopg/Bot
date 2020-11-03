@@ -19,23 +19,23 @@ export default class PlayCommand implements Command {
         if (!query)
             throw new TypeError('Query must be provided.');
 
-        const player = this.music.joinAndGetPlayer(ctx.member, ctx.channel);
+        const player = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
 
         const maxQueueSize = 5;
-        if (player.queue.size >= maxQueueSize)
+        if (player.q.length >= maxQueueSize)
             throw new TypeError(`Max queue size of \`${maxQueueSize}\` reached.`);
 
-        const track = await this.searchForTrack(query, ctx.member);
+        const track = await this.searchForTrack(query);
 
-        player.queue.add(track);
-        if (player.playing)
+        player.q.enqueue(track);
+        if (player.isPlaying)
             return ctx.channel.send(`**Added**: \`${track.title}\` to list.`);
 
-        player.play();
+        player.play(query);
     }
 
-    private async searchForTrack(query: string, requestor: GuildMember) {
-        const res = await this.music.client.search(query, requestor);    
-        return res.tracks[0];
+    private async searchForTrack(query: string) {
+        const videos = await this.music.client.search(query);    
+        return videos[0];
     }
 }
