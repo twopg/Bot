@@ -132,7 +132,8 @@ router.get('/:guildId/members/:memberId/xp-card', async (req, res) => {
         const image = await generator.generate(savedMember);
         
         res.set({'Content-Type': 'image/png'}).send(image);
-    } catch (error) { sendError(res, 400, error); }
+    } catch (error) { console.log(error);
+     sendError(res, 400, error); }
 });
 
 router.get('/:id/bot-status', async (req, res) => {

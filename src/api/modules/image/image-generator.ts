@@ -2,7 +2,7 @@ import { loadImage, Canvas, registerFont } from 'canvas';
 
 export default class ImageGenerator {
   constructor() {
-    registerFont('segeo-ui.ttf', { family: 'Segeo UI' });
+    // registerFont(__dirname + '/segeo-ui.ttf', { family: 'Segeo UI' });
   }
 
   async addBackgroundToCanvas(ctx, canvas, backgroundURL: string) {
