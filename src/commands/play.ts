@@ -25,13 +25,9 @@ export default class PlayCommand implements Command {
         if (player.q.length >= maxQueueSize)
             throw new TypeError(`Max queue size of \`${maxQueueSize}\` reached.`);
 
-        const track = await this.searchForTrack(query);
-
-        player.q.enqueue(track);
+        const track = await player.play(query);
         if (player.isPlaying)
             return ctx.channel.send(`**Added**: \`${track.title}\` to list.`);
-
-        player.play(query);
     }
 
     private async searchForTrack(query: string) {
