@@ -87,7 +87,7 @@ router.get('/set-volume/:value', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        await player.setVolume(+req.params.value);
+        await player.setVolume(+req.params.value / 100);
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }    

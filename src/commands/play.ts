@@ -29,9 +29,4 @@ export default class PlayCommand implements Command {
         if (player.isPlaying)
             return ctx.channel.send(`**Added**: \`${track.title}\` to list.`);
     }
-
-    private async searchForTrack(query: string) {
-        const videos = await this.music.client.search(query);    
-        return videos[0];
-    }
 }
