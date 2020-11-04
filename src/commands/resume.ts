@@ -10,13 +10,14 @@ export default class ResumeCommand implements Command {
 
     constructor(private music = Deps.get<Music>(Music)) {}
     
-    execute = (ctx: CommandContext) => {
+    execute = async (ctx: CommandContext) => {
         const player = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
 
-        if (player.isPlaying)
+        if (!player.isPaused)
             throw new TypeError('Player is already resumed.');
+
+        await player.resume();
             
-        player.pause();
-        ctx.channel.send(`**Resumed**: \`${player.q[0].title}\``);
+        ctx.channel.send(`**Resumed**: \`${player.q.peek().title}\``);
     }
 }

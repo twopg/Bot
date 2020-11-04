@@ -34,8 +34,7 @@ router.get('/list', async (req, res) => {
         const { player } = await getMusic(req.params.id, req.query.key);
 
         for (const track of player.q.items)
-            track['durationString'] = `${Math.floor(track.duration.seconds / 60)}:${Math.floor(track.duration.seconds % 60)
-                .toString().padStart(2, '0')}`;
+            track['durationString'] = `${track.duration}`;
 
         res.status(200).json(player.q.items);
     } catch (error) { res.status(400).send(error?.message); }
@@ -44,8 +43,7 @@ router.get('/list', async (req, res) => {
 router.get('/skip', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
-        
-        music.skip(player);
+        await player.skip();
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }
@@ -79,7 +77,7 @@ router.get('/play', async (req, res) => {
         
         const maxSize = (hasPremium) ? 10 : 5;
         if (player.q.length >= maxSize)
-            throw new Error('Queue limit reached.');
+            throw new TypeError('Queue limit reached.');
 
         res.status(200).json(track);
     } catch (error) { res.status(400).send(error?.message); }
@@ -89,7 +87,7 @@ router.get('/set-volume/:value', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        player.setVolume(Number(req.params.value));
+        await player.setVolume(+req.params.value);
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }    
@@ -99,7 +97,7 @@ router.get('/shuffle', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        // player.q.shuffle(); // FIXME: make work
+        player.q.shuffle();
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }    
@@ -109,7 +107,8 @@ router.get('/stop', async (req, res) => {
     try {
         await validateGuildManager(req.query.key, req.params.id);
 
-        music.client.players.delete(req.params.id);
+        const { player } = await getMusic(req.params.id, req.query.key);
+        await player.stop();
 
         res.status(200).send({ success: true });
     } catch (error) { res.status(400).send(error?.message); }

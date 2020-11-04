@@ -46,12 +46,6 @@ export default class Music {
         return track;
     }
 
-    skip(player: Player) {
-        if (player.q.length <= 1)
-            throw new TypeError('No tracks to skip');
-        player.stop();
-    }
-
     private async searchForTrack(query: string) {
         const videos = await this.client.search(query);  
         return videos[0];

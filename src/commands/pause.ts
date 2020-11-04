@@ -10,13 +10,14 @@ export default class PauseCommand implements Command {
 
     constructor(private music = Deps.get<Music>(Music)) {}
     
-    execute = (ctx: CommandContext) => {
+    execute = async (ctx: CommandContext) => {
         const player = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
 
-        if (!player.isPlaying)
+        if (player.isPaused)
             throw new TypeError('Player is already paused.');
+
+        await player.pause();
         
-        player.pause();
-        ctx.channel.send(`**Paused**: \`${player.q[0].title}\``);
+        ctx.channel.send(`**Paused**: \`${player.q.peek()?.title}\``);
     }
 }
