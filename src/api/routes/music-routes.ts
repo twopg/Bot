@@ -33,11 +33,9 @@ router.get('/list', async (req, res) => {
     try {
         const { player } = await getMusic(req.params.id, req.query.key);
 
-        for (const track of player.q.items) {
-            const durationInSeconds = track.duration / 1000;  
-            track.durationString = `${Math.floor(durationInSeconds / 60)}:${Math.floor(durationInSeconds % 60)
+        for (const track of player.q.items)
+            track['durationString'] = `${Math.floor(track.duration.seconds / 60)}:${Math.floor(track.duration.seconds % 60)
                 .toString().padStart(2, '0')}`;
-        }
 
         res.status(200).json(player.q.items);
     } catch (error) { res.status(400).send(error?.message); }
@@ -77,16 +75,11 @@ router.get('/remove/:number', async (req, res) => {
 router.get('/play', async (req, res) => {
     try {
         const { player, hasPremium } = await getMusic(req.params.id, req.query.key);
-        const track = await music.findTrack(
-            req.query.query?.toString(), +req.query.maxTrackLength || 2);
+        const track = await player.play(req.query.query?.toString());
         
         const maxSize = (hasPremium) ? 10 : 5;
         if (player.q.length >= maxSize)
             throw new Error('Queue limit reached.');
-
-        player.q.enqueue(track);
-        if (!player.isPlaying)
-            player.play(track);
 
         res.status(200).json(track);
     } catch (error) { res.status(400).send(error?.message); }

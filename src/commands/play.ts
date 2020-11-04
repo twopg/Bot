@@ -9,7 +9,7 @@ export default class PlayCommand implements Command {
     module = 'Music';
     name = 'play';
     precondition: Permission = 'SPEAK';
-    summary = 'Join and play a youtube result.';
+    summary = 'Join and play a YouTube result.';
     usage = 'play query'
 
     constructor(private music = Deps.get<Music>(Music)) {}

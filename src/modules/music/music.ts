@@ -24,22 +24,24 @@ export default class Music {
             ?? this.client.create(voiceChannel.guild.id, { textChannel, voiceChannel });
     }
 
-    getDurationString(player: Player, track?: Track) {
+    getDuration(player: Player, track?: Track) {
         if (!player.isPlaying)
             throw new TypeError('No track is currently playing.');
 
-        const positionInSeconds = player.position / 1000;
-        const durationInSeconds = (track ?? player.q.peek()).duration / 1000;        
+        const positionInSeconds = (track === player.q.peek())
+            ? player.position / 1000
+            : 0;
+        track = (track ?? player.q.peek()) as Track;       
 
         return `${Math.floor(positionInSeconds / 60)}:${Math.floor(positionInSeconds % 60).toString().padStart(2, '0')} / ` +
-            `${Math.floor(durationInSeconds / 60)}:${Math.floor(durationInSeconds % 60).toString().padStart(2, '0')}`;
+            `${Math.floor(track.duration.seconds / 60)}:${Math.floor(track.duration.seconds % 60).toString().padStart(2, '0')}`;
     }
 
     async findTrack(query: string, maxTrackLength: number) {
         const track: Track = await this.searchForTrack(query);
 
-        const maxHours = maxTrackLength * 60 * 60 * 1000;      
-        if (track.duration > maxHours)
+        const maxHoursInSeconds = maxTrackLength * 60 * 60;      
+        if (track.duration.seconds > maxHoursInSeconds)
             throw new TypeError(`Track length must be less than or equal to \`${maxTrackLength} hours\``);
         return track;
     }

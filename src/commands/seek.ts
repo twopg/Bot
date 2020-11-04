@@ -13,6 +13,7 @@ export default class SeekCommand implements Command {
     constructor(private music = Deps.get<Music>(Music)) {}
     
     execute = async(ctx: CommandContext, position: string) => {
+        throw new TypeError('This feature is not yet supported.');
         const player = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
         
         if (player.q.length <= 0)
@@ -20,10 +21,10 @@ export default class SeekCommand implements Command {
 
         const pos = Number(position);        
         if (!pos)
-            return ctx.channel.send(`Track at: \`${this.music.getDurationString(player)}\``);
+            return ctx.channel.send(`Track at: \`${this.music.getDuration(player)}\``);
 
         // player.seek(pos * 1000); // TODO: implement
 
-        return ctx.channel.send(`Now at \`${this.music.getDurationString(player)}\`.`);
+        return ctx.channel.send(`Now at \`${this.music.getDuration(player)}\`.`);
     }
 }
