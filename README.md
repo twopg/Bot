@@ -32,13 +32,6 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
         "id": "<support_guild_id>",
         "premiumRoleId": "<premium_role_id>"
     },
-    "lavalinkNodes": [
-        {
-            "host": "localhost",
-            "port": 2333,
-            "password": "youshallnotpass"
-        }
-    ],
     "dashboardURL": "https://2pg.xyz",
     "mongoURL": "mongodb://localhost/2PG"
 }

@@ -2,5 +2,8 @@
   "mochaExplorer.files": "test/unit/*.tests.ts",
   "mochaExplorer.require": "ts-node/register",
   "mochaExplorer.logpanel": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "cSpell.words": [
+    "Segeo"
+  ]
 }

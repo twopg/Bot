@@ -23,7 +23,7 @@ export class XPCardGenerator extends ImageGenerator {
         this.discordUser = bot.users.cache.get(user.id);
     }
 
-    async generate(savedMember: MemberDocument, preview?: XPCard) {
+    async generate(savedMember: MemberDocument, preview ? : XPCard) {
         if (preview)
             this.user.xpCard = preview;
 
@@ -34,28 +34,27 @@ export class XPCardGenerator extends ImageGenerator {
             this.user.xpCard.backgroundURL);
         await this.addXPInfo(ctx, canvas, savedMember.xp);
         this.addUserText(ctx, canvas);
-        await this.addAvatarToCanvas(ctx, 
+        await this.addAvatarToCanvas(ctx,
             this.discordUser.displayAvatarURL({ format: 'png' }));
 
         return canvas.toBuffer();
     }
-    
-    private async addAvatarToCanvas(ctx: CanvasRenderingContext2D, imageURL: string) 
-    {
-      ctx.beginPath();
-      ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
-      ctx.closePath();
-      ctx.clip();
 
-      const avatar = await loadImage(imageURL);
-      ctx.drawImage(avatar, 25, 25, 200, 200);
+    private async addAvatarToCanvas(ctx: CanvasRenderingContext2D, imageURL: string) {
+        ctx.beginPath();
+        ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
+
+        const avatar = await loadImage(imageURL);
+        ctx.drawImage(avatar, 25, 25, 200, 200);
     }
-    
+
     private addUserText(ctx, canvas: Canvas) {
         let card = this.user.xpCard;
 
         ctx.fillStyle = card.tertiary || this.defaultColors.tertiary;
-        ctx.font = '32px Roboto, sans-serif';
+        ctx.font = '32px Segoe UI, Arial, sans-serif';
         ctx.fillText(`#${this.rank}`, canvas.width / 2.5, canvas.height / 2.5);
 
         ctx.fillStyle = card.primary || this.defaultColors.primary;
@@ -67,30 +66,37 @@ export class XPCardGenerator extends ImageGenerator {
         let card = this.user.xpCard;
 
         const sizeOffset = 325;
-        const position = { x: 275, y: canvas.height * 0.775 };
+        const position = {
+            x: 275,
+            y: canvas.height * 0.775
+        };
         const height = 25;
-        
-        const { nextLevelXP, level, levelCompletion } = Leveling.xpInfo(xp);
-        
+
+        const {
+            nextLevelXP,
+            level,
+            levelCompletion
+        } = Leveling.xpInfo(xp);
+
         ctx.fillStyle = card.secondary || this.defaultColors.secondary;
         ctx.fillRect(position.x, position.y, canvas.width - sizeOffset - 1, height);
 
         ctx.fillStyle = card.tertiary || this.defaultColors.tertiary;
-        ctx.fillRect(position.x, position.y, 
+        ctx.fillRect(position.x, position.y,
             (canvas.width - sizeOffset) * (levelCompletion), height);
 
         ctx.fillStyle = card.primary || this.defaultColors.primary;
         ctx.font = '16px Roboto, sans-serif';
         ctx.fillText(xp.toString(), canvas.width / 2.5, canvas.height / 1.175);
-        
+
         ctx.fillStyle = '#0F0F0F';
-        ctx.fillText(`/`, canvas.width / 2.5 + 
+        ctx.fillText(`/`, canvas.width / 2.5 +
             ctx.measureText(xp.toString()).width, canvas.height / 1.175);
 
         ctx.fillStyle = card.primary || this.defaultColors.primary;
-        ctx.fillText(`${nextLevelXP}XP`, canvas.width / 2.5 + 
+        ctx.fillText(`${nextLevelXP}XP`, canvas.width / 2.5 +
             ctx.measureText(`${xp}/`).width, canvas.height / 1.175);
-        
+
         ctx.fillStyle = card.primary || this.defaultColors.primary;
         ctx.fillText(`LEVEL ${level}`, canvas.width / 2.5, canvas.height / 1.35);
     }

@@ -37,7 +37,7 @@ export default class API {
 
         app.get('/api/*', (req, res) => res.status(404).json({ code: 404 }));
         
-        const distPath = join(process.cwd(), '/dist/dashboard');
+        const distPath = join(process.cwd(), '/dist/twopg-dashboard/browser');
         app.use(express.static(distPath));
         
         app.all('*', (req, res) => res.status(200).sendFile(`${distPath}/index.html`));
