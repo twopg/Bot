@@ -1,4 +1,5 @@
 import { User, Guild, Message } from 'discord.js';
+import { AuthUser } from '../../api/modules/api-utils';
 
 export default class EventVariables {
     constructor(private content: string) {}
@@ -14,7 +15,7 @@ export default class EventVariables {
         return this.replace(/\[GUILD\]/g, guild.name);
     }
 
-    instigator(user: User) {
+    instigator(user: AuthUser | User) {
         return this.replace(/\[INSTIGATOR\]/g, `<@!${user.id}>`);
     }
 
