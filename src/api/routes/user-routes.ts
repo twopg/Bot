@@ -7,7 +7,7 @@ import { getUser, sendError } from '../modules/api-utils';
 
 export const router = Router();
 
-const users = users;
+const users = Deps.get<Users>(Users);
 
 router.get('/', async (req, res) => {
     try {
