@@ -34,7 +34,7 @@
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.3",
     "nyc": "^15.1.0",
-    "stripe": "^8.102.0",
+    "stripe": "^8.120.0",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
