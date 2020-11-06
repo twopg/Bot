@@ -4,6 +4,8 @@ import { User } from 'discord.js';
 import config from '../../../config.json';
 
 export async function getUser(key: any) {
+  if (!key) return null;
+
   let authUser: AuthUser = await AuthClient.getUser(key);
 
   authUser['displayAvatarURL'] = authUser.avatarUrl(64);

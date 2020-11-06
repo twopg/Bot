@@ -7,6 +7,8 @@ import { getUser, sendError } from '../modules/api-utils';
 
 export const router = Router();
 
+const users = users;
+
 router.get('/', async (req, res) => {
     try {
         const user = await getUser(req.query.key);
@@ -17,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/saved', async (req, res) => {
     try {        
         const user = await getUser(req.query.key);
-        const savedUser = await Deps.get<Users>(Users).get(user);
+        const savedUser = await users.get(user);
         res.json(savedUser);
     } catch (error) { sendError(res, 400, error); }
 });
@@ -27,7 +29,7 @@ router.get('/xp-card-preview', async (req, res) => {
         delete req.query.cache;
 
         const user = await getUser(req.query.key);
-        const savedUser = await Deps.get<Users>(Users).get(user);
+        const savedUser = await users.get(user);
         if (!savedUser)
             return res.status(404).send('User not found');
 
@@ -47,7 +49,7 @@ router.get('/xp-card-preview', async (req, res) => {
 router.put('/xp-card', async (req, res) => {        
     try {
         const user = await getUser(req.query.key);
-        const savedUser = await Deps.get<Users>(Users).get(user);
+        const savedUser = await users.get(user);
 
         savedUser.xpCard = req.body;
         await savedUser.save();
