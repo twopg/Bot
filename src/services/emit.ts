@@ -3,13 +3,12 @@ import { Guild, User, GuildMember, Message } from 'discord.js';
 import { PunishmentArgs } from '../modules/auto-mod/auto-mod';
 import { MemberDocument } from '../data/models/member';
 import { Change } from '../data/models/log';
-import { AuthUser } from '../api/modules/api-utils';
 
 /**
  * Used for emitting custom events.
  */
 export default class Emit {
-    configSaved(guild: Guild, user: AuthUser | User, change: Change) {
+    configSaved(guild: Guild, user: any, change: Change) {
         const eventArgs: ConfigUpdateArgs = {
             guild,
             instigator: user,
@@ -48,7 +47,7 @@ export default class Emit {
 
 export interface ConfigUpdateArgs {
     guild: Guild;
-    instigator: AuthUser | User;
+    instigator: any | User;
     module: string;
     new: any;
     old: any;

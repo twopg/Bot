@@ -49,19 +49,3 @@ export function leaderboardMember(user: User, xpInfo: any) {
 export function sendError(res: any, code: number, error: Error) {
   return res.status(code).json({ code, message: error?.message })
 }
-
-export interface AuthUser {
-  username: string;
-  locale: string;
-  isMFAEnabled: boolean;
-  discriminator: number;
-  id: string;
-  avatarHash: string;
-  userFlags: string[];
-  premiumType: string;
-  bot: boolean;
-  createdTimestamp: number;
-  createdAt: string;
-
-  avatarUrl: (size: number) => string;
-}
