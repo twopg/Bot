@@ -6,9 +6,7 @@ import config from '../../../config.json';
 export async function getUser(key: any) {
   if (!key) return null;
 
-  let authUser = await auth.getUser(key);
-  authUser['displayAvatarURL'] = authUser.avatarUrl(64);
-  return authUser;
+  return await auth.getUser(key);
 }
 
 export async function validateBotOwner(key: any) {
