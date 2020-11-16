@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import OAuthClient from 'disco-oauth';
+import AuthClient from '@2pg/oauth';
 import express from 'express';
 import { join } from 'path';
 import { Stripe } from 'stripe';
@@ -15,19 +15,19 @@ import { router as musicRoutes } from './routes/music-routes';
 import { router as payRoutes } from './routes/pay-routes';
 import { router as userRoutes } from './routes/user-routes';
 
-export const app = express(),
-             AuthClient = new OAuthClient(config.bot.id, config.bot.secret),
-             stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-08-27' });
+export const app = express();
+export const auth = new AuthClient({
+    id: config.bot.id,
+    secret: config.bot.secret,
+    redirectURI: '',
+    scopes: ['identify', 'guilds']
+});
+export const stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-08-27' });
 
 export default class API {
-    constructor(private stats = Deps.get<Stats>(Stats)) {
-        AuthClient.setRedirect(`${config.api.url}/auth`);
-        AuthClient.setScopes('identify', 'guilds');
-             
-        app.use(cors());
-        
+    constructor(private stats = Deps.get<Stats>(Stats)) {             
+        app.use(cors());        
         app.use('/api', payRoutes);
-
         app.use(bodyParser.json());
 
         app.use('/api/guilds/:id/music', musicRoutes);

@@ -16,7 +16,7 @@ bot.login(config.bot.token);
 Deps.get<EventsService>(EventsService).init();
 Deps.build(API);
 
-mongoose.connect(config.mongoURL, { 
+mongoose.connect(config.mongoURI, { 
     useUnifiedTopology: true, 
     useNewUrlParser: true, 
     useFindAndModify: false 

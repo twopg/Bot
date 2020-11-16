@@ -2,7 +2,7 @@ import { Router } from 'express';
 import Music from '../../modules/music/music';
 import Deps from '../../utils/deps';
 import { bot } from '../../bot';
-import { AuthClient } from '../server';
+import { auth } from '../server';
 import Users from '../../data/users';
 import { validateGuildManager } from '../modules/api-utils';
 
@@ -115,7 +115,7 @@ router.get('/stop', async (req, res) => {
 });
 
 async function getMusic(guildId: string, key: any) {
-    const { id } = await AuthClient.getUser(key);
+    const { id } = await auth.getUser(key);
 
     const user = bot.users.cache.get(id);
     const guild = bot.guilds.cache.get(guildId);

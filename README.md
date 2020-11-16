@@ -33,7 +33,7 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
         "premiumRoleId": "<premium_role_id>"
     },
     "dashboardURL": "https://2pg.xyz",
-    "mongoURL": "mongodb://localhost/2PG"
+    "mongoURI": "mongodb://localhost/2PG"
 }
 ```
 

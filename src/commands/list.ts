@@ -1,7 +1,7 @@
 import { Command, CommandContext, Permission } from './command';
 import Deps from '../utils/deps';
 import Music from '../modules/music/music';
-import { Track } from '2pg-music';
+import { Track } from '@2pg/music';
 
 export default class ListCommand implements Command {
     aliases = ['q'];

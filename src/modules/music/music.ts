@@ -1,5 +1,5 @@
 import { GuildMember, TextChannel, VoiceChannel } from 'discord.js';
-import { MusicClient, Player, Track } from '2pg-music';
+import { MusicClient, Player, Track } from '@2pg/music';
 
 export default class Music {
     private _client = {} as MusicClient;

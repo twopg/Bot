@@ -1,18 +1,13 @@
 import { bot } from '../../bot';
-import { AuthClient } from '../server';
+import { auth } from '../server';
 import { User } from 'discord.js';
 import config from '../../../config.json';
 
 export async function getUser(key: any) {
   if (!key) return null;
 
-  let authUser: AuthUser = await AuthClient.getUser(key);
-
+  let authUser = await auth.getUser(key);
   authUser['displayAvatarURL'] = authUser.avatarUrl(64);
-  authUser = JSON.parse(JSON
-    .stringify(authUser)
-    .replace(/"_(.*?)"/g, '"$1"'));
-
   return authUser;
 }
 
@@ -30,23 +25,15 @@ export async function validateGuildManager(key: any, guildId: string) {
     throw new TypeError('No key provided.');
   const guilds = await getManagableGuilds(key);
       
-  if (!guilds.has(guildId))
+  if (!guilds.some(g => g.id === guildId))
     throw TypeError('Guild not manageable.');
 }
 
 export async function getManagableGuilds(key: any) {
-  const manageableGuilds = [];
-  let userGuilds = await AuthClient.getGuilds(key);    
-  for (const id of userGuilds.keys()) {        
-    const authGuild = userGuilds.get(id);        
-    const hasManager = authGuild._permissions
-      .some(p => p === 'MANAGE_GUILD');
-
-    if (hasManager)
-      manageableGuilds.push(id);
-  }    
-  return bot.guilds.cache
-    .filter(g => manageableGuilds.some(id => id === g.id));
+  return (await auth.getGuilds(key))
+    .array()
+    .filter(g => g.permissions.includes('MANAGE_GUILD'))
+    .map(g => bot.guilds.cache.get(g.id));
 }
 
 export function leaderboardMember(user: User, xpInfo: any) {

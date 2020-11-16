@@ -6,7 +6,7 @@ import { CommandDocument, SavedCommand } from '../../data/models/command';
 import Deps from '../../utils/deps';
 import { validateBotOwner, sendError } from '../modules/api-utils';
 import Stats from '../modules/stats';
-import { AuthClient } from '../server';
+import { auth } from '../server';
 
 export const router = Router();
 
@@ -21,15 +21,14 @@ router.get('/commands', async (req, res) => res.json(commands));
 
 router.get('/auth', async (req, res) => {
   try {    
-    const key = await AuthClient.getAccess(req.query.code);
+    const key = await auth.getAccess(req.query.code.toString());
     res.redirect(`${config.dashboardURL}/auth?key=${key}`);
   } catch (error) { sendError(res, 400, error); }
 });
 
 router.post('/error', async(req, res) => {
   try {
-    const key = req.query.key;
-    let { id } = await AuthClient.getUser(key);
+    const { id } = await auth.getUser(req.query.key.toString());
     
     await bot.users.cache
       .get(config.bot.ownerId)
@@ -57,5 +56,4 @@ router.get('/stats', async (req, res) => {
 router.get('/invite', (req, res) => 
   res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.dashboardURL}/dashboard&permissions=8&scope=bot`));
 
-router.get('/login', (req, res) =>
-  res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.api.url}/auth&response_type=code&scope=identify guilds&prompt=none`));
+router.get('/login', (req, res) => res.redirect(auth.authCodeLink.url));
