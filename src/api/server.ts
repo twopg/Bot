@@ -19,7 +19,7 @@ export const app = express();
 export const auth = new AuthClient({
     id: config.bot.id,
     secret: config.bot.secret,
-    redirectURI: '',
+    redirectURI: `${config.api.url}/auth`,
     scopes: ['identify', 'guilds']
 });
 export const stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-08-27' });
