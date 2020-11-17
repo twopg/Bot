@@ -31,7 +31,8 @@ export async function getManagableGuilds(key: any) {
   return (await auth.getGuilds(key))
     .array()
     .filter(g => g.permissions.includes('MANAGE_GUILD'))
-    .map(g => bot.guilds.cache.get(g.id));
+    .map(g => bot.guilds.cache.get(g.id))
+    .filter(g => g);
 }
 
 export function leaderboardMember(user: User, xpInfo: any) {
