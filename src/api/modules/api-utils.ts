@@ -21,8 +21,8 @@ export async function validateBotOwner(key: any) {
 export async function validateGuildManager(key: any, guildId: string) {
   if (!key)
     throw new TypeError('No key provided.');
-  const guilds = await getManagableGuilds(key);
-      
+
+  const guilds = await getManagableGuilds(key);  
   if (!guilds.some(g => g.id === guildId))
     throw TypeError('Guild not manageable.');
 }
@@ -36,13 +36,13 @@ export async function getManagableGuilds(key: any) {
 }
 
 export function leaderboardMember(user: User, xpInfo: any) {
-    return {
-        id: user.id,
-        username: user.username,
-        tag: '#' + user.discriminator,
-        displayAvatarURL: user.displayAvatarURL({ dynamic: true }),
-        ...xpInfo
-    };
+  return {
+    id: user.id,
+    username: user.username,
+    tag: '#' + user.discriminator,
+    displayAvatarURL: user.displayAvatarURL({ dynamic: true }),
+    ...xpInfo
+  };
 }
 
 export function sendError(res: any, code: number, error: Error) {

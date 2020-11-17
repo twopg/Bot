@@ -12,7 +12,7 @@ const users = Deps.get<Users>(Users);
 router.get('/', async (req, res) => {
     try {
         const user = await getUser(req.query.key);
-        res.json({ ...user, displayAvatarURL: user.displayAvatarURL });
+        res.json(user);
     } catch (error) { sendError(res, 400, error); }
 });
 

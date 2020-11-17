@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@2pg/music": "^1.1.1",
-    "@2pg/oauth": "^1.0.4",
+    "@2pg/oauth": "^1.0.5",
     "body-parser": "^1.19.0",
     "canvas": "^2.6.1",
     "cors": "^2.8.5",
