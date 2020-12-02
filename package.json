@@ -7,11 +7,8 @@
     "test": "npm run test:u && npm run test:i",
     "test:i": "ts-mocha test/integration/*.tests.ts",
     "test:u": "ts-mocha test/unit/*.tests.ts",
-    "start": "npm run start:bot",
-    "start:bot": "ts-node src/bot.ts",
-    "start:dev": "ts-node-dev src/bot.ts",
-    "start:music": "cd dist/lavalink && java -jar Lavalink.jar",
-    "start:prod": "npm run start:music | ts-node src/bot.ts"
+    "start": "ts-node src/bot.ts",
+    "dev": "ts-node-dev src/bot.ts"
   },
   "engines": {
     "node": "12.x",
@@ -22,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@2pg/music": "^1.1.1",
-    "@2pg/oauth": "^1.0.5",
+    "@2pg/oauth": "^1.0.7",
     "body-parser": "^1.19.0",
     "canvas": "^2.6.1",
     "cors": "^2.8.5",
