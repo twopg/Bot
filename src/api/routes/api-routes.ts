@@ -62,7 +62,7 @@ router.get('/login', (req, res) => res.redirect(auth.authCodeLink.url));
 
 router.post('/vote/top-gg', async (req, res) => {
   try {
-    if (req.get('Authorization') !== config.vote.topGGAuth)
+    if (req.get('authorization') !== config.vote.topGGAuth)
       return res.status(400);
 
     const channel = bot.channels.cache.get(config.vote.channelId) as TextChannel;
@@ -70,7 +70,7 @@ router.post('/vote/top-gg', async (req, res) => {
       return res.status(400);
 
     const userId = req.body.user;
-    const savedUser = await users.get(userId);
+    const savedUser = await users.get({ id: userId });
     savedUser.votes ??= 0;
     savedUser.votes++;
     await savedUser.updateOne(savedUser);
