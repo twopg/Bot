@@ -60,7 +60,7 @@ router.get('/invite', (req, res) =>
 
 router.get('/login', (req, res) => res.redirect(auth.authCodeLink.url));
 
-router.get('/vote/top-gg', async (req, res) => {
+router.post('/vote/top-gg', async (req, res) => {
   try {
     if (req.get('Authorization') !== config.vote.topGGAuth)
       return res.status(400);
