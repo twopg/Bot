@@ -19,7 +19,8 @@ export default class CommandService {
         private logs = Deps.get<Logs>(Logs),
         private cooldowns = Deps.get<Cooldowns>(Cooldowns),
         private validators = Deps.get<Validators>(Validators),
-        private savedCommands = Deps.get<Commands>(Commands)) {}
+        private savedCommands = Deps.get<Commands>(Commands)
+    ) {}
 
     async init() {
         const files = await readdir('./src/commands');
@@ -58,8 +59,8 @@ export default class CommandService {
             this.validators.checkCommand(command, savedGuild, msg);
             this.validators.checkPreconditions(command, msg.member);
 
-            await command.execute(new CommandContext(msg), 
-            ...this.getCommandArgs(slicedContent, savedGuild));
+            await command.execute(new CommandContext(msg, savedGuild), 
+                ...this.getCommandArgs(slicedContent, savedGuild));
             
             this.cooldowns.add(msg.author, command);
 

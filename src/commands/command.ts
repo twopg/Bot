@@ -1,4 +1,5 @@
 import { Message, GuildMember, TextChannel, Guild, User, Client, PermissionString } from 'discord.js';
+import { GuildDocument } from '../data/models/guild';
 
 export type Permission = '' | PermissionString;
 
@@ -15,15 +16,15 @@ export interface Command {
 }
 
 export class CommandContext {
-    msg: Message;
     member: GuildMember;
     channel: TextChannel;
     guild: Guild;
     user: User;
     bot: Client;
     
-    constructor(msg: Message) {
-        this.msg = msg;
+    constructor(
+        public msg: Message,
+        public savedGuild: GuildDocument) {
         this.member = msg.member;
         this.channel = msg.channel as TextChannel;
         this.guild = msg.guild;

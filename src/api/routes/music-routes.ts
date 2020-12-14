@@ -8,8 +8,8 @@ import { validateGuildManager } from '../modules/api-utils';
 
 export const router = Router({ mergeParams: true });
 
-const music = Deps.get<Music>(Music),
-      users = Deps.get<Users>(Users);
+const music = Deps.get<Music>(Music);
+const users = Deps.get<Users>(Users);
 
 router.get('/pause', async (req, res) => {
     try {
