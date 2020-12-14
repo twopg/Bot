@@ -62,7 +62,9 @@ router.get('/login', (req, res) => res.redirect(auth.authCodeLink.url));
 
 router.get('/vote/top-gg', async (req, res) => {
   try {
-    const channel = bot.channels.cache.get(config.guild.voteChannelId) as TextChannel;
+    if (req)
+
+    const channel = bot.channels.cache.get(config.vote.channelId) as TextChannel;
     if (!channel)
       return res.status(400);
 
