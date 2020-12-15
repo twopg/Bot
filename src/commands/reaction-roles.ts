@@ -10,6 +10,7 @@ export default class PlayCommand implements Command {
   usage = 'reaction-roles';
 
   async execute(ctx: CommandContext) {
+    let count = 0;
     const configs = ctx.savedGuild.reactionRoles.configs;
     for (const config of configs) {
       const channel = ctx.bot.channels.cache.get(config.channel) as TextChannel;
@@ -23,11 +24,14 @@ export default class PlayCommand implements Command {
         const matchesConfig = this.toHex(reaction.emoji.name) === this.toHex(config.emote);
         if (!matchesConfig) continue;
 
+        count++;
         for (const user of reaction.users.cache.values())
           await ctx.guild.members.cache
             .get(user.id).roles
             .add(config.role);
       }
+
+      await ctx.channel.send(`> Added \`${count}\` reaction roles.`);
     }
   }
     
