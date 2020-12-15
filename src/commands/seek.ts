@@ -23,6 +23,6 @@ export default class SeekCommand implements Command {
 
     await player.seek(pos);
 
-    return ctx.channel.send(`> Player at \`${player.position / 1000}s\`.`);
+    return ctx.channel.send(`> Player at \`${pos}s\`.`);
   }
 }

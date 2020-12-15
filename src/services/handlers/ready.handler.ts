@@ -8,24 +8,22 @@ import config from '../../../config.json';
 import AutoMod from '../../modules/auto-mod/auto-mod';
 
 export default class ReadyHandler implements EventHandler {
-    started = false;
-    on = 'ready';
+  started = false;
+  on = 'ready';
+  
+  constructor(
+    private autoMod = Deps.get<AutoMod>(AutoMod),
+    private commandService = Deps.get<CommandService>(CommandService)) {}
+
+  async invoke() {
+    Log.info(`Bot is live!`, `events`);
+
+    if (this.started) return;
+    this.started = true;
     
-    constructor(
-        private autoMod = Deps.get<AutoMod>(AutoMod),
-        private commandService = Deps.get<CommandService>(CommandService),        
-        private music = Deps.get<Music>(Music)) {}
+    await this.autoMod.init();
+    await this.commandService.init();
 
-    async invoke() {
-        Log.info(`Bot is live!`, `events`);
-
-        if (this.started) return;
-        this.started = true;
-        
-        await this.autoMod.init();
-        await this.commandService.init();
-
-        this.music.initialize();
-        bot.user?.setActivity(config.bot.activity);
-    }
+    bot.user?.setActivity(config.bot.activity);
+  }
 }

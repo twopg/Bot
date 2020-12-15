@@ -5,7 +5,7 @@ export default class Music {
   private _client = {} as MusicClient;
   get client() { return this._client; }
 
-  initialize() {
+  constructor() {
     this._client = new MusicClient();   
     
     this.hookEvents();
