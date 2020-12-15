@@ -49,16 +49,15 @@ router.get('/skip', async (req, res) => {
     } catch (error) { res.status(400).send(error?.message); }
 });
 
-// FIXME: make work
-// router.get('/seek/:position', async (req, res) => {
-//     try {
-//         const { player } = await getMusic(req.params.id, req.query.key);
+router.get('/seek/:position', async (req, res) => {
+    try {
+        const { player } = await getMusic(req.params.id, req.query.key);
 
-//         player.seek(+req.params.position * 1000);
+        player.seek(+req.params.position);
 
-//         res.status(200).send({ success: true });
-//     } catch (error) { res.status(400).send(error?.message); }
-// });
+        res.status(200).send({ success: true });
+    } catch (error) { res.status(400).send(error?.message); }
+});
 
 router.get('/remove/:number', async (req, res) => {
     try {

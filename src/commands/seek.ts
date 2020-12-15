@@ -22,7 +22,7 @@ export default class SeekCommand implements Command {
         if (!pos)
             return ctx.channel.send(`Track at: \`${this.music.getDuration(player)}\``);
 
-        // await player.seek(pos * 1000); // TODO: implement
+        await player.seek(pos);
 
         return ctx.channel.send(`Now at \`${this.music.getDuration(player)}\`.`);
     }
