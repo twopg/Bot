@@ -1,4 +1,4 @@
-import { GuildDocument, MessageFilter } from '../../../data/models/guild';
+import { MessageFilter } from '../../../data/models/guild';
 import { ContentValidator } from './content-validator';
 import AutoMod, { ValidationError } from '../auto-mod';
 import { toNeatList } from '../../../utils/command-utils';
@@ -14,6 +14,6 @@ export default class MassMentionValidator implements ContentValidator {
 
     const invalid = matchedNames.length > 0;
     if (invalid)
-      throw new ValidationError(`Message was flagged for: ${toNeatList(matchedNames)}`, this.filter);
+      throw new ValidationError(`Message was flagged for ${toNeatList(matchedNames)}`, this.filter);
   }
 }

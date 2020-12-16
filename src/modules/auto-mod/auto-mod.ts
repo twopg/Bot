@@ -32,7 +32,15 @@ export default class AutoMod {
     }
     Log.info(`Loaded: ${this.validators.length} validators`, `automod`);
 
-    this.toxicity = await load(0.9, ['insult', 'identity_attack']);
+    this.toxicity = await load(0.9, [
+      'insult',
+      'identity_attack',
+      'obscene',
+      'severe_toxicity',
+      'sexual_explicit',
+      'threat',
+      'toxicity'
+    ]);
   }
   
   public async validate(msg: Message, guild: GuildDocument) {
