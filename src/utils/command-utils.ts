@@ -50,3 +50,15 @@ export function parseDuration(str: string) {
   }
   throw new TypeError('Could not parse duration. Make sure you typed the duration correctly.');
 }
+
+
+export function toNeatList(arr: any[]) {
+  if (arr.length === 1)
+    return arr[0];
+  else if (arr.length === 2)
+    return `${arr[0]}, and ${arr[1]}`;
+  return arr
+      .slice(arr.length - 1)
+      .join(', ')
+      .concat(`and ${arr[arr.length - 1]}`);
+}

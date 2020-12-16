@@ -5,7 +5,7 @@ import { ValidationError } from '../auto-mod';
 export default class MassCapsValidator implements ContentValidator {
     filter = MessageFilter.MassCaps;
 
-    validate(content: string, guild: GuildDocument) {
+    validate(_, content: string, guild: GuildDocument) {
         const pattern = /[A-Z]/g;
         const severity = guild.autoMod.filterThreshold;
         

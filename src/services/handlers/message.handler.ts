@@ -7,26 +7,33 @@ import Leveling from '../../modules/xp/leveling';
 import { Message } from 'discord.js';
 
 export default class MessageHandler implements EventHandler {
-    on = 'message';
+  on = 'message';
 
-    constructor(
-        private autoMod = Deps.get<AutoMod>(AutoMod),
-        private commands = Deps.get<CommandService>(CommandService),
-        private guilds = Deps.get<Guilds>(Guilds),
-        private leveling = Deps.get<Leveling>(Leveling)) {}
+  constructor(
+    private autoMod = Deps.get<AutoMod>(AutoMod),
+    private commands = Deps.get<CommandService>(CommandService),
+    private guilds = Deps.get<Guilds>(Guilds),
+    private leveling = Deps.get<Leveling>(Leveling)) {}
 
-    async invoke(msg: Message) {
-        if (msg.author.bot) return;
+  async invoke(msg: Message) {
+    if (msg.author.bot) return;
 
-        const savedGuild = await this.guilds.get(msg.guild);
+    const savedGuild = await this.guilds.get(msg.guild);
 
-        const isCommand = msg.content.startsWith(savedGuild.general.prefix);
-        if (isCommand)
-            return this.commands.handle(msg, savedGuild);        
+    const isCommand = msg.content.startsWith(savedGuild.general.prefix);
+    if (isCommand)
+      return this.commands.handle(msg, savedGuild);    
 
-        if (savedGuild.autoMod.enabled)
-            await this.autoMod.validate(msg, savedGuild);
-        if (savedGuild.leveling.enabled)
-            await this.leveling.validateXPMsg(msg, savedGuild);
+    if (savedGuild.autoMod.enabled) {
+      try {
+        await this.autoMod.validate(msg, savedGuild);
+      } catch (validation) {
+        await msg.channel.send(`> ${validation.message}`);
+      }
     }
+    if (savedGuild.leveling.enabled)
+      try {
+        await this.leveling.validateXPMsg(msg, savedGuild);
+      } catch {}
+  }
 }
