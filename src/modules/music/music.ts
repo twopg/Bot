@@ -42,7 +42,7 @@ export default class Music {
 
     const maxHoursInSeconds = maxTrackLength * 60 * 60;    
     if (track.duration.seconds > maxHoursInSeconds)
-      throw new TypeError(`Track length must be less than or equal to \`${maxTrackLength} hours\``);
+      throw new TypeError(`Track length must be less than or equal to \`${maxTrackLength} hours\`.`);
     return track;
   }
 

@@ -1,11 +1,13 @@
 import { MessageEmbed, TextChannel } from 'discord.js';
 import { Router } from 'express';
-import config from '../../../config.json';
+
 import { bot } from '../../bot';
 import { CommandDocument, SavedCommand } from '../../data/models/command';
 import Users from '../../data/users';
 import Deps from '../../utils/deps';
 import { validateBotOwner, sendError } from '../modules/api-utils';
+import { ErrorLogger } from '../modules/logging/error-logger';
+import { WebhookLogger } from '../modules/logging/webhook-logger';
 import Stats from '../modules/stats';
 import { auth } from '../server';
 
@@ -13,6 +15,8 @@ export const router = Router();
 
 const stats = Deps.get<Stats>(Stats);
 const users = Deps.get<Users>(Users);
+const errorLogger = Deps.get<ErrorLogger>(ErrorLogger);
+const webhookLogger = Deps.get<WebhookLogger>(WebhookLogger);
 
 let commands: CommandDocument[] = [];
 SavedCommand.find().then(cmds => commands = cmds);
@@ -24,22 +28,25 @@ router.get('/commands', async (req, res) => res.json(commands));
 router.get('/auth', async (req, res) => {
   try {    
     const key = await auth.getAccess(req.query.code.toString());
-    res.redirect(`${config.dashboardURL}/auth?key=${key}`);
+    res.redirect(`${ process.env.DASHBOARD_URL}/auth?key=${key}`);
   } catch (error) { sendError(res, 400, error); }
 });
 
 router.post('/error', async(req, res) => {
   try {
-    const { id } = await auth.getUser(req.query.key.toString());
-    
-    await bot.users.cache
-      .get(config.bot.ownerId)
-      ?.send(new MessageEmbed({
-        title: 'Dashboard Error',
-        description: `**Message**: ${req.body.message}`,
-        footer: { text: `User ID: ${id ?? 'N/A'}` }
-    }));
+    await errorLogger.dashboard(req.body.message);
+
+    res.json({ message: 'Success' });
   } catch (error) { sendError(res, 400, error); }
+});
+
+router.post('/feedback', async(req, res) => {
+  try {
+    await webhookLogger.feedback(req.body.message);
+
+    res.json({ message: 'Success' });
+  } catch (error) {
+    sendError(res, 400, error); }
 });
 
 router.get('/stats', async (req, res) => {
@@ -56,16 +63,16 @@ router.get('/stats', async (req, res) => {
 });
 
 router.get('/invite', (req, res) => 
-  res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${config.bot.id}&redirect_uri=${config.dashboardURL}/dashboard&permissions=8&scope=bot`));
+  res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${ process.env.BOT_ID}&redirect_uri=${ process.env.DASHBOARD_URL}/dashboard&permissions=8&scope=bot`));
 
 router.get('/login', (req, res) => res.redirect(auth.authCodeLink.url));
 
 router.post('/vote/top-gg', async (req, res) => {
   try {
-    if (req.get('authorization') !== config.vote.topGGAuth)
+    if (req.get('authorization') !==  process.env.TOP_GG_AUTH)
       return res.status(400);
 
-    const channel = bot.channels.cache.get(config.vote.channelId) as TextChannel;
+    const channel = bot.channels.cache.get( process.env.VOTE_CHANNEL_ID) as TextChannel;
     if (!channel)
       return res.status(400);
 
@@ -75,6 +82,6 @@ router.post('/vote/top-gg', async (req, res) => {
     savedUser.votes++;
     await savedUser.updateOne(savedUser);
     
-    await channel.send(`> ✅ <@!${userId}> has entered, and now has \`${savedUser.votes}\` entries!`);
+    await webhookLogger.vote(userId, savedUser.votes);
   } catch (error) { sendError(res, 400, error); }
 });

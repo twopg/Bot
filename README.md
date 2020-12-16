@@ -14,29 +14,28 @@ Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8d6c9610e0eb4ae5a4045ab3b92f80bc)](https://www.codacy.com/manual/ADAMJR/2PG?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=theADAMJR/2PG&amp;utm_campaign=Badge_Grade)
 
 ## Config
-`config.json` example:
-```
-{
-    "bot": {
-        "token": "<your_bot_token>",
-        "secret": "<your_client_secret>",
-        "ownerId": "<discord_user_id>",
-        "activity": "2PG.xyz",
-        "id": "<discord_bot_id>"
-    },
-    "api": {
-        "port": "3000",
-        "url": "https://2pg.xyz/api",
-        "stripeSecretKey": "<sk_test_...>",        
-        "stripeWebhookSecret": "<whsec_...>"
-    },
-    "guild": {
-        "id": "<support_guild_id>",
-        "premiumRoleId": "<premium_role_id>"
-    },
-    "dashboardURL": "https://2pg.xyz",
-    "mongoURI": "mongodb://localhost/2PG"
-}
+`.env` example:
+```.env
+BOT_TOKEN=""
+BOT_ID=""
+CLIENT_SECRET=""
+OWNER_ID=""
+
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""
+GUILD_ID=""
+
+API_URL="http://localhost:3000/api"
+DASHBOARD_URL="http://localhost:4200"
+MONGO_URI="mongodb://localhost/2PG"
+PORT="3000"
+
+PREMIUM_ROLE_ID=""
+FEEDBACK_CHANNEL_ID=""
+
+VOTE_CHANNEL_ID="788001309197860874"
+TOP_GG_AUTH=""
+DBOTS_AUTH=""
 ```
 
 ## Redirect URIs

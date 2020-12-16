@@ -1,5 +1,5 @@
 import { Command, CommandContext, Permission } from './command';
-import config from '../../config.json';
+
 import Deps from '../utils/deps';
 import AutoMod from '../modules/auto-mod/auto-mod';
 import { getMemberFromMention } from '../utils/command-utils';

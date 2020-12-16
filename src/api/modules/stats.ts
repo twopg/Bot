@@ -1,7 +1,7 @@
 import Deps from '../../utils/deps';
 import Logs from '../../data/logs';
 import { LogDocument } from '../../data/models/log';
-import config from '../../../config.json';
+
 
 const distinct = (v, i, a) => a.indexOf(v) === i;
 

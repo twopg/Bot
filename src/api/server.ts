@@ -4,7 +4,7 @@ import AuthClient from '@2pg/oauth';
 import express from 'express';
 import { join } from 'path';
 import { Stripe } from 'stripe';
-import config from '../../config.json';
+
 import Deps from '../utils/deps';
 import Log from '../utils/log';
 import Stats from './modules/stats';
@@ -17,12 +17,12 @@ import { router as userRoutes } from './routes/user-routes';
 
 export const app = express();
 export const auth = new AuthClient({
-    id: config.bot.id,
-    secret: config.bot.secret,
-    redirectURI: `${config.api.url}/auth`,
+    id:  process.env.BOT_ID,
+    secret:  process.env.CLIENT_SECRET,
+    redirectURI: `${ process.env.API_URL}/auth`,
     scopes: ['identify', 'guilds']
 });
-export const stripe = new Stripe(config.api.stripeSecretKey, { apiVersion: '2020-08-27' });
+export const stripe = new Stripe( process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
 
 export default class API {
     constructor(private stats = Deps.get<Stats>(Stats)) {             
@@ -46,5 +46,5 @@ export default class API {
     }
 }
 
-const port = config.api.port || 3000;
+const port =  process.env.PORT || 3000;
 app.listen(port, () => Log.info(`API is live on port ${port}`));

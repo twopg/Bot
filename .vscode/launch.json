@@ -13,7 +13,7 @@
       ],
       "program": "${workspaceFolder}/lib/src/bot.js",
       "outFiles": [
-        "${workspaceFolder}/**/*.js"
+        "${workspaceFolder}/lib/src/*.js"
       ]
     }
   ]

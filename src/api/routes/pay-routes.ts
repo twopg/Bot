@@ -1,6 +1,6 @@
 import { stripe } from '../server';
 import { Stripe } from 'stripe';
-import config from '../../../config.json';
+
 import { Router } from 'express';
 import { getUser, sendError } from '../modules/api-utils';
 import Deps from '../../utils/deps';
@@ -41,8 +41,8 @@ router.get('/user/pay', async(req, res) => {
     const { id } = await getUser(key);
 
     const session = await stripe.checkout.sessions.create({
-      success_url: `${config.dashboardURL}/payment-success`,
-      cancel_url: `${config.dashboardURL}/plus`,
+      success_url: `${ process.env.DASHBOARD_URL}/payment-success`,
+      cancel_url: `${ process.env.DASHBOARD_URL}/plus`,
       payment_method_types: ['card'],
       metadata: { id, plan },
       line_items: [ items[+plan] ]
@@ -54,7 +54,7 @@ router.get('/user/pay', async(req, res) => {
 router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), async(req, res) => {
   try {
     let event = stripe.webhooks
-      .constructEvent(req.body, req.headers['stripe-signature'], config.api.stripeWebhookSecret);
+      .constructEvent(req.body, req.headers['stripe-signature'],  process.env.STRIPE_WEBHOOK_SECRET);
     
     if (event.type === 'checkout.session.completed') {
       const { id, plan } = (event.data.object as any).metadata;

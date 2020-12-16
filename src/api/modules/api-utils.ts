@@ -1,20 +1,23 @@
-import { bot } from '../../bot';
-import { auth } from '../server';
 import { User } from 'discord.js';
-import config from '../../../config.json';
+
+import { SessionManager } from './performance/session-manager'
+import Deps from '../../utils/deps';
+
+const sessions = Deps.get<SessionManager>(SessionManager);
 
 export async function getUser(key: any) {
   if (!key) return null;
 
-  return await auth.getUser(key);
+  const session = await sessions.get(key);
+  return session.authUser;
 }
 
 export async function validateBotOwner(key: any) {
   if (!key)
     throw new TypeError('No key provided.');
-  const { id } = await getUser(key);
-      
-  if (id !== config.bot.ownerId)
+
+  const session = await sessions.get(key);
+  if (session.authUser.id !==  process.env.OWNER_ID)
     throw TypeError('Unauthorized.');
 }
 
@@ -22,17 +25,9 @@ export async function validateGuildManager(key: any, guildId: string) {
   if (!key)
     throw new TypeError('No key provided.');
 
-  const guilds = await getManagableGuilds(key);  
-  if (!guilds.some(g => g.id === guildId))
+  const session = await sessions.get(key);
+  if (!session.guilds.some(g => g.id === guildId))
     throw TypeError('Guild not manageable.');
-}
-
-export async function getManagableGuilds(key: any) {
-  return (await auth.getGuilds(key))
-    .array()
-    .filter(g => g.permissions.includes('MANAGE_GUILD'))
-    .map(g => bot.guilds.cache.get(g.id))
-    .filter(g => g);
 }
 
 export function leaderboardMember(user: User, xpInfo: any) {
@@ -45,6 +40,6 @@ export function leaderboardMember(user: User, xpInfo: any) {
   };
 }
 
-export function sendError(res: any, code: number, error: Error) {
-  return res.status(code).json({ code, message: error?.message })
+export function sendError(res: any, status: number, error: Error) {
+  return res.status(status).json({ message: error?.message })
 }
