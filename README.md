@@ -1,17 +1,16 @@
 # 2PG - Simple, powerful Discord bot
-Simple multi-purpose Discord bot made with TypeScript-> https://2pg.xyz
+Simple multi-purpose Discord bot made with TypeScript - https://2pg.xyz
 
 [![Discord](https://img.shields.io/discord/685862664223850497?color=46828d&label=Support&style=for-the-badge)](https://discord.io/twopg)
+![Lines of Code](https://img.shields.io/tokei/lines/github/twopg/Bot?color=46828d&style=for-the-badge)
+![Repo Stars](https://img.shields.io/github/stars/twopg/Bot?color=46828d&style=for-the-badge)
 
-2PG Bot Series - https://www.youtube.com/watch?v=rYpR0CiEGgk&list=PLGfT2ttRbfixMStpAhPD4pKBQN9wjJmbP&index=1
-
-2PG Dashboard Series - https://www.youtube.com/watch?v=rYpR0CiEGgk&list=PLGfT2ttRbfizIr60zU_S_6_i8O3xmP9ia&index=1
+[2PG Bot Tutorials](https://www.youtube.com/watch?v=rYpR0CiEGgk&list=PLGfT2ttRbfixMStpAhPD4pKBQN9wjJmbP&index=1) •
+[2PG Dashboard Tutorials](https://www.youtube.com/watch?v=rYpR0CiEGgk&list=PLGfT2ttRbfizIr60zU_S_6_i8O3xmP9ia&index=1)
 
 **Dashboard**: https://github.com/theADAMJR/2PG-Dashboard
 
 ![2PG Avatar](https://i.ibb.co/h2BjCJh/2pg-smol.png)
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8d6c9610e0eb4ae5a4045ab3b92f80bc)](https://www.codacy.com/manual/ADAMJR/2PG?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=theADAMJR/2PG&amp;utm_campaign=Badge_Grade)
 
 ## Config
 `.env` example:
@@ -40,8 +39,3 @@ DBOTS_AUTH=""
 
 ## Redirect URIs
 ![Redirects](https://i.ibb.co/9pbfVwL/updated-redirects.png)
-
-## Start the Bot
-- `npm start` to start the bot, and Lavalink
-- Remember to have a local MongoDB database running `mongod`
-- Have Lavalink.jar running - `npm run start:music` or `java -jar Lavalink.jar`
