@@ -40,6 +40,7 @@ router.get('/xp-card-preview', async (req, res) => {
     const generator = new XPCardGenerator(savedUser, rank);
 
     const member = new SavedMember();
+    member.id = savedUser.id;
     member.xp = 1800;
     
     delete req.query.key;

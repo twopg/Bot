@@ -22,7 +22,7 @@ export class XPCardGenerator extends ImageGenerator {
     super();
   }
 
-  async generate(savedMember: MemberDocument, preview ? : XPCard) {
+  async generate(savedMember: MemberDocument, preview?: XPCard) {
     this.discordUser = await this.partial.get(savedMember.id);
 
     if (preview)
