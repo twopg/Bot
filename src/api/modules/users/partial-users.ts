@@ -20,7 +20,7 @@ export class PartialUsers {
 
   private getAvatarURL({ id, avatar }: PartialUser) {
     return (avatar)
-      ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.webp`
+      ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
       : `https://cdn.discordapp.com/embed/avatars/0.png`;
   }
 
