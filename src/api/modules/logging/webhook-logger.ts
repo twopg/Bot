@@ -15,7 +15,7 @@ export class WebhookLogger {
   }
 
   async feedback(message: string) {
-    const webhook = await this.get( process.env.FEEDBACK_CHANNEL_ID, '2PG - Feedback');
+    const webhook = await this.get(process.env.FEEDBACK_CHANNEL_ID, '2PG - Feedback');
     if (!webhook) return;    
   
     await webhook.send(new MessageEmbed({
@@ -25,7 +25,7 @@ export class WebhookLogger {
   }
 
   async vote(userId: string, votes: number) {
-    const webhook = await this.get( process.env.FEEDBACK_CHANNEL_ID, '2PG - Vote');
+    const webhook = await this.get(process.env.VOTE_CHANNEL_ID, '2PG - Vote');
     if (!webhook) return;
 
     webhook.send(new MessageEmbed({

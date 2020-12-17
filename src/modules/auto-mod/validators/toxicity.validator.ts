@@ -7,8 +7,8 @@ export default class MassMentionValidator implements ContentValidator {
   filter = MessageFilter.Toxicity;
   
   async validate(autoMod: AutoMod, content: string) {         
-    const labels = await autoMod.toxicity.classify(content);
-    const matchedNames = labels
+    // const labels = await autoMod.toxicity.classify(content); // FIXME: extremely inefficient
+    const matchedNames = []
       .filter(l => l.results.some(r => r.match))
       .map(l => l.label);
 
