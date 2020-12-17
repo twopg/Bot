@@ -2,9 +2,10 @@ import { Command } from '../../commands/command';
 import { GuildMember, TextChannel, Message } from 'discord.js';
 import { GuildDocument, CustomCommand } from '../../data/models/guild';
 import Cooldowns from './cooldowns';
+import Deps from '../../utils/deps';
 
 export default class Validators {
-  constructor(private cooldowns: Cooldowns) {}
+  constructor(private cooldowns = Deps.get<Cooldowns>(Cooldowns)) {}
 
   checkCommand(command: Command, guild: GuildDocument, msg: Message) {
     const config = guild.commands.configs.find(c => c.name === command.name);
