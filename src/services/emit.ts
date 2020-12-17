@@ -3,6 +3,7 @@ import { Guild, User, GuildMember, Message } from 'discord.js';
 import { PunishmentArgs } from '../modules/auto-mod/auto-mod';
 import { MemberDocument } from '../data/models/member';
 import { Change } from '../data/models/log';
+import { CommandContext } from '../commands/command';
 
 /**
  * Used for emitting custom events.
@@ -40,8 +41,8 @@ export default class Emit {
     emitter.emit('userWarn', eventArgs);
   }
 
-  test(member: GuildMember) {
-    emitter.emit('userTest', member);
+  commandExecuted(ctx: CommandContext) {
+    emitter.emit('commandExecuted', ctx);
   }
 }
 

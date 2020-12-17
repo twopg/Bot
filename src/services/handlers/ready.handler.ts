@@ -2,7 +2,7 @@ import Log from '../../utils/log';
 import EventHandler from './event-handler';
 import Deps from '../../utils/deps';
 import { bot } from '../../bot';
-import CommandService from '../command.service';
+import CommandService from '../commands/command.service';
 
 import AutoMod from '../../modules/auto-mod/auto-mod';
 

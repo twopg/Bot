@@ -16,7 +16,7 @@ export class WebhookLogger {
 
   async feedback(message: string) {
     const webhook = await this.get(process.env.FEEDBACK_CHANNEL_ID, '2PG - Feedback');
-    if (!webhook) return;    
+    if (!webhook) return;
   
     await webhook.send(new MessageEmbed({
       title: 'Feedback',
@@ -30,7 +30,7 @@ export class WebhookLogger {
 
     webhook.send(new MessageEmbed({
       title: 'Vote',
-      description: `> ✅ <@!${userId}> has entered, and now has \`${votes}\` entries!`
+      description: `✅ <@!${userId}> has entered, and now has \`${votes}\` entries!`
     }))
   }
 }

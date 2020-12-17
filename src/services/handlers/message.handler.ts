@@ -1,10 +1,11 @@
 import EventHandler from './event-handler';
 import Deps from '../../utils/deps';
-import CommandService from '../command.service';
+import CommandService from '../commands/command.service';
 import Guilds from '../../data/guilds';
 import AutoMod from '../../modules/auto-mod/auto-mod';
 import Leveling from '../../modules/xp/leveling';
 import { Message } from 'discord.js';
+import Logs from '../../data/logs';
 
 export default class MessageHandler implements EventHandler {
   on = 'message';
@@ -13,16 +14,20 @@ export default class MessageHandler implements EventHandler {
     private autoMod = Deps.get<AutoMod>(AutoMod),
     private commands = Deps.get<CommandService>(CommandService),
     private guilds = Deps.get<Guilds>(Guilds),
-    private leveling = Deps.get<Leveling>(Leveling)) {}
+    private leveling = Deps.get<Leveling>(Leveling),
+    private logs = Deps.get<Logs>(Logs)) {}
 
   async invoke(msg: Message) {
-    if (msg.author.bot) return;
+    if (!msg.member || msg.author.bot) return;
 
     const savedGuild = await this.guilds.get(msg.guild);
 
     const isCommand = msg.content.startsWith(savedGuild.general.prefix);
-    if (isCommand)
-      return this.commands.handle(msg, savedGuild);    
+    if (isCommand) {
+      const command = await this.commands.handle(msg, savedGuild);   
+      await this.logs.logCommand(msg, command);
+      return;
+    } 
 
     if (savedGuild.autoMod.enabled) {
       try {
