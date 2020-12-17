@@ -77,11 +77,19 @@ router.get('/:id/channels', async (req, res) => {
 
 router.get('/:id/log', async(req, res) => {
   try {
-    const id = req.params.id;
-
     const guild = bot.guilds.cache.get(req.params.id);
     const log = await logs.get(guild);
     res.send(log);
+  } catch (error) { sendError(res, 400, error); }
+});
+
+router.get('/:id/commands', async (req, res) => {
+  try {
+    const savedGuild = await guilds.get({ id: req.params.id });
+    res.json({
+      guild: bot.guilds.cache.get(req.params.id),
+      commands: savedGuild.commands.custom
+    });
   } catch (error) { sendError(res, 400, error); }
 });
 

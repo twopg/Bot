@@ -67,7 +67,7 @@ export default class CommandService {
     return this.commands.get(name)
       ?? this.findByAlias(name)
       ?? this.commands.get(
-        this.findCustomCommand(name, savedGuild).command
+        this.findCustomCommand(name, savedGuild)?.command
       );
   }
   private findByAlias(name: string) {   

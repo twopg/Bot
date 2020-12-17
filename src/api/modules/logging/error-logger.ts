@@ -22,16 +22,16 @@ export class ErrorLogger {
   }
 
   async dashboard(message: string) {
-    await appendFile(
-      `${this.logsPath}/dashboard/${this.sessionDate}.log`,
-      `[${this.timestamp}] ${message}\n`
-    );
+    // await appendFile(
+    //   `${this.logsPath}/dashboard/${this.sessionDate}.log`,
+    //   `[${this.timestamp}] ${message}\n`
+    // );
   }
 
   async api(status: number, message: string, route: string) {
-    await appendFile(
-      `${this.logsPath}/api/${this.sessionDate}.log`,
-      `[${this.timestamp}] [${status}] [${route}] ${message}\n`
-    );
+    // await appendFile(
+    //   `${this.logsPath}/api/${this.sessionDate}.log`,
+    //   `[${this.timestamp}] [${status}] [${route}] ${message}\n`
+    // );
   }
 }

@@ -23,7 +23,7 @@ export default class EventVariables {
   }
 
   name(name: string) {
-    return name.replace(/\[NAME\]/g, name);
+    return this.replace(/\[NAME\]/g, name);
   }
 
   memberCount(guild: Guild) {
