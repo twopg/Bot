@@ -43,3 +43,11 @@ export function leaderboardMember(user: User, xpInfo: any) {
 export function sendError(res: any, status: number, error: Error) {
   return res.status(status).json({ message: error?.message })
 }
+
+export class APIError extends TypeError {
+  constructor(
+    message: string,
+    public code: number) {
+    super(message);
+  }
+}
