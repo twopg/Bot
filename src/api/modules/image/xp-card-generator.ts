@@ -16,23 +16,23 @@ export class XPCardGenerator extends ImageGenerator {
   private discordUser: PartialUser;
 
   constructor(
-    private user: UserDocument,
+    private savedUser: UserDocument,
     private rank: number,
     private partial = Deps.get<PartialUsers>(PartialUsers)) {
     super();
   }
 
   async generate(savedMember: MemberDocument, preview?: XPCard) {
-    this.discordUser = await this.partial.get(savedMember.id);
+    this.discordUser = await this.partial.get(this.savedUser.id);
 
     if (preview)
-      this.user.xpCard = preview;
+      this.savedUser.xpCard = preview;
 
     const canvas = createCanvas(700, 250);
     const ctx = canvas.getContext('2d');
 
     await super.addBackgroundToCanvas(ctx, canvas,
-      this.user.xpCard.backgroundURL);
+      this.savedUser.xpCard.backgroundURL);
     await this.addXPInfo(ctx, canvas, savedMember.xp);
     this.addUserText(ctx, canvas);
     await this.addAvatarToCanvas(ctx,
@@ -52,7 +52,7 @@ export class XPCardGenerator extends ImageGenerator {
   }
 
   private addUserText(ctx, canvas: Canvas) {
-    let card = this.user.xpCard;
+    let card = this.savedUser.xpCard;
 
     ctx.fillStyle = card.tertiary || this.defaultColors.tertiary;
     ctx.font = '32px Segoe UI, Arial, sans-serif';
@@ -64,7 +64,7 @@ export class XPCardGenerator extends ImageGenerator {
   }
 
   private async addXPInfo(ctx: CanvasRenderingContext2D, canvas, xp: number) {
-    let card = this.user.xpCard;
+    let card = this.savedUser.xpCard;
 
     const sizeOffset = 325;
     const position = {
