@@ -24,7 +24,8 @@ export class CommandContext {
   
   constructor(
     public msg: Message,
-    public savedGuild: GuildDocument) {
+    public savedGuild: GuildDocument,
+    public command: Command) {
     this.member = msg.member;
     this.channel = msg.channel as TextChannel;
     this.guild = msg.guild;

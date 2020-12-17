@@ -44,14 +44,14 @@ export default class CommandService {
       const slicedContent = msg.content.slice(prefix.length);
 
       const command = this.findCommand(slicedContent, savedGuild);
-      const customCommand = this.getCustomCommand(slicedContent, savedGuild);
+      const customCommand = this.findCustomCommand(slicedContent, savedGuild);
       if (!command && !customCommand) return;
       
       this.validators.checkChannel(msg.channel as TextChannel, savedGuild, customCommand);        
       this.validators.checkCommand(command, savedGuild, msg);
       this.validators.checkPreconditions(command, msg.member);
 
-      const ctx = new CommandContext(msg, savedGuild);
+      const ctx = new CommandContext(msg, savedGuild, command);
       await command.execute(ctx, ...this.getCommandArgs(slicedContent, savedGuild));
       
       this.emit.commandExecuted(ctx);
@@ -66,31 +66,26 @@ export default class CommandService {
     const name = this.getCommandName(slicedContent);
     return this.commands.get(name)
       ?? this.findByAlias(name)
-      ?? this.findCustomCommand(name, savedGuild);
+      ?? this.commands.get(
+        this.findCustomCommand(name, savedGuild).command
+      );
   }
   private findByAlias(name: string) {   
     return Array
       .from(this.commands.values())
       .find(c => c.aliases?.some(a => a === name));
   }
-  private findCustomCommand(customName: string, { commands }: GuildDocument) {
-    const ccName = this
-      .getCommandName(commands.custom
-      ?.find(c => c.alias === customName)?.command);
-    return this.commands.get(ccName);
-  }
-
-  private getCommandArgs(slicedContent: string, savedGuild: GuildDocument) {
-    const customCommand = this
-      .getCustomCommand(slicedContent, savedGuild)?.command;
-    return (customCommand ?? slicedContent)
-      .split(' ')
-      .slice(1);
-  }
-  private getCustomCommand(slicedContent: string, savedGuild: GuildDocument) {
+  private findCustomCommand(slicedContent: string, savedGuild: GuildDocument) {
     const name = this.getCommandName(slicedContent);
     return savedGuild.commands.custom
       ?.find(c => c.alias === name);    
+  }
+
+  private getCommandArgs(slicedContent: string, savedGuild: GuildDocument) {
+    const customCommand = this.findCustomCommand(slicedContent, savedGuild)?.command;
+    return (customCommand ?? slicedContent)
+      .split(' ')
+      .slice(1);
   }
   private getCommandName(slicedContent: string) {
     return slicedContent

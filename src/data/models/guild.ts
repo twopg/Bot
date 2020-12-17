@@ -10,14 +10,14 @@ export class LogsModule extends Module {
 
 export enum EventType {
   Ban = 'BAN', 
+  CommandExecuted = 'COMMAND_EXECUTED',
   ConfigUpdate = 'CONFIG_UPDATE',
   LevelUp = 'LEVEL_UP',
   MessageDeleted = 'MESSAGE_DELETED',
   MemberJoin = 'MEMBER_JOIN',
   MemberLeave = 'MEMBER_LEAVE',
   Unban = 'UNBAN',
-  Warn ='WARN',
-  Test = 'TEST'
+  Warn ='WARN'
 }
 
 export interface LogEvent {
