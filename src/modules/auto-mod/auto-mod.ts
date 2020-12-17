@@ -8,12 +8,10 @@ import { promisify } from 'util';
 import fs from 'fs';
 import { MemberDocument } from '../../data/models/member';
 import Emit from '../../services/emit';
-import { ToxicityClassifier, load } from '@tensorflow-models/toxicity';
 
 const readdir = promisify(fs.readdir);
 
 export default class AutoMod {
-  public toxicity: ToxicityClassifier;
   private validators: ContentValidator[] = [];
 
   constructor(
@@ -30,9 +28,6 @@ export default class AutoMod {
       this.validators.push(new Validator());
     }
     Log.info(`Loaded: ${this.validators.length} validators`, `automod`);
-
-    this.toxicity = await load(0.9, ['insult']);
-    Log.info(`Loaded Toxicity Model`, `automod`);
   }
   
   public async validate(msg: Message, guild: GuildDocument) {

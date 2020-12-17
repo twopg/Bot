@@ -5,9 +5,10 @@ import AutoMod, { ValidationError } from '../auto-mod';
 export default class BadLinkValidator implements ContentValidator {
   filter = MessageFilter.Links;
 
-  validate(autoMod: AutoMod, content: string, guild: GuildDocument) {
+  validate(_, content: string, guild: GuildDocument) {
     const isExplicit = guild.autoMod.banLinks
       .some(l => content.includes(l));
+
     if (isExplicit) {
       throw new ValidationError('Message contains banned links.', this.filter);
     }
