@@ -24,9 +24,10 @@ export default class MessageHandler implements EventHandler {
 
     const isCommand = msg.content.startsWith(savedGuild.general.prefix);
     if (isCommand) {
-      const command = await this.commands.handle(msg, savedGuild);   
-      await this.logs.logCommand(msg, command);
-      return;
+      const command = await this.commands.handle(msg, savedGuild);
+      if (!command) return;
+      
+      return await this.logs.logCommand(msg, command);
     } 
 
     if (savedGuild.autoMod.enabled) {
