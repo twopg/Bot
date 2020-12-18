@@ -9,12 +9,10 @@ import EventsService from './services/events.service';
 import API from './api/server';
 import Log from './utils/log';
 import { DBotsService } from './services/stats/dbots.service';
-import { manager } from './sharding';
 
 export const bot = new Client({
   partials: ['GUILD_MEMBER'],
-  retryLimit: Infinity,
-  shards: manager.shards as any
+  retryLimit: Infinity
 });
 
 export const emitter = new EventEmitter();
