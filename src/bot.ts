@@ -14,8 +14,7 @@ import { manager } from './sharding';
 export const bot = new Client({
   partials: ['GUILD_MEMBER'],
   retryLimit: Infinity,
-  shardCount: +manager.totalShards,
-  shards: manager.shards.array().map(s => s.id)
+  shardCount: +manager.totalShards
 });
 
 export const emitter = new EventEmitter();
