@@ -13,7 +13,7 @@ import { DBotsService } from './services/stats/dbots.service';
 export const bot = new Client({
   partials: ['GUILD_MEMBER', 'MESSAGE', 'REACTION'],
   retryLimit: Infinity,
-  messageCacheLifetime: 0,
+  messageCacheLifetime: Infinity,
   messageCacheMaxSize: 100
 });
 
@@ -27,7 +27,7 @@ Deps.build(
   DBotsService
 );
 
-mongoose.connect( process.env.MONGO_URI, { 
+mongoose.connect(process.env.MONGO_URI, { 
   useUnifiedTopology: true, 
   useNewUrlParser: true, 
   useFindAndModify: false 
