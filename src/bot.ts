@@ -11,7 +11,7 @@ import Log from './utils/log';
 import { DBotsService } from './services/stats/dbots.service';
 
 export const bot = new Client({
-  partials: ['GUILD_MEMBER', 'MESSAGE', 'REACTION'],
+  partials: ['GUILD_MEMBER'],
   retryLimit: Infinity,
   messageCacheLifetime: Infinity,
   messageSweepInterval: -1
