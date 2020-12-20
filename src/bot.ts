@@ -11,8 +11,10 @@ import Log from './utils/log';
 import { DBotsService } from './services/stats/dbots.service';
 
 export const bot = new Client({
-  partials: ['GUILD_MEMBER'],
-  retryLimit: Infinity
+  partials: ['GUILD_MEMBER', 'MESSAGE', 'REACTION'],
+  retryLimit: Infinity,
+  messageCacheLifetime: 0,
+  messageCacheMaxSize: 100
 });
 
 export const emitter = new EventEmitter();
