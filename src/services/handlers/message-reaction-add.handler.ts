@@ -12,7 +12,8 @@ export default class MessageReactionAddHandler implements EventHandler {
         private reactionRoles = Deps.get<ReactionRoles>(ReactionRoles)) {}
 
     async invoke(reaction: MessageReaction, user: User) {        
-        reaction = await reaction.fetch();     
+        reaction = await reaction.fetch();
+        console.log(reaction);
 
         const guild = reaction.message.guild;
         if (!guild) return;
