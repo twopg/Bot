@@ -1,15 +1,20 @@
 import { GuildDocument, SavedGuild } from '../../data/models/guild';
 import { MessageReaction, TextChannel, User } from 'discord.js';
 import { bot } from '../../bot';
+import Log from '../../utils/log';
 
 export default class ReactionRoles {
   async init() {
+    let channelCount = 0;
     const savedGuilds = await SavedGuild.find();
+
     for (const savedGuild of savedGuilds)
       for (const config of savedGuild.reactionRoles.configs) {
+        channelCount++;
         const channel = bot.channels.cache.get(config.channel) as TextChannel;
-        await channel.messages.fetch();
+        channel.messages.cache = await channel.messages.fetch();
       }
+    Log.info(`Cached ${channelCount} text channels.`, 'rr');
   }
   
   async checkToAdd(user: User, reaction: MessageReaction, savedGuild: GuildDocument) {    
