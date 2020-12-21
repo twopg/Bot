@@ -12,7 +12,10 @@ export default class ReactionRoles {
       for (const config of savedGuild.reactionRoles.configs) {
         channelCount++;
         const channel = bot.channels.cache.get(config.channel) as TextChannel;
-        channel.messages.cache = await channel.messages.fetch();
+        channel.messages.cache.set(
+          config.messageId,
+          await channel.messages.fetch(config.messageId)
+        );
       }
     Log.info(`Cached ${channelCount} text channels.`, 'rr');
   }
