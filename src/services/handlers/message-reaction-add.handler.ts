@@ -13,7 +13,7 @@ export default class MessageReactionAddHandler implements EventHandler {
 
     async invoke(reaction: MessageReaction, user: User) {        
         reaction = await reaction.fetch();
-        console.log(reaction);
+        console.log('reaction added');
 
         const guild = reaction.message.guild;
         if (!guild) return;
