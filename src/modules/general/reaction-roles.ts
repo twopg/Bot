@@ -28,6 +28,8 @@ export default class ReactionRoles {
 
     const { guild } = reaction.message;
     const member = guild.members.cache.get(user.id);
+    if (!member) return;
+
     const role = guild.roles.cache.get(config.role);
     if (role)
       await member.roles.add(role);
