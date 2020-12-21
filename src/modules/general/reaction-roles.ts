@@ -11,8 +11,8 @@ export default class ReactionRoles {
     for (const savedGuild of savedGuilds)
       for (const config of savedGuild.reactionRoles.configs) {
         channelCount++;
-      const channel = bot.channels.cache.get(config.channel) as TextChannel;
-        if (!channel) return;
+        const channel = bot.channels.cache.get(config.channel) as TextChannel;
+          if (!channel) return;
 
         channel.messages.cache.set(
           config.messageId,
@@ -27,7 +27,7 @@ export default class ReactionRoles {
     if (!config) return;
 
     const { guild } = reaction.message;
-    const member = guild.members.cache.get(user.id);
+    const member = await guild.members.fetch(user.id);
     if (!member) return;
 
     const role = guild.roles.cache.get(config.role);
@@ -40,7 +40,7 @@ export default class ReactionRoles {
     if (!config) return;
 
     const { guild } = reaction.message;
-    const member = guild.members.cache.get(user.id);
+    const member = await guild.members.fetch(user.id);
     const role = guild.roles.cache.get(config.role);
     if (role)
       await member.roles.remove(role);
