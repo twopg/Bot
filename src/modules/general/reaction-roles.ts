@@ -1,7 +1,17 @@
-import { GuildDocument } from '../../data/models/guild';
-import { MessageReaction, User } from 'discord.js';
+import { GuildDocument, SavedGuild } from '../../data/models/guild';
+import { MessageReaction, TextChannel, User } from 'discord.js';
+import { bot } from '../../bot';
 
 export default class ReactionRoles {
+  async init() {
+    const savedGuilds = await SavedGuild.find();
+    for (const savedGuild of savedGuilds)
+      for (const config of savedGuild.reactionRoles.configs) {
+        const channel = bot.channels.cache.get(config.channel) as TextChannel;
+        await channel.messages.fetch();
+      }
+  }
+  
   async checkToAdd(user: User, reaction: MessageReaction, savedGuild: GuildDocument) {    
     const config = this.getReactionRole(reaction, savedGuild);
     if (!config) return;

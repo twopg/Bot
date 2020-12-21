@@ -1,7 +1,7 @@
 import { Command, CommandContext, Permission } from './command';
 import { TextChannel } from 'discord.js';
 
-export default class PlayCommand implements Command {
+export default class ReactionRolesCommand implements Command {
   aliases = ['rr'];
   module = 'General';
   name = 'reaction-roles';
@@ -30,7 +30,6 @@ export default class PlayCommand implements Command {
             .get(user.id).roles
             .add(config.role);
       }
-
       await ctx.channel.send(`> Added \`${count}\` reaction roles.`);
     }
   }
