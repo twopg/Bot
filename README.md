@@ -14,30 +14,5 @@ Simple multi-purpose Discord bot made with TypeScript - https://2pg.xyz
 
 ![2PG Avatar](https://i.ibb.co/h2BjCJh/2pg-smol.png)
 
-## Config
-`.env` example:
-```.env
-BOT_TOKEN=""
-BOT_ID=""
-CLIENT_SECRET=""
-OWNER_ID=""
-
-STRIPE_SECRET_KEY=""
-STRIPE_WEBHOOK_SECRET=""
-GUILD_ID=""
-
-API_URL="http://localhost:3000/api"
-DASHBOARD_URL="http://localhost:4200"
-MONGO_URI="mongodb://localhost/2PG"
-PORT="3000"
-
-PREMIUM_ROLE_ID=""
-FEEDBACK_CHANNEL_ID=""
-
-VOTE_CHANNEL_ID="788001309197860874"
-TOP_GG_AUTH=""
-DBOTS_AUTH=""
-```
-
-## Redirect URIs
-![Redirects](https://i.ibb.co/9pbfVwL/updated-redirects.png)
+## Setup 101
+https://help.codea.live/projects/2pg
