@@ -3,9 +3,7 @@ import { Message,  TextChannel } from 'discord.js';
 import { Command, CommandContext } from '../../commands/command';
 import Log from '../../utils/log';
 import Deps from '../../utils/deps';
-import Commands from '../../data/commands';
 import { GuildDocument } from '../../data/models/guild';
-import Cooldowns from './cooldowns';
 import Validators from './validators';
 import { promisify } from 'util';
 import Emit from '../emit';
@@ -13,12 +11,11 @@ import Emit from '../emit';
 const readdir = promisify(fs.readdir);
 
 export default class CommandService {
-  private commands = new Map<string, Command>();
+  public readonly commands = new Map<string, Command>();
 
   constructor(
     private emit = Deps.get<Emit>(Emit),
-    private validators = Deps.get<Validators>(Validators),
-    private savedCommands = Deps.get<Commands>(Commands)
+    private validators = Deps.get<Validators>(Validators)
   ) {}
 
   public async init() {
@@ -32,8 +29,6 @@ export default class CommandService {
       
       const command = new Command();
       this.commands.set(command.name, command);
-      
-      await this.savedCommands.get(command);
     }
     Log.info(`Loaded: ${this.commands.size} commands`, `cmds`);
   }

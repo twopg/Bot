@@ -33,5 +33,5 @@ mongoose.connect(process.env.MONGO_URI, {
   ? Log.error('Failed to connect to db', 'bot')
   : Log.info('Connected to db', 'bot'));
 
-// Free Hosting -> uncomment for glitch auto ping
+// Free Hosting -> stops apps from auto sleeping
 import './utils/keep-alive';
