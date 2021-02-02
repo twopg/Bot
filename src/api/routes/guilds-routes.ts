@@ -122,6 +122,23 @@ router.get('/:id/members', async (req, res) => {
   } catch (error) { sendError(res, 400, error); }
 });
 
+router.get('/:id/members', async (req, res) => {
+  try {
+    const savedMembers = await SavedMember.find({ guildId: req.params.id }).lean();    
+    let rankedMembers = [];
+    for (const member of savedMembers) {
+      const user = bot.users.cache.get(member.userId);
+      if (!user) continue;
+      
+      const xpInfo = Leveling.xpInfo(member.xp);
+      rankedMembers.push(leaderboardMember(user, xpInfo));
+    }
+    rankedMembers.sort((a, b) => b.xp - a.xp);
+  
+    res.json(rankedMembers);
+  } catch (error) { sendError(res, 400, error); }
+});
+
 router.get('/:guildId/members/:memberId/xp-card', async (req, res) => {
   try {
     const { guildId, memberId } = req.params;
