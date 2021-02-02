@@ -1,7 +1,7 @@
-import AnnounceHandler from '../handlers/announce-handler';
-import { EventType } from '../../data/models/guild';
-import EventVariables from '../../modules/announce/event-variables';
-import { PunishmentEventArgs } from '../emit';
+import AnnounceHandler from '../../handlers/announce-handler';
+import { EventType } from '../../../data/models/guild';
+import EventVariables from '../../../modules/announce/event-variables';
+import { PunishmentEventArgs } from '../../emit';
 
 export default class UserWarnHandler extends AnnounceHandler {
     on = 'userWarn';

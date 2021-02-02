@@ -17,8 +17,8 @@ import { router as userRoutes } from './routes/user-routes';
 
 export const app = express();
 export const auth = new AuthClient({
-    id:  process.env.BOT_ID,
-    secret:  process.env.CLIENT_SECRET,
+    id: process.env.BOT_ID,
+    secret: process.env.CLIENT_SECRET,
     redirectURI: `${ process.env.API_URL}/auth`,
     scopes: ['identify', 'guilds']
 });
@@ -46,5 +46,5 @@ export default class API {
     }
 }
 
-const port =  process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => Log.info(`API is live on port ${port}`));

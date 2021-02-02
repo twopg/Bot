@@ -54,7 +54,7 @@ router.get('/user/pay', async(req, res) => {
 router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), async(req, res) => {
   try {
     let event = stripe.webhooks
-      .constructEvent(req.body, req.headers['stripe-signature'],  process.env.STRIPE_WEBHOOK_SECRET);
+      .constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
     
     if (event.type === 'checkout.session.completed') {
       const { id, plan } = (event.data.object as any).metadata;

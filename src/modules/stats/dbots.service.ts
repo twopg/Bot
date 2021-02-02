@@ -7,10 +7,10 @@ export class DBotsService {
   private dbots: PostStats;
 
   constructor() {
-    if (! process.env.DBOTS_AUTH) return;
+    if (!process.env.DBOTS_AUTH) return;
 
     this.dbots = new PostStats({
-      apiToken:  process.env.DBOTS_AUTH,
+      apiToken: process.env.DBOTS_AUTH,
       botToken: bot.token
     });
 

@@ -17,7 +17,7 @@ export async function validateBotOwner(key: any) {
     throw new TypeError('No key provided.');
 
   const session = await sessions.get(key);
-  if (session.authUser.id !==  process.env.OWNER_ID)
+  if (session.authUser.id !== process.env.OWNER_ID)
     throw TypeError('Unauthorized.');
 }
 
@@ -44,10 +44,32 @@ export function sendError(res: any, status: number, error: Error) {
   return res.status(status).json({ message: error?.message })
 }
 
-export class APIError extends TypeError {
-  constructor(
-    message: string,
-    public code: number) {
-    super(message);
+export class APIError extends Error {
+  private static readonly messages = new Map<number, string>([
+    [400, 'Bad request'],
+    [401, 'Unauthorized'],
+    [403, 'Forbidden'],
+    [404, 'Not found'],
+    [429, 'You are being rate limited'],
+    [500, 'Internal server error'],
+  ])
+
+  constructor(public readonly status = 400) {
+    super(APIError.messages.get(status));
   }
+}
+
+export interface BotStats {
+  guildCount: number;
+}
+
+export interface DefaultAPIResponse {
+  message: string;
+  code?: number;
+}
+
+export enum HexColor {
+  Blue = '#4287f5',
+  Green = '#42f54e',
+  Red = '#f54242'
 }

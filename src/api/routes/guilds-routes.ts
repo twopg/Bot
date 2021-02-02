@@ -18,11 +18,12 @@ import { SessionManager } from '../modules/performance/session-manager';
 export const router = Router();
 
 const emit = Deps.get<Emit>(Emit);
+const generator = Deps.get<XPCardGenerator>(XPCardGenerator);
+const guilds = Deps.get<Guilds>(Guilds);
 const logs = Deps.get<Logs>(Logs);
 const members = Deps.get<Members>(Members);
-const users = Deps.get<Users>(Users);
-const guilds = Deps.get<Guilds>(Guilds);
 const sessions = Deps.get<SessionManager>(SessionManager);
+const users = Deps.get<Users>(Users);
 
 router.get('/', async (req, res) => {
   try {
@@ -155,8 +156,7 @@ router.get('/:guildId/members/:memberId/xp-card', async (req, res) => {
     const savedMembers = await SavedMember.find({ guildId });
     const rank = Ranks.get(member, savedMembers);
     
-    const generator = new XPCardGenerator(savedUser, rank);
-    const image = await generator.generate(savedMember);
+    const image = await generator.generate(savedMember, rank);
     
     res.set({'Content-Type': 'image/png'}).send(image);
   } catch (error) { console.log(error);

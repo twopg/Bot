@@ -6,7 +6,15 @@ export class PartialUsers {
   readonly cache = new Map<string, PartialUser>();
 
   async get(id: string): Promise<PartialUser> {
-    const user = this.cache.get(id) ?? await this.fetchUser(id);
+    const isSnowflake = /\d{18}/.test(id);
+    if (!isSnowflake) return null;
+
+    const user = this.cache.get(id) ?? await this.fetchUser(id);    
+    if (!user) return null;
+    if (user.message?.includes('401'))
+      throw new APIError(500);
+    else if (user.message?.includes('404'))
+      throw new APIError(404);
 
     this.cache.set(id, user);
     setTimeout(() => this.cache.delete(id), 60 * 60 * 1000);
@@ -20,7 +28,7 @@ export class PartialUsers {
 
   private getAvatarURL({ id, avatar }: PartialUser) {
     return (avatar)
-      ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
+      ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.webp`
       : `https://cdn.discordapp.com/embed/avatars/0.png`;
   }
 
@@ -30,9 +38,9 @@ export class PartialUsers {
     });
 
     if (discordRes.status === 429)
-      throw new APIError('You are being rate limited by Discord.', 429);
+      throw new APIError(429);
     else if (discordRes.status === 404)
-      throw new APIError('User does not exist.', 404);
+      throw new APIError(404);
 
     return await discordRes.json();
   }

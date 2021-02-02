@@ -1,5 +1,5 @@
-import { config } from 'dotenv';
-config({ path: '.env' });
+// import { config } from 'dotenv';
+// config({ path: '.env' });
 
 import { Client } from 'discord.js';
 import mongoose from 'mongoose';
@@ -8,7 +8,7 @@ import { EventEmitter } from 'events';
 import EventsService from './services/events.service';
 import API from './api/server';
 import Log from './utils/log';
-import { DBotsService } from './services/stats/dbots.service';
+import { DBotsService } from './modules/stats/dbots.service';
 
 export const bot = new Client({
   partials: ['GUILD_MEMBER', 'REACTION', 'MESSAGE', 'USER'],
@@ -18,6 +18,8 @@ export const bot = new Client({
 export const emitter = new EventEmitter();
 
 bot.login(process.env.BOT_TOKEN);
+console.log(process.env);
+
 
 Deps.get<EventsService>(EventsService).init();
 Deps.build(
