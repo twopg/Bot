@@ -1,5 +1,5 @@
 export default interface EventHandler {
-    on: string;
+  on: string;
 
-    invoke(...args: any[]): Promise<any> | void;
+  invoke(...args: any[]): Promise<any> | void;
 }

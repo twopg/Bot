@@ -4,18 +4,18 @@ import AnnounceHandler from './announce-handler';
 import EventVariables from '../../modules/announce/event-variables';
 
 export default class MemberLeaveHandler extends AnnounceHandler {
-    on = 'guildMemberRemove';
-    event = EventType.MemberLeave;
+  on = 'guildMemberRemove';
+  event = EventType.MemberLeave;
 
-    async invoke(member: GuildMember) {
-        await super.announce(member.guild, [ member ]);
-    }
+  async invoke(member: GuildMember) {
+    await super.announce(member.guild, [ member ]);
+  }
 
-    protected applyEventVariables(content: string, member: GuildMember) {
-        return new EventVariables(content)
-            .user(member.user)
-            .guild(member.guild)
-            .memberCount(member.guild)
-            .toString();
-    }
+  protected applyEventVariables(content: string, member: GuildMember) {
+    return new EventVariables(content)
+      .user(member.user)
+      .guild(member.guild)
+      .memberCount(member.guild)
+      .toString();
+  }
 }

@@ -1,7 +1,7 @@
-import AnnounceHandler from '../handlers/announce-handler';
-import { EventType } from '../../data/models/guild';
-import EventVariables from '../../modules/announce/event-variables';
-import { ConfigUpdateArgs } from '../emit';
+import AnnounceHandler from '../../handlers/announce-handler';
+import { EventType } from '../../../data/models/guild';
+import EventVariables from '../../../modules/announce/event-variables';
+import { ConfigUpdateArgs } from '../../emit';
 
 export default class ConfigUpdateHandler extends AnnounceHandler {
     on = 'configUpdate';

@@ -1,8 +1,8 @@
-import AnnounceHandler from '../handlers/announce-handler';
-import { EventType } from '../../data/models/guild';
-import EventVariables from '../../modules/announce/event-variables';
-import { ConfigUpdateArgs } from '../emit';
-import { CommandContext } from '../../commands/command';
+import AnnounceHandler from '../../handlers/announce-handler';
+import { EventType } from '../../../data/models/guild';
+import EventVariables from '../../../modules/announce/event-variables';
+import { ConfigUpdateArgs } from '../../emit';
+import { CommandContext } from '../../../commands/command';
 
 export default class extends AnnounceHandler {
   on = 'commandExecuted';

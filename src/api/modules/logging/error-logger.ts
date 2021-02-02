@@ -1,7 +1,7 @@
-import fs from 'fs';
 import { promisify } from 'util';
 import { resolve } from 'path';
-import bash from 'shelljs';
+import { exec } from 'child_process';
+import fs from 'fs';
 
 const appendFile = promisify(fs.appendFile);
 
@@ -16,22 +16,24 @@ export class ErrorLogger {
   }
 
   constructor() {
-    bash.mkdir('-p',
-      `${this.logsPath}/logs/dashboard`,
-      `${this.logsPath}/logs/api`);
+    exec(`
+      mkdir -p
+      ${this.logsPath}/logs/dashboard
+      ${this.logsPath}/logs/api`.trim()
+    );
   }
 
   async dashboard(message: string) {
-    // await appendFile(
-    //   `${this.logsPath}/dashboard/${this.sessionDate}.log`,
-    //   `[${this.timestamp}] ${message}\n`
-    // );
+    await appendFile(
+      `${this.logsPath}/dashboard/${this.sessionDate}.log`,
+      `[${this.timestamp}] ${message}\n`
+    );
   }
 
   async api(status: number, message: string, route: string) {
-    // await appendFile(
-    //   `${this.logsPath}/api/${this.sessionDate}.log`,
-    //   `[${this.timestamp}] [${status}] [${route}] ${message}\n`
-    // );
+    await appendFile(
+      `${this.logsPath}/api/${this.sessionDate}.log`,
+      `[${this.timestamp}] [${status}] [${route}] ${message}\n`
+    );
   }
 }
