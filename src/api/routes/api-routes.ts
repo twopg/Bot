@@ -1,9 +1,8 @@
-import { MessageEmbed, TextChannel } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import { Router } from 'express';
-
 import { bot } from '../../bot';
-import { CommandDocument, SavedCommand } from '../../data/models/command';
 import Users from '../../data/users';
+import CommandService from '../../services/commands/command.service';
 import Deps from '../../utils/deps';
 import { validateBotOwner, sendError } from '../modules/api-utils';
 import { ErrorLogger } from '../modules/logging/error-logger';
@@ -17,13 +16,13 @@ const stats = Deps.get<Stats>(Stats);
 const users = Deps.get<Users>(Users);
 const errorLogger = Deps.get<ErrorLogger>(ErrorLogger);
 const webhookLogger = Deps.get<WebhookLogger>(WebhookLogger);
-
-let commands: CommandDocument[] = [];
-SavedCommand.find().then(cmds => commands = cmds);
+const commandService = Deps.get<CommandService>(CommandService);
 
 router.get('/', (req, res) => res.json({ hello: 'earth' }));
 
-router.get('/commands', async (req, res) => res.json(commands));
+router.get('/commands', async (req, res) => res.json(
+  Array.from(commandService.commands.values())
+));
 
 router.get('/auth', async (req, res) => {
   try {    
