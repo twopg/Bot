@@ -13,7 +13,7 @@
   "env": {
     "API_URL": {
       "description": "The API URL [https://<heroku_app_name>.herokuapp.com/api]",    
-      "value": "https://<heroku_app_name>.herokuapp.com/api"
+      "value": "https://twopgbot.herokuapp.com/"
     },    
     "BOT_ID": {
       "description": "Bot ID from https://discord.com/developers.",    
