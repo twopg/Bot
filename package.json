@@ -1,13 +1,14 @@
 {
   "name": "@2pg/core",
-  "version": "0.2.5b",
+  "version": "0.3.0",
   "description": "Simple, powerful, Discord bot.",
   "main": "lib/main.js",
   "private": false,
+  "repository": {
+    "url": "https://github.com/twopg/Bot"
+  },
   "scripts": {
-    "test": "npm run test:u && npm run test:i",
-    "test:i": "ts-mocha test/integration/*.tests.ts",
-    "test:u": "ts-mocha test/unit/*.tests.ts",
+    "test": "ts-mocha test/test.ts",
     "start": "ts-node src/bot.ts",
     "dev": "ts-node-dev src/bot.ts"
   },
@@ -20,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "@2pg/music": "^1.1.7",
-    "@2pg/oauth": "^1.0.7",
+    "@2pg/oauth": "^1.0.8",
     "@dbots/stats": "^1.0.1",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.7",

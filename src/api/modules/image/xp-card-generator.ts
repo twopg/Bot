@@ -1,7 +1,6 @@
 import { Rank } from 'canvacord';
-import { PartialUser } from 'discord.js';
 import { MemberDocument } from '../../../data/models/member';
-import { UserDocument, XPCard } from '../../../data/models/user';
+import { XPCard } from '../../../data/models/user';
 import Leveling from '../../../modules/xp/leveling';
 import Deps from '../../../utils/deps';
 import { PartialUsers } from '../users/partial-users';

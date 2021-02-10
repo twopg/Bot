@@ -3,7 +3,7 @@ import { GuildDocument } from '../../data/models/guild';
 import Members from '../../data/members';
 import Deps from '../../utils/deps';
 import { MemberDocument } from '../../data/models/member';
-import Emit from '../../services/emit';
+import Emit from '../../handlers/emit';
 
 export default class Leveling {
   constructor(

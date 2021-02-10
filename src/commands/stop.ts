@@ -2,7 +2,7 @@ import { Command, CommandContext, Permission } from './command';
 import Deps from '../utils/deps';
 import Music from '../modules/music/music';
 
-export default class StopCommand implements Command {
+export default class implements Command {
   aliases = ['leave'];
   name = 'stop';
   summary = 'Stop playback, clear list, and leave channel';

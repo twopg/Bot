@@ -1,7 +1,7 @@
-import { auth } from '../../server';
 import { bot } from '../../../bot';
 import User from '@2pg/oauth/lib/types/user';
 import Guild from '@2pg/oauth/lib/types/guild';
+import { auth } from '../auth-client';
 
 export class SessionManager {
   private sessions = new Map<string, UserSession>();

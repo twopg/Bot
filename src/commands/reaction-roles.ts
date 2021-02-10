@@ -1,7 +1,7 @@
 import { Command, CommandContext, Permission } from './command';
 import { TextChannel } from 'discord.js';
 
-export default class ReactionRolesCommand implements Command {
+export default class implements Command {
   aliases = ['rr'];
   module = 'General';
   name = 'reaction-roles';

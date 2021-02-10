@@ -3,7 +3,7 @@ import AutoMod from '../modules/auto-mod/auto-mod';
 import Deps from '../utils/deps';
 import { getMemberFromMention } from '../utils/command-utils';
 
-export default class WarnCommand implements Command {
+export default class implements Command {
     precondition: Permission = 'KICK_MEMBERS';
     name = 'warn';
     usage = 'warn user reason';

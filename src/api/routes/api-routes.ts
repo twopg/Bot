@@ -2,13 +2,14 @@ import { TextChannel } from 'discord.js';
 import { Router } from 'express';
 import { bot } from '../../bot';
 import Users from '../../data/users';
-import CommandService from '../../services/commands/command.service';
+import CommandService from '../../handlers/commands/command.service';
 import Deps from '../../utils/deps';
-import { validateBotOwner, sendError } from '../modules/api-utils';
+import { sendError, APIError } from '../modules/api-utils';
 import { ErrorLogger } from '../modules/logging/error-logger';
 import { WebhookLogger } from '../modules/logging/webhook-logger';
 import Stats from '../modules/stats';
-import { auth } from '../server';
+import { auth } from '../modules/auth-client';
+import { validateBotOwner } from '../modules/middleware';
 
 export const router = Router();
 
@@ -28,7 +29,7 @@ router.get('/auth', async (req, res) => {
   try {    
     const key = await auth.getAccess(req.query.code.toString());
     res.redirect(`${ process.env.DASHBOARD_URL}/auth?key=${key}`);
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });
 
 router.post('/error', async(req, res) => {
@@ -36,7 +37,7 @@ router.post('/error', async(req, res) => {
     await errorLogger.dashboard(req.body.message);
 
     res.json({ message: 'Success' });
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });
 
 router.post('/feedback', async(req, res) => {
@@ -45,24 +46,22 @@ router.post('/feedback', async(req, res) => {
 
     res.json({ message: 'Success' });
   } catch (error) {
-    sendError(res, 400, error); }
+    sendError(res, new APIError(400)); }
 });
 
-router.get('/stats', async (req, res) => {
-  try {
-    await validateBotOwner(req.query.key);
-  
+router.get('/stats', validateBotOwner, async (req, res) => {
+  try {  
     res.json({
       general: stats.general,
       commands: stats.commands,
       inputs: stats.inputs,
       modules: stats.modules
     });
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });
 
 router.get('/invite', (req, res) => 
-  res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${ process.env.BOT_ID}&redirect_uri=${ process.env.DASHBOARD_URL}/dashboard&permissions=8&scope=bot`));
+  res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.DASHBOARD_URL}/dashboard&permissions=8&scope=bot`));
 
 router.get('/login', (req, res) => res.redirect(auth.authCodeLink.url));
 
@@ -71,7 +70,7 @@ router.post('/vote/top-gg', async (req, res) => {
     if (req.get('authorization') !== process.env.TOP_GG_AUTH)
       return res.status(400);
 
-    const channel = bot.channels.cache.get( process.env.VOTE_CHANNEL_ID) as TextChannel;
+    const channel = bot.channels.cache.get(process.env.VOTE_CHANNEL_ID) as TextChannel;
     if (!channel)
       return res.status(400);
 
@@ -82,5 +81,5 @@ router.post('/vote/top-gg', async (req, res) => {
     await savedUser.updateOne(savedUser);
     
     await webhookLogger.vote(userId, savedUser.votes);
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });

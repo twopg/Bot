@@ -1,11 +1,14 @@
-import { stripe } from '../server';
 import { Stripe } from 'stripe';
-
 import { Router } from 'express';
-import { getUser, sendError } from '../modules/api-utils';
+import { APIError, sendError } from '../modules/api-utils';
 import Deps from '../../utils/deps';
 import Users from '../../data/users';
 import bodyParser from 'body-parser';
+import { SessionManager } from '../modules/performance/session-manager';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
+
+const sessions = Deps.get<SessionManager>(SessionManager);
 
 const items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
   {
@@ -38,17 +41,17 @@ const users = Deps.get<Users>(Users);
 router.get('/user/pay', async(req, res) => {
   try {
     const { key, plan } = req.query as any;
-    const { id } = await getUser(key);
+    const { authUser } = await sessions.get(key);
 
     const session = await stripe.checkout.sessions.create({
       success_url: `${ process.env.DASHBOARD_URL}/payment-success`,
       cancel_url: `${ process.env.DASHBOARD_URL}/plus`,
       payment_method_types: ['card'],
-      metadata: { id, plan },
+      metadata: { id: authUser.id, plan },
       line_items: [ items[+plan] ]
     });
     res.send(session);
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });
 
 router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), async(req, res) => {
@@ -63,5 +66,5 @@ router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), asy
       return res.json({ success: true });
     }
     res.json({ received: true });
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });

@@ -1,6 +1,6 @@
 import { Command, CommandContext, Permission } from './command';
 
-export default class ClearCommand implements Command {
+export default class implements Command {
     precondition: Permission = 'MANAGE_MESSAGES';
     name = 'clear';
     usage = 'clear [count = 100]';

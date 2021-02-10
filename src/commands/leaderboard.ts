@@ -1,7 +1,7 @@
 import { Command, CommandContext, Permission } from './command';
 
 
-export default class LeaderboardCommand implements Command {
+export default class implements Command {
     aliases = ['lb'];
     name = 'leaderboard';
     summary = `Get a link to the server's leaderboard`;

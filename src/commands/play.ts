@@ -2,7 +2,7 @@ import { Command, CommandContext, Permission } from './command';
 import Deps from '../utils/deps';
 import Music from '../modules/music/music';
 
-export default class PlayCommand implements Command {
+export default class implements Command {
   aliases = ['p'];
   cooldown = 2;
   module = 'Music';

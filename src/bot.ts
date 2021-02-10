@@ -1,11 +1,11 @@
-import { config } from 'dotenv';
-config({ path: '.env' });
+import { validateEnv } from './utils/validate-env';
+validateEnv();
 
 import { Client } from 'discord.js';
 import mongoose from 'mongoose';
 import Deps from './utils/deps';
 import { EventEmitter } from 'events';
-import EventsService from './services/events.service';
+import { EventHandler } from './handlers/event-handler';
 import API from './api/server';
 import Log from './utils/log';
 import { DBotsService } from './modules/stats/dbots.service';
@@ -18,10 +18,8 @@ export const bot = new Client({
 export const emitter = new EventEmitter();
 
 bot.login(process.env.BOT_TOKEN);
-console.log(process.env);
 
-
-Deps.get<EventsService>(EventsService).init();
+Deps.get<EventHandler>(EventHandler).init();
 Deps.build(
   API,
   DBotsService
