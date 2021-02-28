@@ -1,6 +1,5 @@
-import { TextChannel } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
 import { Router } from 'express';
-import { bot } from '../../bot';
 import Users from '../../data/users';
 import CommandService from '../../handlers/commands/command.service';
 import Deps from '../../utils/deps';
@@ -13,6 +12,7 @@ import { validateBotOwner } from '../modules/middleware';
 
 export const router = Router();
 
+const bot = Deps.get<Client>(Client);
 const stats = Deps.get<Stats>(Stats);
 const users = Deps.get<Users>(Users);
 const errorLogger = Deps.get<ErrorLogger>(ErrorLogger);

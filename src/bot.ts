@@ -10,20 +10,21 @@ import API from './api/server';
 import Log from './utils/log';
 import { DBotsService } from './modules/stats/dbots.service';
 
-export const bot = new Client({
+const bot = new Client({
   partials: ['GUILD_MEMBER', 'REACTION', 'MESSAGE', 'USER'],
   retryLimit: Infinity
 });
+
+Deps.add(Client, bot);
 
 export const emitter = new EventEmitter();
 
 bot.login(process.env.BOT_TOKEN);
 
 Deps.get<EventHandler>(EventHandler).init();
-Deps.build(
-  API,
-  DBotsService
-);
+
+Deps.add(API, new API());
+Deps.add(DBotsService, new DBotsService());
 
 mongoose.connect(process.env.MONGO_URI, { 
   useUnifiedTopology: true, 

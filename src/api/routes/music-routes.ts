@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import Music from '../../modules/music/music';
 import Deps from '../../utils/deps';
-import { bot } from '../../bot';
 import Users from '../../data/users';
 import { SessionManager } from '../modules/performance/session-manager';
 import { validateGuildManager } from '../modules/middleware';
+import { Client } from 'discord.js';
 
 export const router = Router({ mergeParams: true });
 
+const bot = Deps.get<Client>(Client);
 const music = Deps.get<Music>(Music);
 const users = Deps.get<Users>(Users);
 const sessions = Deps.get<SessionManager>(SessionManager);

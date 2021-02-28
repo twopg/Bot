@@ -1,14 +1,20 @@
-import { bot, emitter } from '../bot';
+import { emitter } from '../bot';
 import Log from '../utils/log';
 import fs from 'fs';
 import { promisify } from 'util';
 import Event from './events/event-handler';
+import Deps from '../utils/deps';
+import { Client } from 'discord.js';
 
 const readdir = promisify(fs.readdir);
 
 export class EventHandler {
   private readonly handlers: Event[] = [];
   private readonly customHandlers: Event[] = [];
+
+  constructor(
+    private bot = Deps.get<Client>(Client)
+  ) {}
 
   async init() {
     const handlerFiles = await readdir(`${__dirname}/events`);    
@@ -33,7 +39,7 @@ export class EventHandler {
 
   private hookEvents() {
     for (const handler of this.handlers)
-      bot.on(handler.on as any, handler.invoke.bind(handler));
+      this.bot.on(handler.on as any, handler.invoke.bind(handler));
 
     for (const handler of this.customHandlers)
       emitter.on(handler.on, handler.invoke.bind(handler));

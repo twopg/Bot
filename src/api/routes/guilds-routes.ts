@@ -1,14 +1,13 @@
 import { Router } from 'express';
 import { SavedMember } from '../../data/models/member';
 import { XPCardGenerator } from '../modules/image/xp-card-generator';
-import { bot } from '../../bot';
 import Deps from '../../utils/deps';
 import Members from '../../data/members';
 import Users from '../../data/users';
 import Guilds from '../../data/guilds';
 import Logs from '../../data/logs';
 import AuditLogger from '../modules/audit-logger';
-import { TextChannel } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
 import Leveling from '../../modules/xp/leveling';
 import Emit from '../../handlers/emit';
 import { APIError, leaderboardMember, sendError } from '../modules/api-utils';
@@ -17,6 +16,7 @@ import { validateGuildManager } from '../modules/middleware';
 
 export const router = Router();
 
+const bot = Deps.get<Client>(Client);
 const emit = Deps.get<Emit>(Emit);
 const generator = Deps.get<XPCardGenerator>(XPCardGenerator);
 const guilds = Deps.get<Guilds>(Guilds);

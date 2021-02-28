@@ -1,11 +1,16 @@
 import { SavedUser, UserDocument } from './models/user';
 import DBWrapper from './db-wrapper';
 import SnowflakeEntity from './snowflake-entity';
-import { bot } from '../bot';
+import Deps from '../utils/deps';
+import { Client } from 'discord.js';
 
 export default class Users extends DBWrapper<SnowflakeEntity, UserDocument> {
+  constructor(
+    private bot = Deps.get<Client>(Client)
+  ) { super(); }
+
   protected async getOrCreate({ id }: SnowflakeEntity) {
-    const user = bot.users.cache.get(id);
+    const user = this.bot.users.cache.get(id);
     if (user?.bot)
       throw new TypeError(`Bots don't have accounts`);
     
