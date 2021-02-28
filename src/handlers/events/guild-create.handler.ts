@@ -2,16 +2,21 @@ import Event from './event-handler';
 import { Guild, TextChannel } from 'discord.js';
 import Deps from '../../utils/deps';
 import Guilds from '../../data/guilds';
+import { SessionManager } from '../../api/modules/performance/session-manager';
 
 export default class GuildCreateHandler implements Event {
   on = 'guildCreate';
 
-  constructor(private guilds = Deps.get<Guilds>(Guilds)) {}
+  constructor(
+    private guilds = Deps.get<Guilds>(Guilds),
+    private sessionManager = Deps.get<SessionManager>(SessionManager)
+  ) {}
 
   async invoke(guild: Guild): Promise<any> {
     await this.guilds.get(guild);
 
     await this.sendWelcomeMessage(guild.systemChannel);
+    await this.sessionManager.updateGuildSessions(guild.id);
   }
 
   private async sendWelcomeMessage(channel: TextChannel | null) {

@@ -7,15 +7,28 @@ import Deps from '../../../utils/deps';
 export class SessionManager {
   private sessions = new Map<string, UserSession>();
 
-  get(key: string) {
-    return this.sessions.get(key) ?? this.create(key);
-  }
-
   constructor(
     private bot = Deps.get<Client>(Client)
   ) {}
+
+  public get(key: string) {
+    return this.sessions.get(key) ?? this.create(key);
+  }
+
+  public async updateGuildSessions(guildId: string) {
+    const guildManagerIds = this.bot.guilds.cache
+      .get(guildId).members.cache
+      .filter(m => m.hasPermission('MANAGE_GUILD'))
+      .map(m => m.id);
+    
+    for (const entry of this.sessions.entries()) {
+      const userId = entry[1].authUser.id;
+      if (guildManagerIds.includes(userId))
+        await this.update(entry[0]);
+    }
+  }
   
-  async create(key: string) {
+  public async create(key: string) {
     const timeToClear = 5 * 60 * 1000;
     setTimeout(() => this.sessions.delete(key), timeToClear);
     await this.update(key);
@@ -23,7 +36,7 @@ export class SessionManager {
     return this.sessions.get(key);
   }
   
-  async update(key: string) {
+  public async update(key: string) {
     return this.sessions
       .set(key, {
         authUser: await auth.getUser(key),
