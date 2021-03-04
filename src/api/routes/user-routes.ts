@@ -34,8 +34,8 @@ router.get('/xp-card-preview', async (req, res) => {
   try {
     delete req.query.cache;
 
-    const { authUser } = await sessions.get(req.query.key.toString());
-    const savedUser = await users.get(authUser);
+    const session = await sessions.get(req.query.key.toString());
+    const savedUser = await users.get(session.authUser);
     if (!savedUser)
       return res.status(404).send('User not found');
 

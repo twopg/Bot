@@ -2,7 +2,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { join } from 'path';
-import { Stripe } from 'stripe';
 
 import Deps from '../utils/deps';
 import Log from '../utils/log';
@@ -19,9 +18,9 @@ export const app = express();
 export default class API {
   constructor(private stats = Deps.get<Stats>(Stats)) {       
     app.use(cors()); 
-    app.use('/api', payRoutes);
     app.use(bodyParser.json());
-
+    
+    app.use('/api/pay', payRoutes);
     app.use('/api/guilds/:id/music', musicRoutes);
     app.use('/api/guilds', guildsRoutes);
     app.use('/api/user', userRoutes);
