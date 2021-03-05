@@ -24,8 +24,8 @@ export class XPCardGenerator {
   
     return new Rank()
       .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
-      .setCurrentXP(info.xp - info.xpForNextLevel)
-      .setRequiredXP(info.xpForNextLevel)
+      .setCurrentXP(info.xp)
+      .setRequiredXP(info.nextLevelXP)
       .setRank(rank)
       .setLevel(info.level)
       .setProgressBar(preview.secondary, 'COLOR')
