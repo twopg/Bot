@@ -1,5 +1,6 @@
 import { PostStats } from '@dbots/stats';
 
+import { bot } from '../../bot';
 import Log from '../../utils/log';
 
 export class DBotsService {
@@ -10,7 +11,7 @@ export class DBotsService {
 
     this.dbots = new PostStats({
       apiToken: process.env.DBOTS_AUTH,
-      botToken: process.env.BOT_TOKEN
+      botToken: bot.token
     });
 
     this.dbots.on('postStats', () => Log.info('Posted stats to DBots', 'dbots')); 

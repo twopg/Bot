@@ -3,7 +3,7 @@ import Deps from '../utils/deps';
 import AutoMod from '../modules/auto-mod/auto-mod';
 import { getMemberFromMention } from '../utils/command-utils';
 
-export default class implements Command {
+export default class KickCommand implements Command {
     name = 'ban';
     summary = `Ban a member`;
     precondition: Permission = 'BAN_MEMBERS';

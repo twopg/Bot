@@ -1,10 +1,10 @@
 import { User, MessageReaction } from 'discord.js';
-import Event from './event-handler';
+import EventHandler from './event-handler';
 import Guilds from '../../data/guilds';
 import ReactionRoles from '../../modules/general/reaction-roles';
 import Deps from '../../utils/deps';
 
-export default class MessageReactionRemoveHandler implements Event {
+export default class MessageReactionRemoveHandler implements EventHandler {
   on = 'messageReactionRemove';
 
   constructor(

@@ -1,30 +1,31 @@
-import { validateEnv } from './utils/validate-env';
-validateEnv();
+import { config } from 'dotenv';
+config({ path: '.env' });
 
 import { Client } from 'discord.js';
 import mongoose from 'mongoose';
 import Deps from './utils/deps';
 import { EventEmitter } from 'events';
-import { EventHandler } from './handlers/event-handler';
+import EventsService from './services/events.service';
 import API from './api/server';
 import Log from './utils/log';
 import { DBotsService } from './modules/stats/dbots.service';
 
-const bot = new Client({
+export const bot = new Client({
   partials: ['GUILD_MEMBER', 'REACTION', 'MESSAGE', 'USER'],
   retryLimit: Infinity
 });
 
-Deps.add(Client, bot);
-
 export const emitter = new EventEmitter();
 
 bot.login(process.env.BOT_TOKEN);
+console.log(process.env);
 
-Deps.get<EventHandler>(EventHandler).init();
 
-Deps.add(API, new API());
-Deps.add(DBotsService, new DBotsService());
+Deps.get<EventsService>(EventsService).init();
+Deps.build(
+  API,
+  DBotsService
+);
 
 mongoose.connect(process.env.MONGO_URI, { 
   useUnifiedTopology: true, 

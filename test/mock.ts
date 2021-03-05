@@ -1,6 +1,6 @@
 import { User, GuildMember, Guild } from 'discord.js';
 import { mock } from 'ts-mockito';
-import { CommandContext } from '../../src/commands/command';
+import { CommandContext } from '../src/commands/command';
 
 export class Mock {
   static guild() {

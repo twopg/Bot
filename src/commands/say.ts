@@ -1,6 +1,6 @@
 import { Command, CommandContext, Permission } from './command';
 
-export default class implements Command {
+export default class SayCommand implements Command {
     name = 'say';
     summary = `Get the bot to say something`;
     precondition: Permission = 'MENTION_EVERYONE';

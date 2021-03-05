@@ -1,13 +1,9 @@
 import { GuildDocument, SavedGuild } from '../../data/models/guild';
-import { Client, MessageReaction, TextChannel, User } from 'discord.js';
+import { MessageReaction, TextChannel, User } from 'discord.js';
+import { bot } from '../../bot';
 import Log from '../../utils/log';
-import Deps from '../../utils/deps';
 
 export default class ReactionRoles {
-  constructor(
-    private bot = Deps.get<Client>(Client)
-  ) {}
-
   async init() {
     let channelCount = 0;
     const savedGuilds = await SavedGuild.find();
@@ -15,7 +11,7 @@ export default class ReactionRoles {
     for (const savedGuild of savedGuilds)
       for (const config of savedGuild.reactionRoles.configs) {
         channelCount++;
-        const channel = this.bot.channels.cache.get(config.channel) as TextChannel;
+        const channel = bot.channels.cache.get(config.channel) as TextChannel;
           if (!channel) return;
 
         channel.messages.cache.set(

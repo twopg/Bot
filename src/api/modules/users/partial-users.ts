@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { bot } from '../../../bot';
 import { APIError } from '../api-utils';
 
 export class PartialUsers {
@@ -33,7 +34,7 @@ export class PartialUsers {
 
   private async fetchUser(id: string) {
     const discordRes = await fetch(`https://discord.com/api/v6/users/${id}`, {
-      headers: { Authorization: `Bot ${process.env.BOT_TOKEN}` }
+      headers: { Authorization: `Bot ${bot.token}` }
     });
 
     if (discordRes.status === 429)

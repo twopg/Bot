@@ -1,6 +1,6 @@
 import { Command, CommandContext, Permission } from './command';
 
-export default class implements Command {
+export default class HelpCommand implements Command {
   name = 'help';
   summary = 'Get a link to list all commands.';
   precondition: Permission = '';

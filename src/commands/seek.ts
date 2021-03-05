@@ -2,7 +2,7 @@ import { Command, CommandContext, Permission } from './command';
 import Deps from '../utils/deps';
 import Music from '../modules/music/music';
 
-export default class implements Command {
+export default class SeekCommand implements Command {
   precondition: Permission = 'SPEAK';
   name = 'seek';
   usage = 'seek [position]';

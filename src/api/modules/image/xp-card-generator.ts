@@ -1,6 +1,7 @@
 import { Rank } from 'canvacord';
+import { PartialUser } from 'discord.js';
 import { MemberDocument } from '../../../data/models/member';
-import { XPCard } from '../../../data/models/user';
+import { UserDocument, XPCard } from '../../../data/models/user';
 import Leveling from '../../../modules/xp/leveling';
 import Deps from '../../../utils/deps';
 import { PartialUsers } from '../users/partial-users';
@@ -27,7 +28,6 @@ export class XPCardGenerator {
       .setCurrentXP(info.xp)
       .setRequiredXP(info.xpForNextLevel)
       .setRank(rank)
-      .setLevel(info.level)
       .setProgressBar(preview.secondary, 'COLOR')
       .setUsername(partialUser.username)
       .setDiscriminator(partialUser.discriminator)

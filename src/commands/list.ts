@@ -3,7 +3,7 @@ import Deps from '../utils/deps';
 import Music from '../modules/music/music';
 import { Track } from '@2pg/music';
 
-export default class implements Command {
+export default class ListCommand implements Command {
   aliases = ['q'];
   name = 'list';
   summary = 'Display the current track list.';

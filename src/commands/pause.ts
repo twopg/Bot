@@ -2,7 +2,7 @@ import { Command, CommandContext, Permission } from './command';
 import Deps from '../utils/deps';
 import Music from '../modules/music/music';
 
-export default class implements Command {
+export default class PauseCommand implements Command {
   name = 'pause';
   summary = 'Pause playback if playing.';
   precondition: Permission = 'SPEAK';

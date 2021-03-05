@@ -7,7 +7,7 @@ import { ContentValidator } from './validators/content-validator';
 import { promisify } from 'util';
 import fs from 'fs';
 import { MemberDocument } from '../../data/models/member';
-import Emit from '../../handlers/emit';
+import Emit from '../../services/emit';
 
 const readdir = promisify(fs.readdir);
 

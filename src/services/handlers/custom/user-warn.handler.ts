@@ -1,4 +1,4 @@
-import AnnounceHandler from '../announce-handler';
+import AnnounceHandler from '../../handlers/announce-handler';
 import { EventType } from '../../../data/models/guild';
 import EventVariables from '../../../modules/announce/event-variables';
 import { PunishmentEventArgs } from '../../emit';
