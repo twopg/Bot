@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import RateLimitStore from 'rate-limit-mongo';
+import * as RateLimitStore from 'rate-limit-mongo';
 
 export default rateLimit({
   max: 300,

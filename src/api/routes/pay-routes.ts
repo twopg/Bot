@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { APIError, sendError } from '../modules/api-utils';
 import Deps from '../../utils/deps';
-import Users from '../../data/users';
+import Users, { Plan } from '../../data/users';
 import { SessionManager } from '../modules/performance/session-manager';
 import paypal, { Payment } from 'paypal-rest-sdk';
 import Log from '../../utils/log';
@@ -18,7 +18,6 @@ const items: paypal.Item[] = [
   {
     sku: '1_month',
     name: '2PG+ [1 Month]',
-    description: 'Unlock epic perks, and support 2PG\'s development!',
     price: '2.99',
     currency: 'USD',
     quantity: 1
@@ -26,7 +25,6 @@ const items: paypal.Item[] = [
   {
     sku: '3_month',
     name: '2PG+ [3 Months]',
-    description: 'Unlock epic perks, and support 2PG\'s development!',
     price: '4.99',
     currency: 'USD',
     quantity: 1
@@ -34,7 +32,6 @@ const items: paypal.Item[] = [
   {
     sku: '1_year',
     name: '2PG+ [1 Year]',
-    description: 'Unlock epic perks, and support 2PG\'s development!',
     price: '14.99',
     currency: 'USD',
     quantity: 1
@@ -51,6 +48,8 @@ router.get('/', async(req, res) => {
     const { authUser } = await sessions.get(key);
 
     const item = items[+plan];
+    item.description = authUser.id;
+
     const payment: Payment = {
       intent: 'sale',
       payer: {
@@ -103,14 +102,12 @@ router.get('/success', async (req, res) => {
         throw error;
       }
       
-      const transaction = payment.transactions[0];
-      console.log(transaction);
-      
-      const userId = transaction.description;
-      const itemName = transaction.description;
-      await users.givePlus(userId, itemName);
+      const item: paypal.Item = payment
+        .transactions[0]
+        .item_list.items[0];
+      await users.givePlus(item.description, item.sku as Plan);
 
-      res.json({ success: true });
+      res.redirect(`${process.env.DASHBOARD_URL}/payment-success`);
     });
   } catch (error) { sendError(res, new APIError(400)); }
 });

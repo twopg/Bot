@@ -15,6 +15,7 @@ connect(process.env.MONGO_URI, {
 
 (async() => {
   // await import('./integration/auto-mod.tests');
+  await import('./integration/users.tests');
 
   await import('./unit/utils/validate-env.tests');
 })();

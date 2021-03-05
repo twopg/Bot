@@ -13,68 +13,68 @@ should();
 use(chaiAsPromised);
 
 describe('services/command-service', () => {
-    let savedGuild: GuildDocument;
-    let service: CommandService;
+  let savedGuild: GuildDocument;
+  let service: CommandService;
 
-    beforeEach(() => {
+  beforeEach(() => {
 
-        savedGuild = new SavedGuild();
-        savedGuild.general.prefix = '.';
+    savedGuild = new SavedGuild();
+    savedGuild.general.prefix = '.';
 
-        service = new CommandService(
-            mock<Logs>(),
-            mock<Cooldowns>(),
-            mock<Validators>(),
-            mock<Commands>());
+    service = new CommandService(
+      mock<Logs>(),
+      mock<Cooldowns>(),
+      mock<Validators>(),
+      mock<Commands>());
+  });
+
+  describe('handle', () => {
+    it('empty message gets ignored', () => {
+      const msg: any = { content: '', channel: { reply: () => { throw Error() }}};
+
+      const result = () => service.handle(msg, savedGuild);
+
+      expect(result()).to.eventually.throw();
     });
 
-    describe('handle', () => {
-        it('empty message gets ignored', () => {
-            const msg: any = { content: '', channel: { reply: () => { throw Error() }}};
+    it('no found command message gets ignored', () => {
+      const msg: any = { content: '.pong', reply: () => { throw Error(); }};
 
-            const result = () => service.handle(msg, savedGuild);
+      const result = () => service.handle(msg, savedGuild);
 
-            expect(result()).to.eventually.throw();
-        });
-
-        it('no found command message gets ignored', () => {
-            const msg: any = { content: '.pong', reply: () => { throw Error(); }};
-
-            const result = () => service.handle(msg, savedGuild);
-
-            expect(result()).to.eventually.throw();
-        });
-
-        it('found command gets executed', () => {
-            const msg: any = { content: '.ping', reply: () => { throw Error(); }};
-
-            const result = () => service.handle(msg, savedGuild);
-
-            expect(result()).to.eventually.throw();
-        });
-
-        it('found command, with extra args, gets executed', async () => {
-            const msg: any = { content: '.ping pong', reply: () => { throw Error(); }};
-            
-            const result = () => service.handle(msg, savedGuild);
-
-            expect(result()).to.eventually.throw();
-        });
-
-        it('found command, with unmet precondition, gets ignored', async () => {
-            const msg: any = { content: '.warnings', reply: () => { throw Error(); }};
-
-            await service.handle(msg, savedGuild);
-        });
-
-        it('command override disabled command, throws error', () => {            
-            const msg: any = { content: '.ping', reply: () => { throw Error(); }};
-            
-            savedGuild.commands.configs.push({ name: 'ping', enabled: false });
-            
-            const result = () => service.handle(msg, savedGuild);
-
-            expect(result).to.eventually.throw();
-        });
+      expect(result()).to.eventually.throw();
     });
+
+    it('found command gets executed', () => {
+      const msg: any = { content: '.ping', reply: () => { throw Error(); }};
+
+      const result = () => service.handle(msg, savedGuild);
+
+      expect(result()).to.eventually.throw();
+    });
+
+    it('found command, with extra args, gets executed', async () => {
+      const msg: any = { content: '.ping pong', reply: () => { throw Error(); }};
+      
+      const result = () => service.handle(msg, savedGuild);
+
+      expect(result()).to.eventually.throw();
+    });
+
+    it('found command, with unmet precondition, gets ignored', async () => {
+      const msg: any = { content: '.warnings', reply: () => { throw Error(); }};
+
+      await service.handle(msg, savedGuild);
+    });
+
+    it('command override disabled command, throws error', () => {      
+      const msg: any = { content: '.ping', reply: () => { throw Error(); }};
+      
+      savedGuild.commands.configs.push({ name: 'ping', enabled: false });
+      
+      const result = () => service.handle(msg, savedGuild);
+
+      expect(result).to.eventually.throw();
+    });
+  });
 });
