@@ -1,14 +1,15 @@
 import { validateEnv } from './utils/validate-env';
 validateEnv();
 
+import Log from './utils/log';
 import { Client } from 'discord.js';
 import mongoose from 'mongoose';
 import Deps from './utils/deps';
 import { EventEmitter } from 'events';
 import { EventHandler } from './handlers/event-handler';
-import API from './api/server';
-import Log from './utils/log';
 import { DBotsService } from './modules/stats/dbots.service';
+
+Log.twoPG();
 
 const bot = Deps.add(Client, new Client({
   partials: ['GUILD_MEMBER', 'REACTION', 'MESSAGE', 'USER'],
