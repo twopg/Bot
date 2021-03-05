@@ -14,19 +14,6 @@ export class SessionManager {
   public get(key: string) {
     return this.sessions.get(key) ?? this.create(key);
   }
-
-  public async updateGuildSessions(guildId: string) {
-    const guildManagerIds = this.bot.guilds.cache
-      .get(guildId).members.cache
-      .filter(m => m.hasPermission('MANAGE_GUILD'))
-      .map(m => m.id);
-    
-    for (const entry of this.sessions.entries()) {
-      const userId = entry[1].authUser.id;
-      if (guildManagerIds.includes(userId))
-        await this.update(entry[0]);
-    }
-  }
   
   public async create(key: string) {
     const timeToClear = 5 * 60 * 1000;

@@ -17,7 +17,9 @@ router.get('/invite', (req, res) => {
     https://discordapp.com/api/oauth2/authorize
     ?client_id=${process.env.CLIENT_ID}
     &redirect_uri=${process.env.DASHBOARD_URL}/dashboard
-    &permissions=8&scope=bot`.replace(newLineOrSpace, '')
+    &response_type=code
+    &permissions=8
+    &scope=bot`.replace(newLineOrSpace, '')
   )
 });
 

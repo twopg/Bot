@@ -9,14 +9,12 @@ export default class GuildCreateHandler implements Event {
 
   constructor(
     private guilds = Deps.get<Guilds>(Guilds),
-    private sessionManager = Deps.get<SessionManager>(SessionManager)
   ) {}
 
   async invoke(guild: Guild): Promise<any> {
     await this.guilds.get(guild);
 
     await this.sendWelcomeMessage(guild.systemChannel);
-    await this.sessionManager.updateGuildSessions(guild.id);
   }
 
   private async sendWelcomeMessage(channel: TextChannel | null) {

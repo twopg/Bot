@@ -26,7 +26,11 @@ const sessions = Deps.get<SessionManager>(SessionManager);
 
 router.get('/', async (req, res) => {
   try {
-    const { guilds } = await sessions.get(req.query.key.toString());
+    const key = req.query.key.toString();
+    if (req.query.force === 'true') 
+      await sessions.update(key);
+
+    const { guilds } = await sessions.get(key);
     res.json(guilds);
   } catch (error) { sendError(res, new APIError(400)); }
 });
