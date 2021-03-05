@@ -16,7 +16,7 @@ export default class implements Command {
       : ctx.member;
     
     if (target.user.bot)
-      throw new TypeError(`Bot users cannot earn XP`);
+      throw new TypeError(`Bot users cannot earn XP`);      
 
     const xpCardURL = `${process.env.API_URL}/guilds/${ctx.guild.id}/members/${target.id}/xp-card`;
     return ctx.channel.send(

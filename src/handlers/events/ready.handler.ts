@@ -6,6 +6,7 @@ import CommandService from '../commands/command.service';
 import AutoMod from '../../modules/auto-mod/auto-mod';
 import ReactionRoles from '../../modules/general/reaction-roles';
 import { Client } from 'discord.js';
+import API from '../../api/server';
 
 export default class ReadyHandler implements Event {
   started = false;
@@ -27,6 +28,8 @@ export default class ReadyHandler implements Event {
     await this.autoMod.init();
     await this.commandService.init();
     await this.reactionRoles.init();
+
+    Deps.get<API>(API);
 
     await this.bot.user?.setActivity('2PG.xyz');
   }

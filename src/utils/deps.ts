@@ -6,7 +6,7 @@ export default class Deps {
       ?? this.add(type, new type());
   }
 
-  public static add<T>(type: any, instance: T): T {
+  public static add<T>(type: any, instance: T): T {       
     return this.deps
       .set(type, instance)
       .get(type);

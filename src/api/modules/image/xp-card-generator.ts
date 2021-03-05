@@ -17,11 +17,11 @@ export class XPCardGenerator {
       tertiary: '#36E2CA',
       ...preview,
     }
-    const partialUser = await this.partial.get(savedMember.userId);
+    const partialUser = await this.partial.get(savedMember.userId);    
     if (!partialUser)
       throw new TypeError('User not found');
     const info = Leveling.xpInfo(savedMember.xp);    
-
+  
     return new Rank()
       .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
       .setCurrentXP(info.xp)

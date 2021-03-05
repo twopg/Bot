@@ -139,14 +139,12 @@ router.get('/:id/members', async (req, res) => {
 
 router.get('/:guildId/members/:memberId/xp-card', async (req, res) => {
   try {
-    const { guildId, memberId } = req.params;
-
-    const user = bot.users.cache.get(memberId);
+    const { guildId, memberId } = req.params;    
 
     const guild = bot.guilds.cache.get(guildId);
-    const member = guild?.members.cache.get(memberId);
+    const member = guild?.members.cache.get(memberId);    
     if (!member)
-      throw TypeError();
+      throw TypeError('Could not find member in cache.');
     
     const savedMember = await members.get(member);  
     const savedMembers = await SavedMember.find({ guildId });
