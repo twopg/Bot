@@ -1,32 +1,42 @@
-import { stripe } from '../server';
-import { Stripe } from 'stripe';
-
 import { Router } from 'express';
-import { getUser, sendError } from '../modules/api-utils';
+import { APIError, sendError } from '../modules/api-utils';
 import Deps from '../../utils/deps';
 import Users from '../../data/users';
-import bodyParser from 'body-parser';
+import { SessionManager } from '../modules/performance/session-manager';
+import paypal, { Payment } from 'paypal-rest-sdk';
+import Log from '../../utils/log';
 
-const items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
+paypal.configure({
+  mode: process.env.PAYPAL_MODE, // sandbox / live
+  client_id: process.env.PAYPAL_CLIENT_ID,
+  client_secret: process.env.PAYPAL_SECRET,
+});
+
+const sessions = Deps.get<SessionManager>(SessionManager);
+
+const items: paypal.Item[] = [
   {
+    sku: '1_month',
     name: '2PG+ [1 Month]',
-    description: 'Support 2PG, and unlock exclusive features!',
-    amount: 500,
-    currency: 'usd',
+    description: 'Unlock epic perks, and support 2PG\'s development!',
+    price: '2.99',
+    currency: 'USD',
     quantity: 1
   },
   {
+    sku: '3_month',
     name: '2PG+ [3 Months]',
-    description: 'Support 2PG, and unlock exclusive features!',
-    amount: 1000,
-    currency: 'usd',
+    description: 'Unlock epic perks, and support 2PG\'s development!',
+    price: '4.99',
+    currency: 'USD',
     quantity: 1
   },
   {
-    name: '2PG+ [Forever]',
-    description: 'Support 2PG, and unlock exclusive features!',
-    amount: 2500,
-    currency: 'usd',
+    sku: '1_year',
+    name: '2PG+ [1 Year]',
+    description: 'Unlock epic perks, and support 2PG\'s development!',
+    price: '14.99',
+    currency: 'USD',
     quantity: 1
   }
 ];
@@ -35,33 +45,72 @@ export const router = Router();
 
 const users = Deps.get<Users>(Users);
 
-router.get('/user/pay', async(req, res) => {
+router.get('/', async(req, res) => {
   try {
     const { key, plan } = req.query as any;
-    const { id } = await getUser(key);
+    const { authUser } = await sessions.get(key);
 
-    const session = await stripe.checkout.sessions.create({
-      success_url: `${ process.env.DASHBOARD_URL}/payment-success`,
-      cancel_url: `${ process.env.DASHBOARD_URL}/plus`,
-      payment_method_types: ['card'],
-      metadata: { id, plan },
-      line_items: [ items[+plan] ]
+    const item = items[+plan];
+    const payment: Payment = {
+      intent: 'sale',
+      payer: {
+        payment_method: 'paypal'
+      },
+      note_to_payer: `For Discord User - ${authUser.tag}`,
+      redirect_urls: {
+        return_url: `${process.env.API_URL}/pay/success`,
+        cancel_url: `${process.env.DASHBOARD_URL}/plus?payment_status=failed`,
+      },
+      transactions: [
+        {
+          reference_id: authUser.id,
+          item_list: { items: [item] },
+          amount: {
+            currency: item.currency,
+            total: item.price,
+          },
+        },
+      ],
+    };
+
+    paypal.payment.create(payment, {
+      auth: authUser.id,
+    }, (error, payment) => {
+      if (error)
+        throw error;
+
+      for (const link of payment.links) {
+        const paymentApproved = link.rel === 'approval_url';
+        if (paymentApproved)
+          res.redirect(link.href);
+      }
     });
-    res.send(session);
-  } catch (error) { sendError(res, 400, error); }
+  } catch (error) { sendError(res, new APIError(400)); }
 });
 
-router.post('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), async(req, res) => {
+router.get('/success', async (req, res) => {
   try {
-    let event = stripe.webhooks
-      .constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
+    const executePayment: paypal.payment.ExecuteRequest = {
+      payer_id: req.query.PayerID.toString()
+    };
     
-    if (event.type === 'checkout.session.completed') {
-      const { id, plan } = (event.data.object as any).metadata;
-      await users.givePlus(id, +plan);
+    const paymentId = req.query.paymentId.toString();
+    paypal.payment.execute(paymentId, executePayment,
+      async (error, payment) => {
+        payment.payer
+      if (error) {
+        Log.error(error.response, 'pay');
+        throw error;
+      }
+      
+      const transaction = payment.transactions[0];
+      console.log(transaction);
+      
+      const userId = transaction.description;
+      const itemName = transaction.description;
+      await users.givePlus(userId, itemName);
 
-      return res.json({ success: true });
-    }
-    res.json({ received: true });
-  } catch (error) { sendError(res, 400, error); }
+      res.json({ success: true });
+    });
+  } catch (error) { sendError(res, new APIError(400)); }
 });

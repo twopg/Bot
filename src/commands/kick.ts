@@ -4,7 +4,7 @@ import Deps from '../utils/deps';
 import AutoMod from '../modules/auto-mod/auto-mod';
 import { getMemberFromMention } from '../utils/command-utils';
 
-export default class KickCommand implements Command {
+export default class implements Command {
     name = 'kick';
     summary = `Kick a member`;
     precondition: Permission = 'KICK_MEMBERS';

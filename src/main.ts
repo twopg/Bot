@@ -5,7 +5,7 @@ export default class {
   ) {
     process.env.PORT = config.port?.toString() || '3000';
     process.env.API_URL = config.apiURL || `http://localhost:${process.env.PORT}/api`;
-    process.env.BOT_ID = config.botId;
+    process.env.CLIENT_ID = config.botId;
     process.env.BOT_TOKEN = config.botToken;
     process.env.CLIENT_SECRET = config.clientSecret;
     process.env.DASHBOARD_URL = config.dashboardURL || `http://localhost:${process.env.PORT}`;

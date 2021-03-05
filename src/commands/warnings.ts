@@ -5,7 +5,7 @@ import { MemberDocument } from '../data/models/member';
 import Deps from '../utils/deps';
 import { getMemberFromMention } from '../utils/command-utils';
 
-export default class WarningsCommand implements Command {
+export default class implements Command {
     precondition: Permission = 'VIEW_AUDIT_LOG';
     name = 'warnings';
     usage = 'warnings [user]'

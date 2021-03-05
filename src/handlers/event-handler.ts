@@ -1,28 +1,34 @@
-import { bot, emitter } from '../bot';
+import { emitter } from '../bot';
 import Log from '../utils/log';
 import fs from 'fs';
 import { promisify } from 'util';
-import EventHandler from './handlers/event-handler';
+import Event from './events/event-handler';
+import Deps from '../utils/deps';
+import { Client } from 'discord.js';
 
 const readdir = promisify(fs.readdir);
 
-export default class EventsService {
-  private readonly handlers: EventHandler[] = [];
-  private readonly customHandlers: EventHandler[] = [];
+export class EventHandler {
+  private readonly handlers: Event[] = [];
+  private readonly customHandlers: Event[] = [];
+
+  constructor(
+    private bot = Deps.get<Client>(Client)
+  ) {}
 
   async init() {
-    const handlerFiles = await readdir(`${__dirname}/handlers`);    
+    const handlerFiles = await readdir(`${__dirname}/events`);    
     for (const file of handlerFiles.filter(n => n !== 'custom')) {
-      const { default: Handler } = await import(`./handlers/${file}`);
+      const { default: Handler } = await import(`./events/${file}`);
       const handler = Handler && new Handler();
       if (!handler?.on) continue;
 
       this.handlers.push(new Handler());
     }
 
-    const customHandlerFiles = await readdir(`${__dirname}/handlers/custom`);
+    const customHandlerFiles = await readdir(`${__dirname}/events/custom`);
     for (const file of customHandlerFiles) {
-      const { default: Handler } = await import(`./handlers/custom/${file}`);
+      const { default: Handler } = await import(`./events/custom/${file}`);
       const handler = Handler && new Handler();
       if (!handler?.on) continue;
 
@@ -33,7 +39,7 @@ export default class EventsService {
 
   private hookEvents() {
     for (const handler of this.handlers)
-      bot.on(handler.on as any, handler.invoke.bind(handler));
+      this.bot.on(handler.on as any, handler.invoke.bind(handler));
 
     for (const handler of this.customHandlers)
       emitter.on(handler.on, handler.invoke.bind(handler));

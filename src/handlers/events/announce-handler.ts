@@ -2,9 +2,9 @@ import { EventType, LogEvent } from '../../data/models/guild';
 import Guilds from '../../data/guilds';
 import { Guild, TextChannel } from 'discord.js';
 import Deps from '../../utils/deps';
-import EventHandler from './event-handler';
+import Event from './event-handler';
 
-export default abstract class AnnounceHandler implements EventHandler {
+export default abstract class implements Event {
   abstract on: string;
   abstract event: EventType;
 

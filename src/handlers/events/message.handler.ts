@@ -1,4 +1,4 @@
-import EventHandler from './event-handler';
+import Event from './event-handler';
 import Deps from '../../utils/deps';
 import CommandService from '../commands/command.service';
 import Guilds from '../../data/guilds';
@@ -7,7 +7,7 @@ import Leveling from '../../modules/xp/leveling';
 import { Message } from 'discord.js';
 import Logs from '../../data/logs';
 
-export default class MessageHandler implements EventHandler {
+export default class MessageHandler implements Event {
   on = 'message';
 
   constructor(
