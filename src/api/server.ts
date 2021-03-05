@@ -8,6 +8,7 @@ import Log from '../utils/log';
 import Stats from './modules/stats';
 
 import { router as apiRoutes } from './routes/api-routes';
+import { router as authRoutes } from './routes/auth-routes';
 import { router as guildsRoutes } from './routes/guilds-routes';
 import { router as musicRoutes } from './routes/music-routes';
 import { router as payRoutes } from './routes/pay-routes';
@@ -24,7 +25,7 @@ export default class API {
     app.use('/api/guilds/:id/music', musicRoutes);
     app.use('/api/guilds', guildsRoutes);
     app.use('/api/user', userRoutes);
-    app.use('/api', apiRoutes);
+    app.use('/api', apiRoutes, authRoutes);
 
     app.get('/api/*', (req, res) => res.status(404).json({ code: 404 }));
     

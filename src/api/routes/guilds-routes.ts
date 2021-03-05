@@ -23,7 +23,6 @@ const guilds = Deps.get<Guilds>(Guilds);
 const logs = Deps.get<Logs>(Logs);
 const members = Deps.get<Members>(Members);
 const sessions = Deps.get<SessionManager>(SessionManager);
-const users = Deps.get<Users>(Users);
 
 router.get('/', async (req, res) => {
   try {

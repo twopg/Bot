@@ -33,6 +33,7 @@
     "@types/ws": "^7.2.2",
     "body-parser": "^1.19.0",
     "canvacord": "^5.0.8",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "discord.js": "^12.0.2",
     "dotenv": "^8.2.0",
