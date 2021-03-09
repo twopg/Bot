@@ -1,6 +1,6 @@
 import { Rank } from 'canvacord';
 import { MemberDocument } from '../../../data/models/member';
-import { XPCard } from '../../../data/models/user';
+import { UserDocument, XPCard } from '../../../data/models/user';
 import Leveling from '../../../modules/xp/leveling';
 import Deps from '../../../utils/deps';
 import { PartialUsers } from '../users/partial-users';
@@ -10,7 +10,12 @@ export class XPCardGenerator {
     private partial = Deps.get<PartialUsers>(PartialUsers),
   ) {}
 
-  async generate(savedMember: MemberDocument, rank: number, preview?: XPCard) {
+  async generate(
+    savedUser: UserDocument,
+    savedMember: MemberDocument,
+    rank: number,
+    preview?: XPCard
+  ) {
     preview = {
       primary: '#F4F2F3',
       secondary: '#46828D',
@@ -24,6 +29,7 @@ export class XPCardGenerator {
   
     return new Rank()
       .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
+      .setBackground('IMAGE', savedUser.xpCard.backgroundURL)
       .setCurrentXP(info.xp)
       .setRequiredXP(info.nextLevelXP)
       .setRank(rank)
