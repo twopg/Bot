@@ -23,6 +23,7 @@ const guilds = Deps.get<Guilds>(Guilds);
 const logs = Deps.get<Logs>(Logs);
 const members = Deps.get<Members>(Members);
 const sessions = Deps.get<SessionManager>(SessionManager);
+const users = Deps.get<Users>(Users);
 
 router.get('/', async (req, res) => {
   try {
@@ -149,11 +150,12 @@ router.get('/:guildId/members/:memberId/xp-card', async (req, res) => {
     if (!member)
       throw TypeError('Could not find member in cache.');
     
-    const savedMember = await members.get(member);  
+    const savedUser = await users.get(member);
     const savedMembers = await SavedMember.find({ guildId });
+    const savedMember = savedMembers.find(m => m.userId === savedUser.id)
     const rank = members.getRanked(member, savedMembers);
     
-    const image = await generator.generate(savedMember, rank);
+    const image = await generator.generate(savedUser, savedMember, rank);
     
     res.set({'Content-Type': 'image/png'}).send(image);
   } catch (error) { sendError(res, new APIError(400)); }

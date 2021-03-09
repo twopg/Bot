@@ -37,12 +37,12 @@ router.get('/xp-card-preview', async (req, res) => {
     const session = await sessions.get(req.query.key.toString());    
     const savedUser = await users.get(session.authUser);
 
-    const member = new SavedMember();
-    member.xp = 1800;
-    member.userId = savedUser.id;
+    const savedMember = new SavedMember();
+    savedMember.xp = 1800;
+    savedMember.userId = savedUser.id;
     
     delete req.query.key;
-    const image = await generator.generate(member, 1, {
+    const image = await generator.generate(savedUser, savedMember, 1, {
       ...savedUser.xpCard,
       ...req.query
     });
