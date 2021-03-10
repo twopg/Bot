@@ -22,24 +22,22 @@ export default class extends AnnounceHandler {
 
   private async autoPunish(args: PunishmentEventArgs, savedGuild: GuildDocument, savedMember: MemberDocument) {
     const punishments = savedGuild.autoMod.punishments
-      .sort((a, b) => (a.warnings < b.warnings) ? 1 : -1);
+      ?.sort((a, b) => (a.warnings < b.warnings) ? 1 : -1);
     for (const punishment of punishments) {
       if (!this.shouldPunish(savedMember, punishment)) continue;
 
-      const member = args.guild.members.cache.get(args.user.id);
-      console.log('should punish');
-         
-      try {
+      const member = args.guild.members.cache.get(args.user.id);         
+      try {                
         if (punishment.type === 'KICK')
-          await member.kick(`Auto-punish - Too many warnings`);
+          return member.kick(`Auto-punish - ${args.warnings} warnings`);
         else if (punishment.type === 'BAN')
-          await member.ban({ reason: `Auto-punish - Too many warnings` });
+          return member.ban({ reason: `Auto-punish - ${args.warnings} warnings` });
       } catch (error) {}
     }
-  } 
+  }
 
   private shouldPunish(savedMember: MemberDocument, punishment: AutoPunishment) {    
-    return (savedMember.warnings.length > 0)
+    return (savedMember.warnings.length >= punishment.warnings)
       && savedMember.warnings
         .slice(-punishment.warnings)
         .every(p => this.getMinutesSince(p.at) <= punishment.minutes);
