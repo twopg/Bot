@@ -1,4 +1,4 @@
-import { EventType, LogEvent } from '../../data/models/guild';
+import { EventType, GuildDocument, LogEvent } from '../../data/models/guild';
 import Guilds from '../../data/guilds';
 import { Guild, TextChannel } from 'discord.js';
 import Deps from '../../utils/deps';
@@ -10,8 +10,8 @@ export default abstract class implements Event {
 
   constructor(protected guilds = Deps.get<Guilds>(Guilds)) {}
 
-  protected async getEvent(guild: Guild) {
-    const savedGuild = await this.guilds.get(guild);
+  protected async getEvent(guild: Guild, savedGuild?: GuildDocument) {
+    savedGuild ??= await this.guilds.get(guild);
     
     const event = savedGuild.logs.events.find(e => e.event === this.event);
     return (savedGuild.logs.enabled && event?.enabled) ? event : null;
@@ -21,8 +21,8 @@ export default abstract class implements Event {
     return guild.channels.cache.get(config?.channel) as TextChannel;
   }
 
-  protected async announce(guild: Guild, applyEventArgs: any[]) {
-    const config = await this.getEvent(guild);    
+  protected async announce(guild: Guild, applyEventArgs: any[], savedGuild?: GuildDocument) {
+    const config = await this.getEvent(guild, savedGuild);    
     if (!config) return;
 
     const message = await this.applyEventVariables(config.message, ...applyEventArgs);

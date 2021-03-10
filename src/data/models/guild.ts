@@ -20,6 +20,12 @@ export enum EventType {
   Warn ='WARN'
 }
 
+export interface AutoPunishment {
+  warnings: number;
+  minutes: number;
+  type: 'BAN' | 'KICK';
+}
+
 export interface LogEvent {
   channel: string;
   enabled: boolean;
@@ -35,6 +41,7 @@ export class AutoModModule extends Module {
   banLinks: string[] = [];
   autoWarnUsers = true;
   filterThreshold = 5;
+  punishments: AutoPunishment[];
 }
 
 export class CommandsModule extends Module {

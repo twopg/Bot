@@ -12,7 +12,7 @@ import Emit from '../../handlers/emit';
 const readdir = promisify(fs.readdir);
 
 export default class AutoMod {
-  private validators: ContentValidator[] = [];
+  private validators = new Map<MessageFilter, ContentValidator>();
 
   constructor(
     private emit = Deps.get<Emit>(Emit),
@@ -22,23 +22,26 @@ export default class AutoMod {
     const files = await readdir(`${__dirname}/validators`);
 
     for (const file of files) {
-      const Validator = require(`./validators/${file}`).default;
+      const { default: Validator } = await import(`./validators/${file}`);
       if (!Validator) continue;
 
-      this.validators.push(new Validator());
+      const validator = new Validator();
+      this.validators.set(validator.filter, validator);
     }
-    Log.info(`Loaded: ${this.validators.length} validators`, `automod`);
+    Log.info(`Loaded: ${this.validators.size} validators`, `automod`);
   }
   
   public async validate(msg: Message, guild: GuildDocument) {
     const activeFilters = guild.autoMod.filters;
     for (const filter of activeFilters)
       try {        
-        const validator = this.validators.find(v => v.filter === filter);
-        await validator?.validate(this, msg.content, guild);
+        await this.validators
+          .get(filter)
+          ?.validate(this, msg.content, guild);
       } catch (validation) {
         if (guild.autoMod.autoDeleteMessages)
           await msg.delete({ reason: validation.message });
+
         if (guild.autoMod.autoWarnUsers && msg.member)
           await this.warn(msg.member, {
             instigator: msg.client.user,

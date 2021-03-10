@@ -1,32 +1,32 @@
-import { User, GuildMember, Guild } from 'discord.js';
+import { User, GuildMember, Guild, Collection } from 'discord.js';
 import { mock } from 'ts-mockito';
-import { CommandContext } from '../../src/commands/command';
 
 export class Mock {
-  static guild() {
+  static guild(id = '533947001578979322') {
     const guild = mock<Guild>();
 
-    guild.id = '533947001578979322';
+    guild.id = id;
     guild.name = 'Test Server';
+    guild.members.cache = new Collection<string, GuildMember>();
 
     return guild;
   }
 
-  static member() {
+  static member(id = '533947001578979328', guild?: Guild) {
     const member = mock<GuildMember>();
     
-    member.guild = Mock.guild();
-    member.user = Mock.user();
+    member.guild = guild ?? Mock.guild();
+    member.user = Mock.user(id);
 
     return member;
   }
 
-  static user() {
+  static user(id = '533947001578979328') {
     const user = mock<User>();
 
     user.username = 'User';
     user.discriminator = '0001';
-    user.id = '533947001578979328';
+    user.id = id;
 
     return user;
   }

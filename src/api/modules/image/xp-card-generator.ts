@@ -21,22 +21,28 @@ export class XPCardGenerator {
       secondary: '#46828D',
       tertiary: '#36E2CA',
       ...preview,
-    }
+    };
     const partialUser = await this.partial.get(savedMember.userId);    
     if (!partialUser)
       throw new TypeError('User not found');
-    const info = Leveling.xpInfo(savedMember.xp);    
-  
-    return new Rank()
-      .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
-      .setBackground('IMAGE', savedUser.xpCard.backgroundURL)
-      .setCurrentXP(info.xp)
-      .setRequiredXP(info.nextLevelXP)
-      .setRank(rank)
-      .setLevel(info.level)
-      .setProgressBar(preview.secondary, 'COLOR')
-      .setUsername(partialUser.username)
-      .setDiscriminator(partialUser.discriminator)
-      .build();
+      
+    const info = Leveling.xpInfo(savedMember.xp);  
+    const defaultWallpaper = `${__dirname}/wallpaper.png`;   
+
+    try {
+      return new Rank()
+        .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
+        .setBackground('IMAGE', savedUser.xpCard.backgroundURL || defaultWallpaper)
+        .setCurrentXP(info.xp)
+        .setRequiredXP(info.nextLevelXP)
+        .setRank(rank)
+        .setLevel(info.level)
+        .setProgressBar(preview.secondary, 'COLOR')
+        .setUsername(partialUser.username)
+        .setDiscriminator(partialUser.discriminator)
+        .build();
+    } catch (error) {
+      console.log(error.message);  
+    }
   }
 }

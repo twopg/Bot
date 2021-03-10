@@ -38,7 +38,7 @@ export default class Emit {
       user: target.user,
       warnings: savedMember.warnings.length
     }
-    emitter.emit('userWarn', eventArgs);
+    emitter.emit('userWarn', eventArgs, savedMember);
   }
 
   commandExecuted(ctx: CommandContext) {

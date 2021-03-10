@@ -3,7 +3,7 @@ import { GuildMember } from 'discord.js';
 import { EventType } from '../../data/models/guild';
 import EventVariables from '../../modules/announce/event-variables';
 
-export default class MemberJoinHandler extends AnnounceHandler {
+export default class extends AnnounceHandler {
   on = 'guildMemberAdd';
   event = EventType.MemberJoin;
 

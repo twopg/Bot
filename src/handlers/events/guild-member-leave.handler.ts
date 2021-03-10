@@ -3,7 +3,7 @@ import { EventType } from '../../data/models/guild';
 import AnnounceHandler from './announce-handler';
 import EventVariables from '../../modules/announce/event-variables';
 
-export default class MemberLeaveHandler extends AnnounceHandler {
+export default class extends AnnounceHandler {
   on = 'guildMemberRemove';
   event = EventType.MemberLeave;
 

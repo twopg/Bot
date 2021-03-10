@@ -1,24 +1,58 @@
 import AnnounceHandler from '../announce-handler';
-import { EventType } from '../../../data/models/guild';
+import { AutoPunishment, EventType, GuildDocument } from '../../../data/models/guild';
 import EventVariables from '../../../modules/announce/event-variables';
 import { PunishmentEventArgs } from '../../emit';
+import { MemberDocument } from '../../../data/models/member';
 
-export default class UserWarnHandler extends AnnounceHandler {
-    on = 'userWarn';
-    event = EventType.Warn;
+export default class extends AnnounceHandler {
+  on = 'userWarn';
+  event = EventType.Warn;
 
-    async invoke(args: PunishmentEventArgs) {  
-        await super.announce(args.guild, [ args ]);
+  public async invoke(args: PunishmentEventArgs, savedMember: MemberDocument) {
+    const savedGuild = await this.guilds.get(args.guild);
+    await this.autoPunish(args, savedGuild, savedMember);
+
+    await super.announce(args.guild, [ args ], savedGuild);
+  }
+  
+  private getMinutesSince(date: Date) {
+    const ms = new Date().getTime() - date.getTime();
+    return ms / 1000 / 60;
+  }
+
+  private async autoPunish(args: PunishmentEventArgs, savedGuild: GuildDocument, savedMember: MemberDocument) {
+    const punishments = savedGuild.autoMod.punishments
+      .sort((a, b) => (a.warnings < b.warnings) ? 1 : -1);
+    for (const punishment of punishments) {
+      if (!this.shouldPunish(savedMember, punishment)) continue;
+
+      const member = args.guild.members.cache.get(args.user.id);
+      console.log('should punish');
+         
+      try {
+        if (punishment.type === 'KICK')
+          await member.kick(`Auto-punish - Too many warnings`);
+        else if (punishment.type === 'BAN')
+          await member.ban({ reason: `Auto-punish - Too many warnings` });
+      } catch (error) {}
     }
-    
-    protected async applyEventVariables(content: string, args: PunishmentEventArgs) {
-        return new EventVariables(content)
-            .guild(args.guild)
-            .instigator(args.instigator)
-            .memberCount(args.guild)
-            .reason(args.reason)
-            .user(args.user)
-            .warnings(args.warnings)
-            .toString();
-    }
+  } 
+
+  private shouldPunish(savedMember: MemberDocument, punishment: AutoPunishment) {    
+    return (savedMember.warnings.length > 0)
+      && savedMember.warnings
+        .slice(-punishment.warnings)
+        .every(p => this.getMinutesSince(p.at) <= punishment.minutes);
+  }
+
+  protected async applyEventVariables(content: string, args: PunishmentEventArgs) {
+    return new EventVariables(content)
+      .guild(args.guild)
+      .instigator(args.instigator)
+      .memberCount(args.guild)
+      .reason(args.reason)
+      .user(args.user)
+      .warnings(args.warnings)
+      .toString();
+  }
 }

@@ -6,8 +6,8 @@ let count = 0;
 setInterval(async () => {
   try {
     await fetch(process.env.DASHBOARD_URL);
-    Log.info(`[${++count}] Kept ${process.env.DASHBOARD_URL} alive.`, 'keep');
+    Log.info(`[${++count}] Kept ${process.env.DASHBOARD_URL} alive.`, 'live');
   } catch {
-    Log.error(`[${++count}] Error keeping ${process.env.DASHBOARD_URL} alive.`, 'keep');
+    Log.error(`[${++count}] Error keeping ${process.env.DASHBOARD_URL} alive.`, 'live');
   }
 }, 5 * 60 * 1000);
