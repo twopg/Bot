@@ -61,7 +61,7 @@ describe('handlers/user-warn', () => {
     expect(ban).to.not.be.called();
   });
 
-  it('member warned 3 times in 1 min, triggers auto punishment, kick is called and not ban', async () => {
+  it('member warned 3 times in 1 min, 1 trigger, kick is called, but not ban', async () => {
     savedMember = new SavedMember({
       warnings: [
         { at: new Date() },
@@ -80,7 +80,7 @@ describe('handlers/user-warn', () => {
     expect(ban).to.not.be.called();
   });
 
-  it('member warned 6 times in 1 min, triggers 2 auto punishments, last punishment is executed', async () => {
+  it('member warned 6 times in 1 min, 2 triggers, ban is called, but not kick', async () => {
     savedMember = new SavedMember({
       warnings: [
         { at: new Date() },
@@ -95,10 +95,51 @@ describe('handlers/user-warn', () => {
     const ban = spy.on(member, 'ban');
 
     await event.invoke({
-      guild, user, warnings: 1, instigator: null, reason: ''
+      guild, user, warnings: 6, instigator: null, reason: ''
     }, savedMember);
 
     expect(ban).to.be.called();
+    expect(kick).to.not.be.called();
+  });
+
+  it('member warned, has 3 total warnings, no punishment', async () => {
+    savedMember = new SavedMember({
+      warnings: [
+        { at: new Date() },
+        { at: new Date(0) },
+        { at: new Date(0) },
+      ]
+    });
+    const kick = spy.on(member, 'kick');
+    const ban = spy.on(member, 'ban');
+
+    await event.invoke({
+      guild, user, warnings: 6, instigator: null, reason: ''
+    }, savedMember);
+
+    expect(ban).to.not.be.called();
+    expect(kick).to.not.be.called();
+  });
+
+  it('member warned, has 6 total warnings, no punishment', async () => {
+    savedMember = new SavedMember({
+      warnings: [
+        { at: new Date() },
+        { at: new Date(0) },
+        { at: new Date(0) },
+        { at: new Date(0) },
+        { at: new Date(0) },
+        { at: new Date(0) },
+      ]
+    });
+    const kick = spy.on(member, 'kick');
+    const ban = spy.on(member, 'ban');
+
+    await event.invoke({
+      guild, user, warnings: 6, instigator: null, reason: ''
+    }, savedMember);
+
+    expect(ban).to.not.be.called();
     expect(kick).to.not.be.called();
   });
 });
