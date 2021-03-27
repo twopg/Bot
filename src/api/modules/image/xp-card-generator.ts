@@ -37,7 +37,7 @@ export class XPCardGenerator {
         .setRequiredXP(info.nextLevelXP)
         .setRank(rank)
         .setLevel(info.level)
-        .setProgressBar(preview.secondary, 'COLOR')
+        .setProgressBar(savedUser.xpCard.secondary || preview.secondary, 'COLOR')
         .setUsername(partialUser.username)
         .setDiscriminator(partialUser.discriminator)
         .build();
