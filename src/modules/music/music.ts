@@ -12,8 +12,8 @@ export default class Music {
   }
 
   private hookEvents() {
-    this.client.on('trackStart', (player, track) => player.textChannel?.send(`> **Now Playing**: \`${track.title}\` 🎵`));
-    this.client.on('queueEnd', (player) => player.textChannel?.send(`> **Queue has Ended** 🎵`));
+    // this.client.on('trackStart', (player, track) => player.textChannel?.send(`> **Now Playing**: \`${track.title}\` 🎵`));
+    // this.client.on('queueEnd', (player) => player.textChannel?.send(`> **Queue has Ended** 🎵`));
   }
   
   joinAndGetPlayer(voiceChannel?: VoiceChannel, textChannel?: TextChannel) {
