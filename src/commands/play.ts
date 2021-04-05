@@ -19,12 +19,14 @@ export default class implements Command {
       throw new TypeError('Query must be provided.');
 
     const player = this.music.joinAndGetPlayer(ctx.member.voice.channel, ctx.channel);
-
+    
+    
     const maxQueueSize = 5;
     if (player.q.length >= maxQueueSize)
-      throw new TypeError(`Max queue size of \`${maxQueueSize}\` reached.`);
-
+    throw new TypeError(`Max queue size of \`${maxQueueSize}\` reached.`);
+    
     const track = await player.play(query);
+    console.log(track.title);
     if (player.isPlaying)
       return ctx.channel.send(`> **Added**: \`${track.title}\` to list.`);
   }
