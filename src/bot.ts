@@ -13,7 +13,6 @@ Log.twoPG();
 
 const bot = Deps.add(Client, new Client({
   partials: ['GUILD_MEMBER', 'REACTION', 'MESSAGE', 'USER'],
-  retryLimit: Infinity
 }));
 
 export const emitter = new EventEmitter();
