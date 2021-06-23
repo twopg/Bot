@@ -35,7 +35,7 @@ export class XPCardGenerator {
         .setBackground('IMAGE', savedUser.xpCard.backgroundURL || defaultWallpaper)
         .setCurrentXP(info.xp)
         .setRequiredXP(info.nextLevelXP)
-        .setRank(rank)
+        .setRank(rank, '#')
         .setLevel(info.level)
         .setProgressBar(savedUser.xpCard.secondary || preview.secondary, 'COLOR')
         .setUsername(partialUser.username)
