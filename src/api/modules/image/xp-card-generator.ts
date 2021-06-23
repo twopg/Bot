@@ -30,19 +30,15 @@ export class XPCardGenerator {
     const defaultWallpaper = `${__dirname}/wallpaper.png`;   
 
     try {
-      return new Rank()
-        .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
-        .setBackground('IMAGE', savedUser.xpCard.backgroundURL || defaultWallpaper)
-        .setCurrentXP(info.xp, savedUser.xpCard.secondary || preview.secondary)
-        .setDiscriminator(partialUser.discriminator, savedUser.xpCard.tertiary || preview.tertiary)
-        .setLevel(info.level, 'LVL')
-        .setProgressBar(savedUser.xpCard.secondary || preview.secondary)
-        .setProgressBarTrack(savedUser.xpCard.tertiary || preview.tertiary)
-        .setRank(rank, '#')
-        .setRankColor(savedUser.xpCard.tertiary || preview.tertiary, savedUser.xpCard.tertiary || preview.tertiary)
-        .setRequiredXP(info.nextLevelXP, savedUser.xpCard.tertiary || preview.tertiary)
-        .setUsername(partialUser.username, savedUser.xpCard.primary || preview.primary)
-        .build();
+         return new Rank()
+          .setAvatar(partialUser.displayAvatarURL.replace('.webp', '.png'))
+          .setCurrentXP(info.xp)
+          .setRequiredXP(info.xpForNextLevel)
+          .setRank(rank)
+          .setProgressBar(preview.secondary, 'COLOR')
+          .setUsername(partialUser.username)
+          .setDiscriminator(partialUser.discriminator)
+          .build();
     } catch (error) {
       console.log(error.message);  
     }
